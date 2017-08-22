@@ -6,6 +6,7 @@ This will build a container for [Nginx](https://www.nginx.org)
 
 *    Tracks Mainline release channel
 *    Includes Zabbix Monitoring (nginx status) on port 73
+*    Logrotate Included to roll over log files at 23:59, compress and retain for 7 days
 *    Compile Options:
 *    --with-threads
         --with-http_ssl_module 
