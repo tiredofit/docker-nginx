@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  
+  nginx-app:
+    image: tiredofit/nginx
+    container_name: nginx-app
+    environment:
+    - VIRTUAL_HOST=nginx.hostname.com
+    - VIRTUAL_NETWORK=nginx-proxy
+    - VIRTUAL_PORT=80
+    - LETSENCRYPT_HOST=nginx.hostname.com
+    - LETSENCRYPT_EMAIL=user@hostname.com
+
+    - UPLOAD_MAX_SIZE=2G
+    - TZ=America/Vancouver
+
+    - ZABBIX_HOSTNAME=nginx-ldap-app
+
+    volumes:
+    - ./data:/www/html
+    - ./logs:/www/logs
+    networks:
+      - proxy-tier
+    restart: always
+
+networks:
+  proxy-tier:
+    external:
+      name: nginx-proxy
+
