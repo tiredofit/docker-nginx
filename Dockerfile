@@ -127,11 +127,11 @@ MAINTAINER Dave Conroy <dave at tiredofit dot ca>
 		# forward request and error logs to docker log collector
 		ln -sf /dev/stdout /var/log/nginx/access.log && \
 		ln -sf /dev/stderr /var/log/nginx/error.log && \
-		mkdir -p /www /www/logs/nginx
+		mkdir -p /www /www/logs/nginx && \
 
 
 ### WWW  Installation
-      mkdir -p /www/logs
+                mkdir -p /www/logs
 
 ### Files Addition
   ADD install /
