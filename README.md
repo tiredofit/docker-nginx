@@ -74,7 +74,7 @@ in order to serve your pages. However, it will run just fine on it's own if you 
 
 # Installation
 
-Automated builds of the image are available on [Registry](https://hub.docker.com/tiredofit/nginx) and is the recommended method of installation.
+Automated builds of the image are available on [Docker Hub](https://hub.docker.com/tiredofit/nginx) and is the recommended method of installation.
 
 
 ```bash
@@ -107,8 +107,9 @@ The following directories are used for configuration and can be mapped for persi
 
 ### Environment Variables
 
-Along with the Environment Variables from the Base image, below is the complete list of available options 
-that can be used to customize your installation.
+
+Along with the Environment Variables from the [Base image](https://hub.docker.com/r/tiredofit/alpine), below is the complete list of available options that can be used to customize your installation.
+
 
 
 | Parameter        | Description                            |
