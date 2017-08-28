@@ -1,3 +1,7 @@
+## 3.0 2017-08-27 <dave at tiredofit dot ca>
+
+* Major Version Bump to support Base Image Changes
+
 ## 2.3 2017-07-13 <dave at tiredofit dot ca>
 
 * Cleaned up Initialization Routes with cont-init.d

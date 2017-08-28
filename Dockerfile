@@ -2,7 +2,7 @@ FROM tiredofit/alpine:3.4
 MAINTAINER Dave Conroy <dave at tiredofit dot ca>
 
 ### Set Nginx Version Number
-   ENV NGINX_VERSION 1.13.2
+   ARG NGINX_VERSION=1.13.2
 
 ### Install Nginx
    RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 && \
@@ -129,25 +129,16 @@ MAINTAINER Dave Conroy <dave at tiredofit dot ca>
 		ln -sf /dev/stderr /var/log/nginx/error.log && \
 		mkdir -p /www /www/logs/nginx
 
-   ADD  install/nginx /etc/nginx
 
-   
+### WWW  Installation
+      mkdir -p /www/logs
 
-### S6 Setup
-  ADD install/s6 /etc/s6
-  ADD install/cont-init.d /etc/cont-init.d
-  RUN chmod +x /etc/cont-init.d/*.sh
+### Files Addition
+  ADD install /
 
-### Logrotate Setup
-  ADD install/logrotate.d /etc/logrotate.d
-
-### Networking Setup
-EXPOSE 80 443
-
-### Zabbix Setup 
-  ADD install/zabbix /etc/zabbix
-  RUN chmod +x /etc/zabbix/zabbix_agentd.conf.d/nginx-status.sh && \
-      chown -R zabbix /etc/zabbix
+### Networking Configuration
+  EXPOSE 80
 
 ### Entrypoint Configuration
-ENTRYPOINT ["/init"]
+  ENTRYPOINT ["/init"]
+
