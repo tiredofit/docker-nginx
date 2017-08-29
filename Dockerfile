@@ -2,7 +2,7 @@ FROM tiredofit/alpine:3.4
 MAINTAINER Dave Conroy <dave at tiredofit dot ca>
 
 ### Set Nginx Version Number
-   ARG NGINX_VERSION=1.13.2
+   ARG NGINX_VERSION=1.13.4
 
 ### Install Nginx
    RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 && \
