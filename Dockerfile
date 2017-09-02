@@ -77,6 +77,7 @@ MAINTAINER Dave Conroy <dave at tiredofit dot ca>
 				hkp://keyserver.ubuntu.com:80 \
 				hkp://p80.pool.sks-keyservers.net:80 \
 				pgp.mit.edu \
+                                hkp://keyserver.ubuntu.com:80 \
 			; do \
 				echo "Fetching GPG key $GPG_KEYS from $server"; \
 				gpg --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPG_KEYS" && found=yes && break; \
