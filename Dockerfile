@@ -1,5 +1,5 @@
 FROM tiredofit/alpine:3.4
-MAINTAINER Dave Conroy <dave at tiredofit dot ca>
+LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
    ARG NGINX_VERSION=1.13.4
