@@ -1,3 +1,8 @@
+## 3.1 2017-09-27 <dave at tiredofit dot ca>
+
+* Fix Build Issues
+* Nginx 1.13.5
+
 ## 3.0 2017-08-27 <dave at tiredofit dot ca>
 
 * Major Version Bump to support Base Image Changes
