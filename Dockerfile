@@ -1,8 +1,8 @@
-FROM tiredofit/alpine:3.4
+FROM tiredofit/alpine:3.7
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
-   ARG NGINX_VERSION=1.13.5
+   ARG NGINX_VERSION=1.13.8
 
 ### Install Nginx
    RUN CONFIG="\
@@ -129,6 +129,7 @@ LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Files Addition
   ADD install /
+  RUN chmod +x /etc/zabbix/zabbix_agentd.conf.d/scripts/*
 
 ### Networking Configuration
   EXPOSE 80

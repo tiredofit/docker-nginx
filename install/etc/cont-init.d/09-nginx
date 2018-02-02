@@ -4,4 +4,5 @@
   UPLOAD_MAX_SIZE=${UPLOAD_MAX_SIZE:="2G"}
   sed -i -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /etc/nginx/nginx.conf
   
-
+  mkdir -p /tmp/state
+  touch /tmp/state/09-nginx
