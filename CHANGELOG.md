@@ -1,3 +1,19 @@
+## 3.8 2018-04-14 <dave at tiredofit dot ca>
+
+* Bump Version, Clean Code
+
+## 3.7 2018-04-02 <dave at tiredofit dot ca>
+
+* Added MAINTENANCE environment variable to move system to maintenance mode. Also maintenance script (off/on/sleep 60) inside container.
+
+## 2018-02-20 3.6 <dave at tiredofit dot ca>
+
+* Fix startup Issues with Logfiles
+
+## 2018-02-20 3.5 <dave at tiredofit dot ca>
+	
+* Add Reverse Proxy Detection
+
 ## 2018-01-29 3.4 <dave at tiredofit dot ca>
 
 * Rebase
