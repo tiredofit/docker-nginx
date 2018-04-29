@@ -7,6 +7,7 @@ This will build a container for [Nginx](https://www.nginx.org)
 *    Tracks Mainline release channel
 *    Includes Zabbix Monitoring (nginx status) on port 73
 *    Logrotate Included to roll over log files at 23:59, compress and retain for 7 days
+*    Ability to Password Protect (Basic) or use LemonLDAP:NG Handler
 *    Compile Options:
 *    --with-threads
         --with-http_ssl_module 
@@ -39,7 +40,7 @@ This will build a container for [Nginx](https://www.nginx.org)
         --with-file-aio 
         --with-http_v2_module 
         
-This Container uses [tiredofit:alpine:3.4](https://hub.docker.com/r/tiredofit/alpine) as a base.
+This Container uses [tiredofit:alpine:3.7](https://hub.docker.com/r/tiredofit/alpine) as a base.
 
 
 [Changelog](CHANGELOG.md)
@@ -110,6 +111,20 @@ The following directories are used for configuration and can be mapped for persi
 
 Along with the Environment Variables from the [Base image](https://hub.docker.com/r/tiredofit/alpine), below is the complete list of available options that can be used to customize your installation.
 
+
+Authentication Options
+
+| Parameter | Description |
+|-----------|-------------|
+| `AUTHENTICATION_TYPE` | Protect site - `NONE`,`BASIC`,`LLNG` - Default `NONE` |
+| `WEB_USER` | If `BASIC` chosen enter this for the username to protect site |
+| `WEB_PASS` | If `BASIC` chosen enter this for the password to protect site |
+| `LLNG_HANDLER_HOST` | If `LLNG` chosen use hostname of handler - Default `llng-handler`
+| `LLNG_HANDLER_PORT` | If `LLNG` chosen use this port for handler - Default `2884` |
+
+The `LLNG` option is for when using LemonLDAP:NG Handlers to protect your application and require modification to the `/etc/nginx/conf.d/default.llng` file to fully work properly! 
+
+General Options 
 
 
 | Parameter        | Description                            |

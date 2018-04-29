@@ -1,3 +1,7 @@
+## 4.0 2018-04-28 <dave at tiredofit dot ca>
+
+* Ability to protect service via basic authentication or using LemonLDAP:NG Handlers
+
 ## 3.8 2018-04-14 <dave at tiredofit dot ca>
 
 * Bump Version, Clean Code

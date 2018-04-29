@@ -117,7 +117,7 @@ LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
           | xargs -r apk info --installed \
           | sort -u \
       )" ; \
-      apk add --no-cache --virtual .nginx-rundeps $runDeps ; \
+      apk add --no-cache --virtual .nginx-rundeps $runDeps apache2-utils; \
       apk del .nginx-build-deps ; \
       apk del .gettext ; \
       mv /tmp/envsubst /usr/local/bin/ ; \
