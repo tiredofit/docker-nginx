@@ -1,3 +1,7 @@
+## 4.0.1 2018-09-24 <dave at tiredofit dot ca>
+
+* Bump to Nginx 1.15.3
+
 ## 4.0 2018-04-28 <dave at tiredofit dot ca>
 
 * Ability to protect service via basic authentication or using LemonLDAP:NG Handlers

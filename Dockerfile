@@ -1,8 +1,8 @@
-FROM tiredofit/alpine:3.7
+FROM tiredofit/alpine:3.9
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
-   ARG NGINX_VERSION=1.14.0
+   ARG NGINX_VERSION=1.15.3
 
 ### Install Nginx
     RUN set -x ; \
