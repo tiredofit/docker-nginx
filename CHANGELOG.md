@@ -1,3 +1,23 @@
+## 4.0.5 2019-04-28 <dave at tiredofit dot ca>
+
+* Bump to Nginx 1.16.0
+
+## 4.0.4 2019-03-26 <dave at tiredofit dot ca>
+
+* Bump to Nginx 1.15.10
+
+## 4.0.3 2019-02-08 <dave at tiredofit dot ca>
+
+* Bump to Nginx 1.15.8 
+
+## 4.0.2 2018-12-10 <dave at tiredofit dot ca>
+
+* Bump to Nginx 1.15.7
+
+## 4.0.2 2018-10-23 <dave at tiredofit dot ca>
+
+* Bump to Nginx 1.15.5
+
 ## 4.0.1 2018-09-24 <dave at tiredofit dot ca>
 
 * Bump to Nginx 1.15.3

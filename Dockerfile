@@ -1,11 +1,11 @@
-FROM tiredofit/alpine:3.8
+FROM tiredofit/alpine:3.9
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
-   ARG NGINX_VERSION=1.15.3
+   ARG NGINX_VERSION=1.16.0
 
 ### Install Nginx
-    RUN set -x ; \
+    RUN set -x && \
         CONFIG="\
         --prefix=/etc/nginx \
         --sbin-path=/usr/sbin/nginx \
@@ -51,9 +51,9 @@ LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
         --with-compat \
         --with-file-aio \
         --with-http_v2_module \
-      " ; \
-      addgroup -S www-data ; \
-      adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data nginx ; \
+      " && \
+      addgroup -S www-data && \
+      adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data nginx && \
       apk add --no-cache --virtual .nginx-build-deps \
         gcc \
         gd-dev \
@@ -68,47 +68,47 @@ LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
         perl-dev \
         tar \
         zlib-dev \
-        ; \
+        && \
         \
-      mkdir -p /www /www/logs/nginx ; \
-      curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz ; \
-      mkdir -p /usr/src ; \
-      tar -zxC /usr/src -f nginx.tar.gz ; \
-      rm nginx.tar.gz ; \
-      cd /usr/src/nginx-$NGINX_VERSION ; \
-      ./configure $CONFIG --with-debug ; \
-      make -j$(getconf _NPROCESSORS_ONLN) ; \
-      mv objs/nginx objs/nginx-debug ; \
-      mv objs/ngx_http_xslt_filter_module.so objs/ngx_http_xslt_filter_module-debug.so ; \
-      mv objs/ngx_http_image_filter_module.so objs/ngx_http_image_filter_module-debug.so ; \
-      mv objs/ngx_http_geoip_module.so objs/ngx_http_geoip_module-debug.so ; \
-      mv objs/ngx_http_perl_module.so objs/ngx_http_perl_module-debug.so ; \
-      mv objs/ngx_stream_geoip_module.so objs/ngx_stream_geoip_module-debug.so ; \
-      ./configure $CONFIG ; \
-      make -j$(getconf _NPROCESSORS_ONLN) ; \
-      make install ; \
-      rm -rf /etc/nginx/html/ ; \
-      mkdir -p /etc/nginx/conf.d/ ; \
-      mkdir -p /usr/share/nginx/html/ ; \
-      install -m644 html/index.html /usr/share/nginx/html/ ; \
-      install -m644 html/50x.html /usr/share/nginx/html/ ; \
-      install -m755 objs/nginx-debug /usr/sbin/nginx-debug ; \
-      install -m755 objs/ngx_http_xslt_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_xslt_filter_module-debug.so ; \
-      install -m755 objs/ngx_http_image_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_image_filter_module-debug.so ; \
-      install -m755 objs/ngx_http_geoip_module-debug.so /usr/lib/nginx/modules/ngx_http_geoip_module-debug.so ; \
-      install -m755 objs/ngx_http_perl_module-debug.so /usr/lib/nginx/modules/ngx_http_perl_module-debug.so ; \
-      install -m755 objs/ngx_stream_geoip_module-debug.so /usr/lib/nginx/modules/ngx_stream_geoip_module-debug.so ; \
-      ln -s ../../usr/lib/nginx/modules /etc/nginx/modules ; \
-      strip /usr/sbin/nginx* ; \
-      strip /usr/lib/nginx/modules/*.so ; \
-      rm -rf /usr/src/nginx-$NGINX_VERSION ; \
+      mkdir -p /www /www/logs/nginx && \
+      curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz && \
+      mkdir -p /usr/src && \
+      tar -zxC /usr/src -f nginx.tar.gz && \
+      rm nginx.tar.gz && \
+      cd /usr/src/nginx-$NGINX_VERSION && \
+      ./configure $CONFIG --with-debug && \
+      make -j$(getconf _NPROCESSORS_ONLN) && \
+      mv objs/nginx objs/nginx-debug && \
+      mv objs/ngx_http_xslt_filter_module.so objs/ngx_http_xslt_filter_module-debug.so && \
+      mv objs/ngx_http_image_filter_module.so objs/ngx_http_image_filter_module-debug.so && \
+      mv objs/ngx_http_geoip_module.so objs/ngx_http_geoip_module-debug.so && \
+      mv objs/ngx_http_perl_module.so objs/ngx_http_perl_module-debug.so && \
+      mv objs/ngx_stream_geoip_module.so objs/ngx_stream_geoip_module-debug.so && \
+      ./configure $CONFIG && \
+      make -j$(getconf _NPROCESSORS_ONLN) && \
+      make install && \
+      rm -rf /etc/nginx/html/ && \
+      mkdir -p /etc/nginx/conf.d/ && \
+      mkdir -p /usr/share/nginx/html/ && \
+      install -m644 html/index.html /usr/share/nginx/html/ && \
+      install -m644 html/50x.html /usr/share/nginx/html/ && \
+      install -m755 objs/nginx-debug /usr/sbin/nginx-debug && \
+      install -m755 objs/ngx_http_xslt_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_xslt_filter_module-debug.so && \
+      install -m755 objs/ngx_http_image_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_image_filter_module-debug.so && \
+      install -m755 objs/ngx_http_geoip_module-debug.so /usr/lib/nginx/modules/ngx_http_geoip_module-debug.so && \
+      install -m755 objs/ngx_http_perl_module-debug.so /usr/lib/nginx/modules/ngx_http_perl_module-debug.so && \
+      install -m755 objs/ngx_stream_geoip_module-debug.so /usr/lib/nginx/modules/ngx_stream_geoip_module-debug.so && \
+      ln -s ../../usr/lib/nginx/modules /etc/nginx/modules && \
+      strip /usr/sbin/nginx* && \
+      strip /usr/lib/nginx/modules/*.so && \
+      rm -rf /usr/src/nginx-$NGINX_VERSION && \
       \
       # Bring in gettext so we can get `envsubst`, then throw
       # the rest away. To do this, we need to install `gettext`
       # then move `envsubst` out of the way so `gettext` can
       # be deleted completely, then move `envsubst` back.
-      apk add --no-cache --virtual .gettext gettext ; \
-      mv /usr/bin/envsubst /tmp/ ; \
+      apk add --no-cache --virtual .gettext gettext && \
+      mv /usr/bin/envsubst /tmp/ && \
       \
       runDeps="$( \
         scanelf --needed --nobanner /usr/sbin/nginx /usr/lib/nginx/modules/*.so /tmp/envsubst \
@@ -116,13 +116,13 @@ LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
           | sort -u \
           | xargs -r apk info --installed \
           | sort -u \
-      )" ; \
-      apk add --no-cache --virtual .nginx-rundeps $runDeps apache2-utils; \
-      apk del .nginx-build-deps ; \
-      apk del .gettext ; \
-      mv /tmp/envsubst /usr/local/bin/ ; \
+      )" && \
+      apk add --no-cache --virtual .nginx-rundeps $runDeps apache2-utils&& \
+      apk del .nginx-build-deps && \
+      apk del .gettext && \
+      mv /tmp/envsubst /usr/local/bin/ && \
       \
-      rm -rf /usr/src/* /var/tmp/* /var/cache/apk/* ; \
+      rm -rf /usr/src/* /var/tmp/* /var/cache/apk/* && \
       \
       \
 ### WWW  Installation
