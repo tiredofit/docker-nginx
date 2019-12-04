@@ -2,7 +2,7 @@ version: '3.7'
 services:
   
   nginx-app:
-    image: registry.selfdesign.org/docker/nginx
+    image: tiredofit/nginx
     container_name: nginx-app
     labels:
       - traefik.enable=true
