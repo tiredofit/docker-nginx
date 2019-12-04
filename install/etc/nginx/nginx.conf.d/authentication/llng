@@ -1,0 +1,11 @@
+  # LemonLDAP:NG authentication request
+  location = /lmauth {
+    internal;
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass <LLNG_HANDLER_HOST>:<LLNG_HANDLER_PORT>;
+    fastcgi_param REMOTE_PORT <LLNG_HANDLER_PORT>;
+    fastcgi_pass_request_body  off;
+    fastcgi_param CONTENT_LENGTH "";
+    fastcgi_param HOST $http_host;
+    fastcgi_param X_ORIGINAL_URI  $request_uri;
+   }

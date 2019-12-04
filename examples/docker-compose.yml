@@ -1,31 +1,28 @@
-version: '2'
-
+version: '3.7'
 services:
   
   nginx-app:
-    image: tiredofit/nginx
+    image: registry.selfdesign.org/docker/nginx
     container_name: nginx-app
-    environment:
-    - VIRTUAL_HOST=nginx.hostname.com
-    - VIRTUAL_NETWORK=nginx-proxy
-    - VIRTUAL_PORT=80
-    - LETSENCRYPT_HOST=nginx.hostname.com
-    - LETSENCRYPT_EMAIL=user@hostname.com
-
-    - UPLOAD_MAX_SIZE=2G
-    - TZ=America/Vancouver
-
-    - ZABBIX_HOSTNAME=nginx-ldap-app
-
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:nginx.example.com
+      - traefik.port=80
+      - traefik.protocol=http
+      - traefik.docker.network=proxy
+      - traefik.backend=nginx-app
     volumes:
-    - ./data:/www/html
-    - ./logs:/www/logs
+      - ./data:/www/html
+      - ./logs:/www/logs
+    environment:
+      - ZABBIX_HOSTNAME=nginx-ldap-app
     networks:
-      - proxy-tier
+      - proxy
+      - services
     restart: always
 
 networks:
-  proxy-tier:
-    external:
-      name: nginx-proxy
-
+  proxy:
+    external: true
+  services:
+    external: true

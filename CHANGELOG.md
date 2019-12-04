@@ -1,3 +1,31 @@
+## 5.0.0 2019-12-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.17.6
+      - Rewrote entire image
+      - Added many new environment variables for customization
+      - Enabled Brotli Compression
+      - Enabled Gzip Compression
+      - Broke out configuration into seperate files
+      - Integrated tiredofit/nginx-ldap functionality
+      - Cleaned up code
+      - Tuned for performance
+
+## 4.2.1 2019-11-18 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update to Nginx 1.17.5
+
+
+## 4.2 2019-06-30 <dave at tiredofit dot ca>
+
+* Nginx 1.17.0
+* Cleanup Build Process
+
+## 4.1 2019-06-19 <dave at tiredofit dot ca>
+
+* Change Alpine Base Image to 3.10
+
 ## 4.0.5 2019-04-28 <dave at tiredofit dot ca>
 
 * Bump to Nginx 1.16.0
