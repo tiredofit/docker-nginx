@@ -1,0 +1,9 @@
+  server {
+	listen <LISTEN_PORT>;                                   
+	server_name localhost;
+	root <WEBROOT>;
+	index  index.html index.htm;              
+
+	rewrite ^/(.*) <REDIRECT_URL>;
+	                                                
+  }
