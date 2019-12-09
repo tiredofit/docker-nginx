@@ -16,20 +16,20 @@ fi
 
 case "$1" in
      "on" | "ON" | "true" | "TRUE" )
-	    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.orig
-        mv /etc/nginx/conf.d/maintenance.conf.maint /etc/nginx/conf.d/maintenance.conf
+	    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
+        mv /etc/nginx/conf.d/maintenance.template /etc/nginx/conf.d/maintenance.conf
         nginx -s reload
         echo 'Maintenance Mode Activated'
      ;;	
      "off" | "OFF" | "false" | "FALSE" )
-	    mv /etc/nginx/conf.d/default.conf.orig /etc/nginx/conf.d/default.conf
-        mv /etc/nginx/conf.d/maintenance.conf /etc/nginx/conf.d/maintenance.conf.maint
+	    mv /etc/nginx/conf.d/default.template /etc/nginx/conf.d/default.conf
+        mv /etc/nginx/conf.d/maintenance.conf /etc/nginx/conf.d/maintenance.template
         nginx -s reload
         echo 'Maintenance Mode Deactivated'
      ;;
      "sleep" | "SLEEP" | "temp" | "TEMP" )
-	    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.orig
-        mv /etc/nginx/conf.d/maintenance.conf.maint /etc/nginx/conf.d/maintenance.conf
+	    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
+        mv /etc/nginx/conf.d/maintenance.template /etc/nginx/conf.d/maintenance.conf
         nginx -s reload
         if [ -z $2 ]; then
             SLEEPNUM="15"
@@ -61,8 +61,8 @@ case "$1" in
 
         echo 'Maintenance Mode Temporarily Activated for '$SLEEPNUM' '$SLEEPDESC
         sleep $SLEEPCALC
-        mv /etc/nginx/conf.d/default.conf.orig /etc/nginx/conf.d/default.conf 
-        mv /etc/nginx/conf.d/maintenance.conf /etc/nginx/conf.d/maintenance.conf.maint
+        mv /etc/nginx/conf.d/default.template /etc/nginx/conf.d/default.conf 
+        mv /etc/nginx/conf.d/maintenance.conf /etc/nginx/conf.d/maintenance.template
         nginx -s reload
         echo 'Maintenance Mode Deactivated'
      ;;

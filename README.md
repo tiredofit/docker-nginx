@@ -154,6 +154,7 @@ Presently you can compress your served content with gzip and brotli. More compre
 
 | Parameter | Description |
 |-----------|-------------|
+| `NGINX_ENABLE_FASTCGI_HTTPS` | Set fastcgi_param HTTPS 'on' - Default `FALSE` |
 | `NGINX_ENABLE_REVERSE_PROXY` | Helpers for when behind a reverse proxy - Default `TRUE` | 
 | `NGINX_REAL_IP_HEADER` | What is the header passed containing the visitors IP - Default `X-Forwarded-For` | 
 | `NGINX_SET_REAL_IP_FROM` | Set the network of your Docker Network if having IP lookup issues - Default `172.16.0.0/12` | 
@@ -165,6 +166,7 @@ Presently you can compress your served content with gzip and brotli. More compre
 | `NGINX_ENABLE_APPLICATION_CONFIGURATION` | Don't automatically setup /etc/nginx/conf.d files - Useful for volume mapping/overriding - Default `TRUE` | 
 | `NGINX_ENABLE_CREATE_SAMPLE_HTML` | If no index.html found - create a sample one to prove container works - Default `TRUE` | 
 | `NGINX_ENABLE_SITE_OPTIMIZATIONS` | Deny access to some files and URLs, send caching tags - Default `TRUE` |
+| `NGINX_INCLUDE_CONFIGURATION` | Include configuration in your website application file. e.g. `/www/website/nginx.conf`
 | `NGINX_LISTEN_PORT` |  Nginx listening port - Default `80` | 
 
 | `NGINX_WEBROOT` | Where to serve content from inside the container - Default `/www/html` | 

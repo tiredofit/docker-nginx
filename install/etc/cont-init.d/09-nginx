@@ -38,6 +38,7 @@ NGINX_ENABLE_CREATE_SAMPLE_HTML=${NGINX_ENABLE_CREATE_SAMPLE_HTML:-"TRUE"}
 NGINX_ENABLE_DDOS_PROTECTION=${NGINX_ENABLE_DDOS_PROTECTION:-"FALSE"}
 NGINX_ENABLE_EPOLL=${NGINX_ENABLE_EPOLL:-"TRUE"}
 NGINX_ENABLE_EXPLOIT_PROTECTION=${NGINX_ENABLE_EXPLOIT_PROTECTION:-"TRUE"}
+NGINX_ENABLE_FASTCGI_HTTPS=${NGINX_ENABLE_FASTCGI_HTTPS:-"FALSE"}
 NGINX_ENABLE_MULTI_ACCEPT=${NGINX_ENABLE_MULTI_ACCEPT:-"TRUE"}
 NGINX_ENABLE_OPEN_FILE_CACHE=${NGINX_ENABLE_OPEN_FILE_CACHE:-"TRUE"}
 NGINX_ENABLE_OPEN_FILE_CACHE_ERRORS=${NGINX_ENABLE_OPEN_FILE_CACHE_ERRORS:-"TRUE"}
@@ -267,10 +268,24 @@ EOF
   sed -i -e "s#<LISTEN_PORT>#${NGINX_LISTEN_PORT}#g" /etc/nginx/conf.d/*.conf > /dev/null
   sed -i -e "s#<WEBROOT>#${NGINX_WEBROOT}#g" /etc/nginx/conf.d/*.template > /dev/null
   sed -i -e "s#<LISTEN_PORT>#${NGINX_LISTEN_PORT}#g" /etc/nginx/conf.d/*.template > /dev/null
+
+  if [[ -v NGINX_INCLUDE_CONFIGURATION ]] ; then
+    sed -i "\|### Don't edit past here|a\ \ \ \ \  include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/conf.d/*.conf
+  fi
+
+  ### Perform Nginx FastCGI reverse proxy modifications
+  if [ "NGINX_ENABLE_FASTCGI_HTTPS" = "TRUE" ]; then
+    echo "** [nginx] Enable Nginx FastCGI HTTPS Termination Support"
+    echo "fastcgi_param  HTTPS 'on';" >> /etc/nginx/fastcgi_params
+    PROTOCOL="https://"
+  else
+    echo "** [nginx] Disable Nginx FastCGI HTTPS Termination Support"
+    echo "fastcgi_param  HTTPS 'off';" >> /etc/nginx/fastcgi_params
+    PROTOCOL="http://"
+  fi
 else 
   echo "** [nginx] Not configurating application / default.conf files"
 fi
-
 
 ### Set Stage for Future Development and Production Purposes
 case "$STAGE" in
@@ -301,12 +316,12 @@ EOF
 fi
 
 ### Force Reset Permissions for Accessibility
-mkdir -p ${NGINX_WEBROOT}
-chown -R nginx ${NGINX_WEBROOT}
+mkdir -p "${NGINX_WEBROOT}"
+chown -R nginx "${NGINX_WEBROOT}"
 
 ### Create Log Directories
-mkdir -p ${NGINX_LOG_ERROR_LOCATION} ${NGINX_LOG_ACCESS_LOCATION}
-chown -R nginx ${NGINX_LOG_ERROR_LOCATION} ${NGINX_LOG_ACCESS_LOCATION}
+mkdir -p "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
+chown -R nginx "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
 
 ### Update Logrotate
 sed -i -e "s#<ERROR_LOG_LOCATION>#${NGINX_LOG_ERROR_LOCATION}#g" /etc/logrotate.d/nginx

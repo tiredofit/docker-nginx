@@ -1,3 +1,14 @@
+## 5.3.0 2019-12-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add functionality to set fastcgi_param HTTPS 'on' or 'off'
+
+
+## 5.2.0 2019-12-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add `NGINX_INCLUDE_CONFIGURATION` to include additional .conf files from the filesystem for applications
+
 ## 5.1.0 2019-12-09 <dave at tiredofit dot ca>
 
    ### Added
