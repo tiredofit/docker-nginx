@@ -1,3 +1,13 @@
+## 5.1.0 2019-12-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Added NGINX_MODE environment variable to allow Redirection to remote URLs
+
+   ### Changed
+      - Moved around maintenance functionality
+      - Minor cleanup to code
+
+
 ## 5.0.0 2019-12-04 <dave at tiredofit dot ca>
 
    ### Added

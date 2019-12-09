@@ -108,7 +108,7 @@ You can choose to request visitors be authenticated before accessing your site. 
 | `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2` | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below |
 
 When working with `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2` you will need to omit any `$` chracters from your string. It will be added in upon container startup. Example:
-`NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1=HTTP_AUTH_USER,uid,upsteam_http_uid` will get converted into `HTTP_AUTH_USER,$uid,$upsteam_http_uid` and get placed in the appropriate areas in the configuration.
+`NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1=HTTP_AUTH_USER,uid,upstream_http_uid` will get converted into `HTTP_AUTH_USER,$uid,$upstream_http_uid` and get placed in the appropriate areas in the configuration.
 
 
 *Logging Options*
@@ -164,9 +164,21 @@ Presently you can compress your served content with gzip and brotli. More compre
 |-----------|-------------|
 | `NGINX_ENABLE_APPLICATION_CONFIGURATION` | Don't automatically setup /etc/nginx/conf.d files - Useful for volume mapping/overriding - Default `TRUE` | 
 | `NGINX_ENABLE_CREATE_SAMPLE_HTML` | If no index.html found - create a sample one to prove container works - Default `TRUE` | 
-| `NGINX_ENABLE_SITE_OPTIMIZATIONS`
+| `NGINX_ENABLE_SITE_OPTIMIZATIONS` | Deny access to some files and URLs, send caching tags - Default `TRUE` |
 | `NGINX_LISTEN_PORT` |  Nginx listening port - Default `80` | 
+
 | `NGINX_WEBROOT` | Where to serve content from inside the container - Default `/www/html` | 
+
+*Functionality Options*
+
+| Parameter | Description |
+|-----------|-------------|
+| `NGINX_MODE` | Set to `NORMAL`, `MAINTENANCE` , `REDIRECT` - Default `NORMAL` |
+| `NGINX_REDIRECT_URL` | If `REDIRECT` set enter full url to forward all traffic to e.g. `https://example.com` |
+
+If set to `MAINTNENANCE` a single page will show visitors that the server is being worked on.
+
+You can also enter into the container and type `maintenance ARG`, where ARG is either `ON`,`OFF`, or `SLEEP (seconds)` which will temporarily place the site in maintenance mode and then restore it back to normal after time has passed. 
 
 *Performance Options*
 
@@ -214,7 +226,3 @@ docker exec -it (whatever your container name is ie  nginx) bash
 # References
 
 * https://nginx.org/
-
-
-
-
