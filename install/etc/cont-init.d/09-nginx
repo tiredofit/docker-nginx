@@ -1,5 +1,13 @@
 #!/usr/bin/with-contenv bash
 
+silent() {
+  if [ "$DEBUG_MODE" = "TRUE" ] || [ "$DEBUG_MODE" = "true" ];  then
+    "$@"
+  else
+    "$@" > /dev/null 2>&1
+  fi
+}
+
 ### Set Debug Mode
 if [ "$DEBUG_MODE" = "TRUE" ] || [ "$DEBUG_MODE" = "true" ]; then
     set -x
@@ -14,6 +22,7 @@ NGINX_AUTHENTICATION_LDAP_GROUP_ATTRIBUTE=${NGINX_AUTHENTICATION_LDAP_GROUP_ATTR
 NGINX_AUTHENTICATION_LDAP_SCOPE=${NGINX_AUTHENTICATION_LDAP_SCOPE:-"sub"}
 NGINX_AUTHENTICATION_LLNG_HANDLER_HOST=${NGINX_AUTHENTICATION_LLNG_HANDLER_HOST:-"llng-handler"}
 NGINX_AUTHENTICATION_LLNG_HANDLER_PORT=${NGINX_AUTHENTICATION_LLNG_HANDLER_PORT:-"2884"}
+NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1=${NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1:-"HTTP_AUTH_USER,uid,upstream_http_uid"}
 NGINX_AUTHENTICATION_TITLE=${NGINX_AUTHENTICATION_TITLE:-"Please login"}
 NGINX_AUTHENTICATION_TYPE=${NGINX_AUTHENTICATION_TYPE:-"NONE"}
 NGINX_CLIENT_BODY_TIMEOUT=${NGINX_CLIENT_BODY_TIMEOUT:-60}
@@ -67,6 +76,8 @@ NGINX_REAL_IP_HEADER=${NGINX_REAL_IP_HEADER:-"X-Forwarded-For"}
 NGINX_SEND_TIMEOUT=${NGINX_SEND_TIMEOUT:-60}
 NGINX_SET_REAL_IP_FROM=${NGINX_SET_REAL_IP_FROM:-"172.16.0.0/12"}
 NGINX_UPLOAD_MAX_SIZE=${NGINX_UPLOAD_MAX_SIZE:-"2G"}
+NGINX_USER=${NGINX_USER:-"nginx"}
+NGINX_GROUP=${NGINX_GROUP:-"www-data"}
 NGINX_WEBROOT=${NGINX_WEBROOT:-"/www/html"}
 NGINX_WORKER_CONNECTIONS=${NGINX_WORKER_CONNECTIONS:-"1024"}
 NGINX_WORKER_PROCESSES=${NGINX_WORKER_PROCESSES:-"auto"}
@@ -80,10 +91,12 @@ sed -i -e "s#<CLIENT_BODY_TIMEOUT>#${NGINX_CLIENT_BODY_TIMEOUT}#g" /etc/nginx/ng
 sed -i -e "s#<ERROR_LOG>#${NGINX_LOG_ERROR_FILE}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<ERROR_LOG_LEVEL>#${NGINX_LOG_LEVEL_ERROR}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<ERROR_LOG_LOCATION>#${NGINX_LOG_ERROR_LOCATION}#g" /etc/nginx/nginx.conf
+sed -i -e "s#<GROUP>#${NGINX_GROUP}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<KEEPALIVE_REQUESTS>#${NGINX_KEEPALIVE_REQUESTS}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<KEEPALIVE_TIMEOUT>#${NGINX_KEEPALIVE_TIMEOUT}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<SEND_TIMEOUT>#${NGINX_SEND_TIMEOUT}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<UPLOAD_MAX_SIZE>#${NGINX_UPLOAD_MAX_SIZE}#g" /etc/nginx/nginx.conf
+sed -i -e "s#<USER>#${NGINX_USER}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_CONNECTIONS>#${NGINX_WORKER_CONNECTIONS}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_PROCESSES>#${NGINX_WORKER_PROCESSES}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_RLIMIT_NOFILE>#${NGINX_WORKER_RLIMIT_NOFILE}#g" /etc/nginx/nginx.conf
@@ -215,10 +228,10 @@ if [ "$NGINX_ENABLE_APPLICATION_CONFIGURATION" = "TRUE" ]; then
         for (( i = 1; i <= $user_num; i++ ))
           do
             basic_user=NGINX_AUTHENTICATION_BASIC_USER${i}
-            basic_pass=NGINX_AUTHENTICATION_BASIC$_PASS{i}
+            basic_pass=NGINX_AUTHENTICATION_BASIC_PASS${i}
             echo "** [nginx] Creating User: ${!basic_user}"
             htpasswd -b -n ${!basic_user:-$NGINX_AUTHENTICATION_BASIC_USER} ${!basic_pass:-$NGINX_AUTHENTICATION_BASIC_PASS} >> /etc/nginx/nginx.conf.d/authentication/basic_authorized_users
-            sed -i '/ server {/a\ \ \  auth_basic "${NGINX_AUTHENTICATION_TITLE}"; auth_basic_user_file /etc/nginx/nginx.conf.d/authentication/basic_authorized_users;' /etc/nginx/conf.d/*.conf
+            sed -i '/ server {/a\ \ \  auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_basic_user_file /etc/nginx/nginx.conf.d/authentication/basic_authorized_users;' /etc/nginx/conf.d/*.conf
           done
       ;;
       "LDAP")
@@ -253,8 +266,9 @@ EOF
                   echo "auth_request_set \$${array[1]} \$${array[2]};" >> /etc/nginx/nginx.conf.d/authentication/llng_auth_request
             done
 
-          sed -i '/ server {/a\ \ \ \ \  include /etc/nginx/nginx.conf.d/authentication/llng;' /etc/nginx/conf.d/*.conf
-          sed -i '/ location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/nginx.conf.d/authentication/llng_auth_request;' /etc/nginx/conf.d/*.conf
+          sed -i '/server {/a\ \ \ \ \  include /etc/nginx/nginx.conf.d/authentication/llng;' /etc/nginx/conf.d/*.conf
+          sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/nginx.conf.d/authentication/llng_auth_request;' /etc/nginx/conf.d/*.conf
+          sed -i '/include \/etc\/nginx\/nginx.conf.d\/php-fpm.conf;/a\ \ \ \ \ \ \ \ include \/etc\/nginx\/nginx.conf.d\/authentication\/llng_auth_request;' /etc/nginx/conf.d/*.conf
       ;;
       "NONE")
         :
@@ -264,10 +278,10 @@ EOF
      ;;
   esac
 
-  sed -i -e "s#<WEBROOT>#${NGINX_WEBROOT}#g" /etc/nginx/conf.d/*.conf > /dev/null
-  sed -i -e "s#<LISTEN_PORT>#${NGINX_LISTEN_PORT}#g" /etc/nginx/conf.d/*.conf > /dev/null
-  sed -i -e "s#<WEBROOT>#${NGINX_WEBROOT}#g" /etc/nginx/conf.d/*.template > /dev/null
-  sed -i -e "s#<LISTEN_PORT>#${NGINX_LISTEN_PORT}#g" /etc/nginx/conf.d/*.template > /dev/null
+  silent sed -i -e "s#<WEBROOT>#${NGINX_WEBROOT}#g" /etc/nginx/conf.d/*.conf
+  silent sed -i -e "s#<LISTEN_PORT>#${NGINX_LISTEN_PORT}#g" /etc/nginx/conf.d/*.conf
+  silent sed -i -e "s#<WEBROOT>#${NGINX_WEBROOT}#g" /etc/nginx/conf.d/*.template
+  silent sed -i -e "s#<LISTEN_PORT>#${NGINX_LISTEN_PORT}#g" /etc/nginx/conf.d/*.template
 
   if [[ -v NGINX_INCLUDE_CONFIGURATION ]] ; then
     sed -i "\|### Don't edit past here|a\ \ \ \ \  include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/conf.d/*.conf
@@ -317,11 +331,11 @@ fi
 
 ### Force Reset Permissions for Accessibility
 mkdir -p "${NGINX_WEBROOT}"
-chown -R nginx "${NGINX_WEBROOT}"
+chown -R "${NGINX_USER}" "${NGINX_WEBROOT}"
 
 ### Create Log Directories
 mkdir -p "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
-chown -R nginx "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
+chown -R "${NGINX_USER}" "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
 
 ### Update Logrotate
 sed -i -e "s#<ERROR_LOG_LOCATION>#${NGINX_LOG_ERROR_LOCATION}#g" /etc/logrotate.d/nginx
@@ -330,6 +344,6 @@ sed -i -e "s#<ACCESS_LOG_LOCATION>#${NGINX_LOG_ACCESS_LOCATION}#g" /etc/nginx/ng
 
 ### Create Temporary Files
 mkdir -p /tmp/nginx
-chown -R nginx /tmp/nginx
+chown -R "${NGINX_USER}" /tmp/nginx
 
 touch /tmp/state/09-nginx

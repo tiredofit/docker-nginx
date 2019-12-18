@@ -1,3 +1,33 @@
+## 5.4.4 2019-12-16 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change Sed Command to properly escape slashes
+
+
+## 5.4.3 2019-12-16 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add Default Variable to pass for LLNG
+
+
+## 5.4.2 2019-12-16 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Tweaks to LLNG Authentication
+
+
+## 5.4.1 2019-12-12 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix Basic Authentication Passwords
+
+
+## 5.4.0 2019-12-12 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add default `NGINX_USER` and `NGINX_GROUP` variables
+
+
 ## 5.3.0 2019-12-09 <dave at tiredofit dot ca>
 
    ### Added

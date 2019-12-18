@@ -177,6 +177,8 @@ Presently you can compress your served content with gzip and brotli. More compre
 |-----------|-------------|
 | `NGINX_MODE` | Set to `NORMAL`, `MAINTENANCE` , `REDIRECT` - Default `NORMAL` |
 | `NGINX_REDIRECT_URL` | If `REDIRECT` set enter full url to forward all traffic to e.g. `https://example.com` |
+| `NGINX_USER` | What user to run nginx as inside container - Default `nginx` |
+| `NGINX_GROUP` | What group to run nginx as inside container - Default `www-data` |
 
 If set to `MAINTNENANCE` a single page will show visitors that the server is being worked on.
 
