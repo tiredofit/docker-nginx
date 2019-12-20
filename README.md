@@ -15,7 +15,7 @@ This will build a container for [Nginx](https://www.nginx.org)
 *    Logrotate Included to roll over log files at 23:59, compress and retain for 7 days
 *    Ability to Password Protect (Basic), LDAP Authenticate or use LemonLDAP:NG Handler
         
-This Container uses [tiredofit:alpine:3.10](https://hub.docker.com/r/tiredofit/alpine) as a base.
+This Container uses [tiredofit/alpine:3.11](https://hub.docker.com/r/tiredofit/alpine) as a base.
 
 
 [Changelog](CHANGELOG.md)
