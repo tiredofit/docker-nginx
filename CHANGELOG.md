@@ -1,3 +1,16 @@
+## 5.6.1 2019-12-29 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.17.7
+
+
+## 5.6.0 2019-12-29 <dave at tiredofit dot ca>
+
+   ### Added
+      - Refactored image to support new tiredofit/alpine base image
+      - Added FORCE_RESET_PERMISSIONS env variable (credit juanluisbaptiste@github)
+
+
 ## 5.5.0 2019-12-20 <dave at tiredofit dot ca>
 
    ### Added

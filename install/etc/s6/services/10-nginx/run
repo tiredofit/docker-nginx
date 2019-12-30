@@ -1,13 +1,14 @@
 #!/usr/bin/with-contenv bash
 
+source /assets/functions/*
+PROCESS_NAME="nginx"
+
 while [ ! -f /tmp/state/99-container-init ]
 do
   sleep 1
 done
 
-if [ ! -f "/tmp/state/10-nginx" ]; then
-	echo "Nginx ${NGINX_VERSION} Initializaed on "`date` >/tmp/state/10-nginx
-fi
+liftoff
 
-echo "** [nginx] Starting nginx ${NGINX_VERSION}"
+print_info "Starting nginx ${NGINX_VERSION}"
 exec nginx

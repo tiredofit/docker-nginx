@@ -17,7 +17,6 @@ This will build a container for [Nginx](https://www.nginx.org)
         
 This Container uses [tiredofit/alpine:3.11](https://hub.docker.com/r/tiredofit/alpine) as a base.
 
-
 [Changelog](CHANGELOG.md)
 
 # Authors
@@ -52,7 +51,7 @@ in order to serve your pages. However, it will run just fine on it's own if you 
 Automated builds of the image are available on [Docker Hub](https://hub.docker.com/tiredofit/nginx) and is the recommended method of installation.
 
 ```bash
-docker pull hub.docker.com/tiredofit/nginx
+docker pull tiredofit/nginx
 ```
 
 # Quick Start
@@ -168,13 +167,13 @@ Presently you can compress your served content with gzip and brotli. More compre
 | `NGINX_ENABLE_SITE_OPTIMIZATIONS` | Deny access to some files and URLs, send caching tags - Default `TRUE` |
 | `NGINX_INCLUDE_CONFIGURATION` | Include configuration in your website application file. e.g. `/www/website/nginx.conf`
 | `NGINX_LISTEN_PORT` |  Nginx listening port - Default `80` | 
-
 | `NGINX_WEBROOT` | Where to serve content from inside the container - Default `/www/html` | 
 
 *Functionality Options*
 
 | Parameter | Description |
 |-----------|-------------|
+| `FORCE_RESET_PERMISSIONS` | Force setting Nginx files ownership to web server user - Default `TRUE` | 
 | `NGINX_MODE` | Set to `NORMAL`, `MAINTENANCE` , `REDIRECT` - Default `NORMAL` |
 | `NGINX_REDIRECT_URL` | If `REDIRECT` set enter full url to forward all traffic to e.g. `https://example.com` |
 | `NGINX_USER` | What user to run nginx as inside container - Default `nginx` |
