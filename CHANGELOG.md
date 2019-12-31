@@ -1,3 +1,12 @@
+## 5.7.0 2019-12-31 <dave at tiredofit dot ca>
+
+   ### Added
+      - Split defaults to /assets/functions
+
+   ### Changed
+      - Change Warnings to Notices
+
+
 ## 5.6.1 2019-12-29 <dave at tiredofit dot ca>
 
    ### Added
