@@ -1,3 +1,9 @@
+## 5.7.1 2020-01-02 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Additional Changes to support new tiredofit/alpine base image
+
+
 ## 5.7.0 2019-12-31 <dave at tiredofit dot ca>
 
    ### Added
