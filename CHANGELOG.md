@@ -1,3 +1,9 @@
+## 5.7.1 2020-01-03 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Cleanup LLNG Authentication routines
+
+
 ## 5.7.1 2020-01-02 <dave at tiredofit dot ca>
 
    ### Changed
