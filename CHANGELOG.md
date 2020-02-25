@@ -1,3 +1,9 @@
+## 5.8.2 2020-02-25 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix extra semicolon in default environment variable
+
+
 ## 5.8.1 2020-02-25 <dave at tiredofit dot ca>
 
    ### Changed

@@ -1,4 +1,4 @@
-FROM tiredofit/alpine:3.11
+FROM tiredofit/alpine:edge
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
