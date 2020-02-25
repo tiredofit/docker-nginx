@@ -19,6 +19,8 @@ sed -i -e "s#<USER>#${NGINX_USER}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_CONNECTIONS>#${NGINX_WORKER_CONNECTIONS}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_PROCESSES>#${NGINX_WORKER_PROCESSES}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_RLIMIT_NOFILE>#${NGINX_WORKER_RLIMIT_NOFILE}#g" /etc/nginx/nginx.conf
+sed -i -e "s#<FASTCGI_BUFFERS>#${NGINX_FASTCGI_BUFFERS}#g" /etc/nginx/nginx.conf
+sed -i -e "s#<FASTCGI_BUFFER_SIZE>#${NGINX_FASTCGI_BUFFER_SIZE}#g" /etc/nginx/nginx.conf
 
 if [ "$NGINX_ENABLE_COMPRESSION_BROTLI" = "TRUE" ]; then
   sed -i -e "s#<BROTLI_LEVEL>#${NGINX_COMPRESSION_BROTLI_LEVEL}#g" /etc/nginx/nginx.conf.d/compression_brotli.conf
@@ -32,13 +34,13 @@ fi
 if [ "$NGINX_ENABLE_COMPRESSION_GZIP" = "TRUE" ]; then
   sed -i -e "s#<GZIP_BUFFERS>#${NGINX_COMPRESSION_GZIP_BUFFERS}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_DISABLE>#${NGINX_COMPRESSION_GZIP_DISABLE}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
-  sed -i -e "s#<GZIP_HTTP_VERSION>#${NGINX_COMPRESSION_GZIP_HTTP_VERSION}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf  
+  sed -i -e "s#<GZIP_HTTP_VERSION>#${NGINX_COMPRESSION_GZIP_HTTP_VERSION}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_LEVEL>#${NGINX_COMPRESSION_GZIP_LEVEL}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_MIN_LENGTH>#${NGINX_COMPRESSION_GZIP_MIN_LENGTH}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_PROXIED>#${NGINX_COMPRESSION_GZIP_PROXIED}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_TYPES>#${NGINX_COMPRESSION_GZIP_TYPES}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   if [ "$NGINX_COMPRESSION_GZIP_VARY" != "TRUE" ]; then
-    sed -i -e "\#gzip_vary on;#d" /etc/nginx/nginx.conf.d/compression_gzip.conf  
+    sed -i -e "\#gzip_vary on;#d" /etc/nginx/nginx.conf.d/compression_gzip.conf
   fi
 else
   sed -i -e "\#include /etc/nginx/nginx.conf.d/compression_gzip.conf;#d" /etc/nginx/nginx.conf
@@ -123,10 +125,10 @@ case "$NGINX_MODE" in
       echo '** [nginx] ERROR: No NGINX_REDIRECT_URL Set!'
       exit 1
     fi
-    
+
     NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
 
-    sed -i "s#rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};#g" /etc/nginx/conf.d/redirect.template 
+    sed -i "s#rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};#g" /etc/nginx/conf.d/redirect.template
 
     print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
     mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
@@ -217,7 +219,7 @@ EOF
     echo "fastcgi_param  HTTPS 'off';" >> /etc/nginx/fastcgi_params
     PROTOCOL="http://"
   fi
-else 
+else
   print_notice "Not configurating application / default.conf files"
 fi
 

@@ -87,12 +87,12 @@ You can choose to request visitors be authenticated before accessing your site. 
 
 | Parameter | Description |
 |-----------|-------------|
-| `NGINX_AUTHENTICATION_TYPE` | Protect the site with `BASIC`, `LDAP`, `LLNG` - Default `NONE` | 
-| `NGINX_AUTHENTICATION_TITLE` |  Challenge response when visiting protected site - Default `Please login` | 
-| `NGINX_AUTHENTICATION_BASIC_USER1` | If `BASIC` chosen enter this for the username to protect site - Default `admin` | 
-| `NGINX_AUTHENTICATION_BASIC_PASS1` | If `BASIC` chosen enter this for the password to protect site - Default `password` | 
-| `NGINX_AUTHENTICATION_BASIC_USER2` | As above, increment for more users | 
-| `NGINX_AUTHENTICATION_BASIC_PASS2` | As above, increment for more users | 
+| `NGINX_AUTHENTICATION_TYPE` | Protect the site with `BASIC`, `LDAP`, `LLNG` - Default `NONE` |
+| `NGINX_AUTHENTICATION_TITLE` |  Challenge response when visiting protected site - Default `Please login` |
+| `NGINX_AUTHENTICATION_BASIC_USER1` | If `BASIC` chosen enter this for the username to protect site - Default `admin` |
+| `NGINX_AUTHENTICATION_BASIC_PASS1` | If `BASIC` chosen enter this for the password to protect site - Default `password` |
+| `NGINX_AUTHENTICATION_BASIC_USER2` | As above, increment for more users |
+| `NGINX_AUTHENTICATION_BASIC_PASS2` | As above, increment for more users |
 | `NGINX_AUTHENTICATION_LDAP_HOST` | Hostname and port number of LDAP Server - ie `ldap://ldapserver:389` |
 | `NGINX_AUTHENTICATION_LDAP_BIND_DN` | User to Bind to LDAP - ie  `cn=admin,dc=orgname,dc=org` |
 | `NGINX_AUTHENTICATION_LDAP_BIND_PW` | Password for Above Bind User - ie  `password` |
@@ -101,8 +101,8 @@ You can choose to request visitors be authenticated before accessing your site. 
 | `NGINX_AUTHENTICATION_LDAP_SCOPE` |LDAP Scope for searching - ie `sub` |
 | `NGINX_AUTHENTICATION_LDAP_FILTER` | Define what object that is searched for (ie  `objectClass=person`) |
 | `NGINX_AUTHENTICATION_LDAP_GROUP_ATTRIBUTE` | If searching inside of a group what is the Group Attribute - ie `uniquemember` |
-| `NGINX_AUTHENTICATION_LLNG_HANDLER_HOST` | If `LLNG` chosen use hostname of handler - Default `llng-handler` | 
-| `NGINX_AUTHENTICATION_LLNG_HANDLER_PORT` | If `LLNG` chosen use this port for handler - Default `2884` | 
+| `NGINX_AUTHENTICATION_LLNG_HANDLER_HOST` | If `LLNG` chosen use hostname of handler - Default `llng-handler` |
+| `NGINX_AUTHENTICATION_LLNG_HANDLER_PORT` | If `LLNG` chosen use this port for handler - Default `2884` |
 | `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1` | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below |
 | `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2` | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below |
 
@@ -114,11 +114,11 @@ When working with `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2` you will need to omit a
 
 | Parameter | Description |
 |-----------|-------------|
-| `NGINX_LOG_ACCESS_FILE` | Nginx websites access logs - Default `access.log` | 
-| `NGINX_LOG_ACCESS_LOCATION` | Location inside container for saving logs - Default `/www/logs/nginx` | 
-| `NGINX_LOG_ERROR_FILE` | Nginx server and websites error log name - Default `error.log` | 
-| `NGINX_LOG_ERROR_LOCATION` | Location inside container for saving logs - Default `/www/logs/nginx` | 
-| `NGINX_LOG_LEVEL_ERROR` | How much verbosity to use with error logs - Default `warn` | 
+| `NGINX_LOG_ACCESS_FILE` | Nginx websites access logs - Default `access.log` |
+| `NGINX_LOG_ACCESS_LOCATION` | Location inside container for saving logs - Default `/www/logs/nginx` |
+| `NGINX_LOG_ERROR_FILE` | Nginx server and websites error log name - Default `error.log` |
+| `NGINX_LOG_ERROR_LOCATION` | Location inside container for saving logs - Default `/www/logs/nginx` |
+| `NGINX_LOG_LEVEL_ERROR` | How much verbosity to use with error logs - Default `warn` |
 
 *Compression Options*
 
@@ -126,20 +126,20 @@ Presently you can compress your served content with gzip and brotli. More compre
 
 | Parameter | Description |
 |-----------|-------------|
-| `NGINX_ENABLE_COMPRESSION_BROTLI` | Enable Brotli Compression - Default `TRUE` | 
-| `NGINX_COMPRESSION_BROTLI_LEVEL` | Compression Level for Brotli - Default `6` | 
-| `NGINX_COMPRESSION_BROTLI_MIN_LENGTH` | Minimum length of content before compressing - Default `20` | 
-| `NGINX_COMPRESSION_BROTLI_TYPES` | What filetypes to compress - Default `text/plain text/css text/xml text/javascript application/x-javascript application/json application/xml` | 
-| `NGINX_COMPRESSION_BROTLI_WINDOW` |  - Default `512k` | 
-| `NGINX_ENABLE_COMPRESSION_GZIP` | Enable GZIP Compression - Default `TRUE` | 
-| `NGINX_COMPRESSION_GZIP_BUFFERS` |  - Default `16 8k` | 
-| `NGINX_COMPRESSION_GZIP_DISABLE` | Don't compress for these user agents - Default `MSIE [1-6].(?!.*SV1)` | 
-| `NGINX_COMPRESSION_GZIP_HTTP_VERSION` |  - Default `1.1` | 
-| `NGINX_COMPRESSION_GZIP_LEVEL` | Compression Level - Default `6` | 
-| `NGINX_COMPRESSION_GZIP_MIN_LENGTH` | Minimum length of content before compressing - Default `10240` | 
-| `NGINX_COMPRESSION_GZIP_PROXIED` |  - Default `expired no-cache no-store private auth` | 
-| `NGINX_COMPRESSION_GZIP_TYPES` | Types of content to compress - Default `text/plain text/css text/xml text/javascript application/x-javascript application/json application/xml` | 
-| `NGINX_COMPRESSION_GZIP_VARY` |  - Default `TRUE` | 
+| `NGINX_ENABLE_COMPRESSION_BROTLI` | Enable Brotli Compression - Default `TRUE` |
+| `NGINX_COMPRESSION_BROTLI_LEVEL` | Compression Level for Brotli - Default `6` |
+| `NGINX_COMPRESSION_BROTLI_MIN_LENGTH` | Minimum length of content before compressing - Default `20` |
+| `NGINX_COMPRESSION_BROTLI_TYPES` | What filetypes to compress - Default `text/plain text/css text/xml text/javascript application/x-javascript application/json application/xml` |
+| `NGINX_COMPRESSION_BROTLI_WINDOW` |  - Default `512k` |
+| `NGINX_ENABLE_COMPRESSION_GZIP` | Enable GZIP Compression - Default `TRUE` |
+| `NGINX_COMPRESSION_GZIP_BUFFERS` |  - Default `16 8k` |
+| `NGINX_COMPRESSION_GZIP_DISABLE` | Don't compress for these user agents - Default `MSIE [1-6].(?!.*SV1)` |
+| `NGINX_COMPRESSION_GZIP_HTTP_VERSION` |  - Default `1.1` |
+| `NGINX_COMPRESSION_GZIP_LEVEL` | Compression Level - Default `6` |
+| `NGINX_COMPRESSION_GZIP_MIN_LENGTH` | Minimum length of content before compressing - Default `10240` |
+| `NGINX_COMPRESSION_GZIP_PROXIED` |  - Default `expired no-cache no-store private auth` |
+| `NGINX_COMPRESSION_GZIP_TYPES` | Types of content to compress - Default `text/plain text/css text/xml text/javascript application/x-javascript application/json application/xml` |
+| `NGINX_COMPRESSION_GZIP_VARY` |  - Default `TRUE` |
 
 *DDoS Options*
 
@@ -208,6 +208,8 @@ You can also enter into the container and type `maintenance ARG`, where ARG is e
 | `NGINX_OPEN_FILE_CACHE_MAX` | Maximum files to cache - Default `200000` | 
 | `NGINX_OPEN_FILE_CACHE_MIN_USES` | Minimum uses of file before cashing - Default `2` | 
 | `NGINX_OPEN_FILE_CACHE_VALID` | Cache a file if has been accessed within this window - Default `2m` | 
+| `NGINX_FASTCGI_BUFFERS` | Amount of FastCGI Buffers - Default `16 16k` |
+| `NGINX_FASTCGI_BUFFER_SIZE` | FastCGI Buffer Size - Default `32k`|
 
 ### Networking
 

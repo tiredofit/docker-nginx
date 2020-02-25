@@ -1,3 +1,15 @@
+## 5.8.0 2020-02-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add FastCGI Buffers and FastCGI Buffer Size environment variables
+
+
+## 5.7.2 2020-01-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.17.8
+
+
 ## 5.7.1 2020-01-03 <dave at tiredofit dot ca>
 
    ### Changed
