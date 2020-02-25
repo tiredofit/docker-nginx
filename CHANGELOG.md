@@ -1,3 +1,9 @@
+## 5.8.1 2020-02-25 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Spelling mistake for fastcgi_buffer_size
+
+
 ## 5.8.0 2020-02-25 <dave at tiredofit dot ca>
 
    ### Added
