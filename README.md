@@ -166,6 +166,7 @@ Presently you can compress your served content with gzip and brotli. More compre
 | `NGINX_ENABLE_CREATE_SAMPLE_HTML` | If no index.html found - create a sample one to prove container works - Default `TRUE` | 
 | `NGINX_ENABLE_SITE_OPTIMIZATIONS` | Deny access to some files and URLs, send caching tags - Default `TRUE` |
 | `NGINX_INCLUDE_CONFIGURATION` | Include configuration in your website application file. e.g. `/www/website/nginx.conf`
+| `NGINX_RELOAD_ON_CONFIG_CHANGE` | Automatically reload nginx on configuration file change - Default `FALSE` |
 | `NGINX_LISTEN_PORT` |  Nginx listening port - Default `80` | 
 | `NGINX_WEBROOT` | Where to serve content from inside the container - Default `/www/html` | 
 

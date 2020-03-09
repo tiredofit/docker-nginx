@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv bash
+
+for s in /assets/functions/*; do source $s; done
+PROCESS_NAME="nginx-config-reload"
+
+if [ "$NGINX_RELOAD_ON_CONFIG_CHANGE" = "TRUE" ]; then
+	print_notice "Enabling Auto Reload of Nginx Configuration when configuration files change"
+else
+	service_stop 11-nginx-config-reload
+fi
+
+liftoff

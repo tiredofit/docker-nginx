@@ -209,8 +209,10 @@ EOF
     sed -i "\|### Don't edit past here|a\ \ \ \ \  include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/conf.d/*.conf
   fi
 
+
+
   ### Perform Nginx FastCGI reverse proxy modifications
-  if [ "NGINX_ENABLE_FASTCGI_HTTPS" = "TRUE" ]; then
+  if [ "$NGINX_ENABLE_FASTCGI_HTTPS" = "TRUE" ]; then
     print_notice "Enable Nginx FastCGI HTTPS Termination Support"
     echo "fastcgi_param  HTTPS 'on';" >> /etc/nginx/fastcgi_params
     PROTOCOL="https://"

@@ -1,3 +1,11 @@
+## 5.9.0 2020-03-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add NGINX_RELOAD_ON_CONFIG_CHANGE environment variable to automatically reload nginx configuration if main configuration files are changed or the value of NGINX_INCLUDE_CONFIGURATION
+
+   ### Changed
+      - Fixed `NGINX_ENABLE_FASTCGI_HTTPS` that didn't do anything
+
 ## 5.8.3 2020-03-04 <dave at tiredofit dot ca>
 
    ### Added

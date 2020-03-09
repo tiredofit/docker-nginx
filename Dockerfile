@@ -154,6 +154,7 @@ RUN set -x && \
     apk add \
         $runDeps \
         apache2-utils \
+        inotify-tools \
         && \
     apk del .nginx-build-deps && \
     apk del .brotli-build-deps && \
