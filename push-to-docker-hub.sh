@@ -31,12 +31,12 @@ sed -i "s#alpine:3.6#alpine:3.5#g" Dockerfile
 docker build -t tiredofit/nginx:alpine-3.5 --compress --squash --no-cache .
 sed -i "s#alpine:3.5#alpine:edge#g" Dockerfile
 docker build -t tiredofit/nginx:alpine-edge --compress --squash --no-cache .
-#docker push tiredofit/nginx:alpine-3.11
-#docker push tiredofit/nginx:alpine-3.10
-#docker push tiredofit/nginx:alpine-3.9
-#docker push tiredofit/nginx:alpine-3.8
-#docker push tiredofit/nginx:alpine-3.7
-#docker push tiredofit/nginx:alpine-3.6
-#docker push tiredofit/nginx:alpine-3.5
-#docker push tiredofit/nginx:alpine-edge
+docker push tiredofit/nginx:alpine-3.11
+docker push tiredofit/nginx:alpine-3.10
+docker push tiredofit/nginx:alpine-3.9
+docker push tiredofit/nginx:alpine-3.8
+docker push tiredofit/nginx:alpine-3.7
+docker push tiredofit/nginx:alpine-3.6
+docker push tiredofit/nginx:alpine-3.5
+docker push tiredofit/nginx:alpine-edge
 sed -i "s#alpine:edge#alpine:3.11#g" Dockerfile
