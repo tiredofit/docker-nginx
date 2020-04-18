@@ -1,3 +1,9 @@
+## 5.9.2 2020-04-18 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update to support tiredofit/alpine 4.5.1 release
+
+
 ## 5.9.1 2020-04-15 <dave at tiredofit dot ca>
 
    ### Added

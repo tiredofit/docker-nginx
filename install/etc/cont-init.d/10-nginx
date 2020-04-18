@@ -22,7 +22,7 @@ sed -i -e "s#<WORKER_RLIMIT_NOFILE>#${NGINX_WORKER_RLIMIT_NOFILE}#g" /etc/nginx/
 sed -i -e "s#<FASTCGI_BUFFERS>#${NGINX_FASTCGI_BUFFERS}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<FASTCGI_BUFFER_SIZE>#${NGINX_FASTCGI_BUFFER_SIZE}#g" /etc/nginx/nginx.conf
 
-if [ "$NGINX_ENABLE_COMPRESSION_BROTLI" = "TRUE" ]; then
+if var_true $NGINX_ENABLE_COMPRESSION_BROTLI ; then
   sed -i -e "s#<BROTLI_LEVEL>#${NGINX_COMPRESSION_BROTLI_LEVEL}#g" /etc/nginx/nginx.conf.d/compression_brotli.conf
   sed -i -e "s#<BROTLI_MIN_LENGTH>#${NGINX_COMPRESSION_BROTLI_MIN_LENGTH}#g" /etc/nginx/nginx.conf.d/compression_brotli.conf
   sed -i -e "s#<BROTLI_TYPES>#${NGINX_COMPRESSION_BROTLI_TYPES}#g" /etc/nginx/nginx.conf.d/compression_brotli.conf
@@ -31,7 +31,7 @@ else
   sed -i -e "\#include/etc/nginx/nginx.conf.d/compression_brotli.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_COMPRESSION_GZIP" = "TRUE" ]; then
+if var_true $NGINX_ENABLE_COMPRESSION_GZIP ; then
   sed -i -e "s#<GZIP_BUFFERS>#${NGINX_COMPRESSION_GZIP_BUFFERS}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_DISABLE>#${NGINX_COMPRESSION_GZIP_DISABLE}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_HTTP_VERSION>#${NGINX_COMPRESSION_GZIP_HTTP_VERSION}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
@@ -39,33 +39,33 @@ if [ "$NGINX_ENABLE_COMPRESSION_GZIP" = "TRUE" ]; then
   sed -i -e "s#<GZIP_MIN_LENGTH>#${NGINX_COMPRESSION_GZIP_MIN_LENGTH}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_PROXIED>#${NGINX_COMPRESSION_GZIP_PROXIED}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_TYPES>#${NGINX_COMPRESSION_GZIP_TYPES}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
-  if [ "$NGINX_COMPRESSION_GZIP_VARY" != "TRUE" ]; then
+  if var_false $NGINX_COMPRESSION_GZIP_VARY ; then
     sed -i -e "\#gzip_vary on;#d" /etc/nginx/nginx.conf.d/compression_gzip.conf
   fi
 else
   sed -i -e "\#include /etc/nginx/nginx.conf.d/compression_gzip.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_DDOS_PROTECTION" = "TRUE" ]; then
+if var_true $NGINX_ENABLE_DDOS_PROTECTION ; then
   sed -i -e "s#<DDOS_CONNECTIONS_PER_IP>#${NGINX_DDOS_CONNECTIONS_PER_IP}#g" /etc/nginx/nginx.conf.d/ddos_protection.conf
   sed -i -e "s#<DDOS_REQUESTS_PER_IP>#${NGINX_DDOS_REQUESTS_PER_IP}#g" /etc/nginx/nginx.conf.d/ddos_protection.conf
 else
   sed -i -e "\#include /etc/nginx/nginx.conf.d/ddos_protection.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_EPOLL" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_EPOLL ; then
   sed -i -e "\#use_epoll;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_EXPLOIT_PROTECTION" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_EXPLOIT_PROTECTION ; then
   sed -i -e "\#include /etc/nginx/nginx.conf.d/exploit_protection.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_MULTI_ACCEPT" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_MULTI_ACCEPT ; then
   sed -i -e "\#multi_accept on;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_OPEN_FILE_CACHE" = "TRUE" ]; then
+if var_true $NGINX_ENABLE_OPEN_FILE_CACHE ; then
   sed -i -e "s#<OPEN_FILE_CACHE_MAX>#${NGINX_OPEN_FILE_CACHE_MAX}#g" /etc/nginx/nginx.conf.d/open_file_cache.conf
   sed -i -e "s#<OPEN_FILE_CACHE_INACTIVE>#${NGINX_OPEN_FILE_CACHE_INACTIVE}#g" /etc/nginx/nginx.conf.d/open_file_cache.conf
   sed -i -e "s#<OPEN_FILE_CACHE_VALID>#${NGINX_OPEN_FILE_CACHE_VALID}#g" /etc/nginx/nginx.conf.d/open_file_cache.conf
@@ -75,39 +75,39 @@ else
   sed -i -e "\#include /etc/nginx/nginx.conf.d/open_file_cache.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_RESET_TIMEDOUT_CONNECTION" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_RESET_TIMEDOUT_CONNECTION ; then
   sed -i -e "\#reset_timedout_connection#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_REVERSE_PROXY" = "TRUE" ]; then
+if var_true $NGINX_ENABLE_REVERSE_PROXY ; then
   sed -i -e "s#<REAL_IP_HEADER>#${NGINX_REAL_IP_HEADER}#g" /etc/nginx/nginx.conf.d/reverse_proxy.conf
   sed -i -e "s#<SET_REAL_IP_FROM>#${NGINX_SET_REAL_IP_FROM}#g" /etc/nginx/nginx.conf.d/reverse_proxy.conf
 else
   sed -i -e "\#include /etc/nginx/nginx.conf.d/reverse_proxy.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_SENDFILE" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_SENDFILE ; then
   sed -i -e "\#sendfile#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_SITE_OPTIMIZATION" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_SITE_OPTIMIZATION ; then
   sed -i -e "\#include /etc/nginx/nginx.conf.d/site_optimization.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_SERVER_TOKENS" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_SERVER_TOKENS ; then
   sed -i -e "\#server_tokens off;#d" /etc/nginx/nginx.conf
   sed -i -e "\#more_clear_headers Server;#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_TCPNOPUSH" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_TCPNOPUSH ; then
   sed -i -e "\#tcp_nopush#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$NGINX_ENABLE_TCPNODELAY" != "TRUE" ]; then
+if var_false $NGINX_ENABLE_TCPNODELAY ; then
   sed -i -e "\#tcp_nodelay#d" /etc/nginx/nginx.conf
 fi
 
-if [ "$ENABLE_ZABBIX" != "TRUE" ]; then
+if var_false $ENABLE_ZABBIX ; then
   sed -i -e "\#include /etc/nginx/nginx.conf.d/zabbix.conf;#d" /etc/nginx/nginx.conf
 fi
 
@@ -121,11 +121,7 @@ case "$NGINX_MODE" in
     :
   ;;
   "REDIRECT")
-    if [ ! -n "$NGINX_REDIRECT_URL" ]; then
-      echo '** [nginx] ERROR: No NGINX_REDIRECT_URL Set!'
-      exit 1
-    fi
-
+    sanity_var NGINX_REDIRECT_URL "No Redirect URL"
     NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
 
     sed -i "s#rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};#g" /etc/nginx/conf.d/redirect.template
@@ -139,7 +135,7 @@ case "$NGINX_MODE" in
   ;;
 esac
 
-if [ "$NGINX_ENABLE_APPLICATION_CONFIGURATION" = "TRUE" ]; then
+if var_true $NGINX_ENABLE_APPLICATION_CONFIGURATION ; then
 ## Configure default.conf
   ### Map Authentication
   case "$NGINX_AUTHENTICATION_TYPE" in
@@ -212,7 +208,7 @@ EOF
 
 
   ### Perform Nginx FastCGI reverse proxy modifications
-  if [ "$NGINX_ENABLE_FASTCGI_HTTPS" = "TRUE" ]; then
+  if var_true $NGINX_ENABLE_FASTCGI_HTTPS ; then
     print_notice "Enable Nginx FastCGI HTTPS Termination Support"
     echo "fastcgi_param  HTTPS 'on';" >> /etc/nginx/fastcgi_params
     PROTOCOL="https://"
@@ -239,7 +235,7 @@ case "$STAGE" in
 esac
 
 #### Create Sample HTML File if doesn't exist
-if [ "$NGINX_ENABLE_CREATE_SAMPLE_HTML" = "TRUE" ]; then
+if var_true $NGINX_ENABLE_CREATE_SAMPLE_HTML ; then
   if [ ! -f "${NGINX_WEBROOT}/index.html" ] ; then
      print_notice "Creating sample index.html"
      mkdir -p ${NGINX_WEBROOT}
