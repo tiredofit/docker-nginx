@@ -1,3 +1,9 @@
+## 5.9.4 2020-05-09 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Remove faulty access log statement in site_optimization.conf
+
+
 ## 5.9.3 2020-04-22 <dave at tiredofit dot ca>
 
    ### Added
