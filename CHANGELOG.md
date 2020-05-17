@@ -1,3 +1,9 @@
+## 5.10.0 2020-05-17 <dave at tiredofit dot ca>
+
+   ### Added
+      - Introduced Reverse Proxy Feature set by NGINX_MODE=PROXY and NGINX_PROXY_URL
+
+
 ## 5.9.4 2020-05-09 <dave at tiredofit dot ca>
 
    ### Changed

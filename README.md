@@ -175,8 +175,9 @@ Presently you can compress your served content with gzip and brotli. More compre
 | Parameter | Description |
 |-----------|-------------|
 | `FORCE_RESET_PERMISSIONS` | Force setting Nginx files ownership to web server user - Default `TRUE` | 
-| `NGINX_MODE` | Set to `NORMAL`, `MAINTENANCE` , `REDIRECT` - Default `NORMAL` |
+| `NGINX_MODE` | Set to `NORMAL`, `MAINTENANCE` , `PROXY`, `REDIRECT` - Default `NORMAL` |
 | `NGINX_REDIRECT_URL` | If `REDIRECT` set enter full url to forward all traffic to e.g. `https://example.com` |
+| `NGINX_PROXY_URL` | If `REDIRECT` set enter full url to proxy all traffic to e.g. `https://example.com:443` |
 | `NGINX_USER` | What user to run nginx as inside container - Default `nginx` |
 | `NGINX_GROUP` | What group to run nginx as inside container - Default `www-data` |
 
