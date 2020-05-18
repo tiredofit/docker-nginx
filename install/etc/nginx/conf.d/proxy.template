@@ -2,13 +2,8 @@
       ### Don't Touch This
       listen <LISTEN_PORT>;
       server_name localhost;
-      root <WEBROOT>;
       ###
 
-      ### Populate your custom directives here
-      index  index.html index.htm;
-     
-      
       location / {
          proxy_pass         <PROXY_URL>;
          proxy_redirect     off;
@@ -20,6 +15,4 @@
 
       ### Don't edit past here
 
-      include /etc/nginx/nginx.conf.d/site_optimization.conf;
-      include /etc/nginx/nginx.conf.d/exploit_protection.conf;
 }

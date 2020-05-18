@@ -1,3 +1,9 @@
+## 5.10.1 2020-05-17 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Remove Site Optimizations when using PROXY mode
+
+
 ## 5.10.0 2020-05-17 <dave at tiredofit dot ca>
 
    ### Added

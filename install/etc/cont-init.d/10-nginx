@@ -127,7 +127,7 @@ case "$NGINX_MODE" in
     print_notice "Proxy Mode Activated - Proxying all traffic to ${NGINX_PROXY_URL}"
     sed -i "s#<PROXY_URL>#${NGINX_PROXY_URL}#g" /etc/nginx/conf.d/proxy.template
     mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
-    mv /etc/nginx/conf.d/proxy.template /etc/nginx/conf.d/redirect.conf
+    mv /etc/nginx/conf.d/proxy.template /etc/nginx/conf.d/proxy.conf
   ;;
   "REDIRECT")
     sanity_var NGINX_REDIRECT_URL "No Redirect URL"
