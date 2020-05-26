@@ -43,7 +43,7 @@ This Container uses [tiredofit/alpine:3.11](https://hub.docker.com/r/tiredofit/a
 This image assumes that you are using a reverse proxy such as 
 [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy) and optionally the [Let's Encrypt Proxy 
 Companion @ 
-https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion) 
+https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion) or traefik 
 in order to serve your pages. However, it will run just fine on it's own if you map appropriate ports.
 
 # Installation
