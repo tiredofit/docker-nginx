@@ -1,3 +1,45 @@
+## 5.11.0 2020-06-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update to support tiredofit/debian 5.0.0 base image
+
+
+## 5.10.4 2020-06-05 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add inotify-tools
+
+
+## 5.10.3 2020-06-05 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change /etc/s6/services to /etc/services.d
+
+
+## 5.10.2 2020-05-27 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Cleanup Logrotate if ERROR LOG and ACCESS LOG location are the same
+
+
+## 5.10.1 2020-05-17 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Remove Site Optimizations when using PROXY mode
+
+
+## 5.10.0 2020-05-17 <dave at tiredofit dot ca>
+
+   ### Added
+      - Introduced Reverse Proxy Feature set by NGINX_MODE=PROXY and NGINX_PROXY_URL
+
+
+## 5.9.4 2020-05-09 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Remove faulty access log statement in site_optimization.conf
+
+
 ## 5.9.3 2020-04-22 <dave at tiredofit dot ca>
 
    ### Added

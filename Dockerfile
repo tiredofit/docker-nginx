@@ -1,4 +1,4 @@
-FROM tiredofit/alpine:3.11
+FROM tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
@@ -56,71 +56,65 @@ RUN set -x && \
       --with-compat \
       --with-file-aio \
       --with-http_v2_module \
+ #     --with-pcre=/usr/src/pcre \
+ #     --with-pcre-jit \
+ #     --with-zlib=/usr/src/zlib \
+ #     --with-openssl=/usr/src/openssl \
+ #     --with-openssl-opt=no-nextprotoneg \
 #     --with-http_v3_module \
 #      --with-quiche=/usr/src/quiche \
       --add-module=/usr/src/headers-more-nginx-module \
       --add-module=/usr/src/nginx-brotli \
       --add-module=/usr/src/nginx-auth-ldap \
+      --add-module=/usr/src/nginx-ext-dav \
     " && \
-    addgroup -S www-data && \
-    adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data nginx && \
-    apk update && \
-    apk upgrade && \
-    apk add -t .nginx-build-deps \
-                gcc \
-                gd-dev \
-                geoip-dev \
-                gnupg \
-                libc-dev \
-                libressl-dev \
-                libxslt-dev \
-                linux-headers \
-                make \
-                pcre-dev \
-                perl-dev \
-                tar \
-                zlib-dev \
-                && \
-    \
-    apk add -t .brotli-build-deps \
-                autoconf \
-                automake \
-                cmake \
-                g++ \
-                git \
-                libtool \
-                && \
-    \
-#    apk add -t .quiche-build-deps \
-#                cargo \
-#                go \
-#                rust \
-#                && \
-#    \
-    apk add -t .auth-ldap-build-deps \
-                openldap-dev \
-                && \
+    adduser --disabled-password --system --home /var/cache/nginx --shell /sbin/nologin --ingroup www-data nginx && \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+                    build-essential \
+                    git \
+                    software-properties-common \
+                    inotify-tools \
+                    perl \
+                    libperl-dev \
+                    libgd3 \
+                    libgd-dev \
+                    libgeoip1 \
+                    libgeoip-dev \
+                    geoip-bin \
+                    libxml2 \
+                    libxml2-dev \
+                    libxslt1.1 \
+                    libxslt1-dev \
+                    libpcre3 \ 
+                    libpcre3-dev \ 
+                    zlib1g \ 
+                    zlib1g-dev \ 
+                    openssl \ 
+                    libssl-dev \ 
+                    libldap2-dev \
+                    && \
     \
     mkdir -p /www /var/log/nginx && \
     chown -R nginx:www-data /var/log/nginx && \
+#    mkdir -p /usr/src/pcre && \
+#    curl -ssL https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.gz | tar xvfz - --strip 1 -C /usr/src/pcre && \
+#    mkdir -p /usr/src/zlib && \
+#    curl -ssL https://www.zlib.net/zlib-1.2.11.tar.gz | tar xvfz - --strip 1 -C /usr/src/zlib && \
+#    mkdir -p /usr/src/openssl && \
+#    curl -ssL https://www.openssl.org/source/openssl-1.1.1c.tar.gz | tar xvfz - --strip 1 -C /usr/src/openssl && \
 #    git clone --recursive https://github.com/cloudflare/quiche /usr/src/quiche && \
     git clone --recursive https://github.com/openresty/headers-more-nginx-module.git /usr/src/headers-more-nginx-module && \
     git clone --recursive https://github.com/google/ngx_brotli.git /usr/src/nginx-brotli && \
     cd /usr/src/nginx-brotli && \
     git checkout -b $NGINX_BROTLI_VERSION $NGINX_BROTLI_VERSION && \
     cd /usr/src && \
+    git clone https://github.com/arut/nginx-dav-ext-module/ /usr/src/nginx-ext-dav && \
     git clone https://github.com/kvspb/nginx-auth-ldap /usr/src/nginx-auth-ldap && \
     mkdir -p /usr/src/nginx && \
     curl -sSL http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/nginx && \
     cd /usr/src/nginx && \
-    ./configure $CONFIG --with-debug && \
-    make -j$(getconf _NPROCESSORS_ONLN) && \
-    mv objs/nginx objs/nginx-debug && \
-    mv objs/ngx_http_xslt_filter_module.so objs/ngx_http_xslt_filter_module-debug.so && \
-    mv objs/ngx_http_image_filter_module.so objs/ngx_http_image_filter_module-debug.so && \
-    mv objs/ngx_http_geoip_module.so objs/ngx_http_geoip_module-debug.so && \
-    mv objs/ngx_http_perl_module.so objs/ngx_http_perl_module-debug.so && \
-    mv objs/ngx_stream_geoip_module.so objs/ngx_stream_geoip_module-debug.so && \
     ./configure $CONFIG && \
     make -j$(getconf _NPROCESSORS_ONLN) && \
     make install && \
@@ -129,41 +123,22 @@ RUN set -x && \
     mkdir -p /usr/share/nginx/html/ && \
     install -m644 html/index.html /usr/share/nginx/html/ && \
     install -m644 html/50x.html /usr/share/nginx/html/ && \
-    install -m755 objs/nginx-debug /usr/sbin/nginx-debug && \
-    install -m755 objs/ngx_http_xslt_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_xslt_filter_module-debug.so && \
-    install -m755 objs/ngx_http_image_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_image_filter_module-debug.so && \
-    install -m755 objs/ngx_http_geoip_module-debug.so /usr/lib/nginx/modules/ngx_http_geoip_module-debug.so && \
-    install -m755 objs/ngx_http_perl_module-debug.so /usr/lib/nginx/modules/ngx_http_perl_module-debug.so && \
-    install -m755 objs/ngx_stream_geoip_module-debug.so /usr/lib/nginx/modules/ngx_stream_geoip_module-debug.so && \
     ln -s ../../usr/lib/nginx/modules /etc/nginx/modules && \
-    strip /usr/sbin/nginx* && \
-    strip /usr/lib/nginx/modules/*.so && \
-    \
-    apk add -t .gettext \
-        gettext && \
-    mv /usr/bin/envsubst /tmp/ && \
-    \
-    runDeps="$( \
-      scanelf --needed --nobanner /usr/sbin/nginx /usr/lib/nginx/modules/*.so /tmp/envsubst \
-        | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-        | sort -u \
-        | xargs -r apk info --installed \
-        | sort -u \
-    )" && \
-    \
-    apk add \
-        $runDeps \
-        apache2-utils \
-        inotify-tools \
-        && \
-    apk del .nginx-build-deps && \
-    apk del .brotli-build-deps && \
-    apk del .auth-ldap-build-deps && \
-#    apk del .quiche-build-deps && \
-    apk del .gettext && \
-    mv /tmp/envsubst /usr/local/bin/ && \
-    \
-    rm -rf /etc/nginx/*.default /usr/src/* /var/tmp/* /var/cache/apk/*
+    mkdir -p /var/log/nginx && \
+    apt-get purge -y  build-essential \
+                      git \
+                      libgd-dev \
+                      libgeoip-dev \
+                      libldap2-dev \
+                      libperl-dev \
+                      libpcre3-dev \ 
+                      libssl-dev \ 
+                      libxml2-dev \
+                      libxslt1-dev \
+                      zlib1g-dev \ 
+                      && \
+    apt-get autoremove -y && \
+    rm -rf /etc/nginx/*.default /usr/src/* /var/tmp/* /var/lib/apt/lists/*
 
 ### Networking Configuration
 EXPOSE 80
