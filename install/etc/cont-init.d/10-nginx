@@ -272,7 +272,7 @@ chown -R "${NGINX_USER}" "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCAT
 
 ### Update Logrotate
 if [ "${NGINX_LOG_ERROR_LOCATION}" = "${NGINX_LOG_ACCESS_LOCATION}" ] ; then
-  sed -i -e "s#<ERROR_LOG_LOCATION>/*.log##g" /etc/logrotate.d/nginx
+  sed -i -e "s#<ERROR_LOG_LOCATION>/\*.log##g" /etc/logrotate.d/nginx
 else
   sed -i -e "s#<ERROR_LOG_LOCATION>#${NGINX_LOG_ERROR_LOCATION}#g" /etc/logrotate.d/nginx
 fi
