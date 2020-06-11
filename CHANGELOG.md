@@ -1,3 +1,9 @@
+## 5.11.1 2020-06-11 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for logrotate if Access Logs and Error Logs are in same location
+
+
 ## 5.11.0 2020-06-09 <dave at tiredofit dot ca>
 
    ### Added
