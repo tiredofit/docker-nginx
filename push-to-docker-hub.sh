@@ -1,13 +1,13 @@
 #!/bin/bash
-docker rmi tiredofit/alpine:edge
-docker rmi tiredofit/alpine:3.12
-docker rmi tiredofit/alpine:3.11
-docker rmi tiredofit/alpine:3.10
-docker rmi tiredofit/alpine:3.9
-docker rmi tiredofit/alpine:3.8
-docker rmi tiredofit/alpine:3.7
-docker rmi tiredofit/alpine:3.6
-docker rmi tiredofit/alpine:3.5
+#docker rmi tiredofit/alpine:edge
+#docker rmi tiredofit/alpine:3.12
+#docker rmi tiredofit/alpine:3.11
+#docker rmi tiredofit/alpine:3.10
+#docker rmi tiredofit/alpine:3.9
+#docker rmi tiredofit/alpine:3.8
+#docker rmi tiredofit/alpine:3.7
+#docker rmi tiredofit/alpine:3.6
+#docker rmi tiredofit/alpine:3.5
 docker rmi tiredofit/nginx:alpine-3.12
 docker rmi tiredofit/nginx:alpine-3.11
 docker rmi tiredofit/nginx:alpine-3.10

@@ -4,7 +4,7 @@ source /assets/functions/00-container
 prepare_service 10-nginx
 PROCESS_NAME="nginx-config-reload"
 
-if var_true $NGINX_RELOAD_ON_CONFIG_CHANGE ; then
+if var_true "$NGINX_RELOAD_ON_CONFIG_CHANGE" ; then
 	print_notice "Enabling Auto Reload of Nginx Configuration when configuration files change"
 else
 	service_stop 11-nginx-config-reload
