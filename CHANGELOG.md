@@ -1,3 +1,12 @@
+## 5.11.2 2020-07-31 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.19.1
+
+   ### Changed
+      - Quiet down notification about not finding a log
+
+
 ## 5.11.1 2020-06-11 <dave at tiredofit dot ca>
 
    ### Changed

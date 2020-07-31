@@ -2,7 +2,7 @@ FROM tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.19.0 \
+ENV NGINX_VERSION=1.19.1 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=e505dce68acc190cc5a1e780a3b0275e39f160ca \
     NGINX_USER=nginx \
@@ -16,8 +16,8 @@ RUN set -x && \
       --sbin-path=/usr/sbin/nginx \
       --modules-path=/usr/lib/nginx/modules \
       --conf-path=/etc/nginx/nginx.conf \
-      --error-log-path=/var/log/nginx/error.log \
-      --http-log-path=/var/log/nginx/access.log \
+      --error-log-path=/dev/null \
+      --http-log-path=/dev/null.log \
       --pid-path=/var/run/nginx.pid \
       --lock-path=/var/run/nginx.lock \
       --http-client-body-temp-path=/var/cache/nginx/client_temp \
