@@ -219,6 +219,7 @@ You can also enter into the container and type `maintenance ARG`, where ARG is e
 | `NGINX_OPEN_FILE_CACHE_MAX`              | Maximum files to cache                                                                  | `200000` |
 | `NGINX_OPEN_FILE_CACHE_MIN_USES`         | Minimum uses of file before cashing                                                     | `2`      |
 | `NGINX_OPEN_FILE_CACHE_VALID`            | Cache a file if has been accessed within this window                                    | `2m`     |
+| `NGINX_CLIENT_BODY_BUFFER_SIZE`          | Client Buffer size                                                                      | `16k`    |
 | `NGINX_FASTCGI_BUFFERS`                  | Amount of FastCGI Buffers                                                               | `16 16k` |
 | `NGINX_FASTCGI_BUFFER_SIZE`              | FastCGI Buffer Size                                                                     | `32k`    |
 

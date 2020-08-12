@@ -16,6 +16,7 @@ sed -i "s#<KEEPALIVE_REQUESTS>#${NGINX_KEEPALIVE_REQUESTS}#g" /etc/nginx/nginx.c
 sed -i "s#<KEEPALIVE_TIMEOUT>#${NGINX_KEEPALIVE_TIMEOUT}#g" /etc/nginx/nginx.conf
 sed -i "s#<SEND_TIMEOUT>#${NGINX_SEND_TIMEOUT}#g" /etc/nginx/nginx.conf
 sed -i "s#<UPLOAD_MAX_SIZE>#${NGINX_UPLOAD_MAX_SIZE}#g" /etc/nginx/nginx.conf
+sed -i "s#<CLIENT_BODY_BUFFER_SIZE>#${NGINX_CLIENT_BODY_BUFFER_SIZE}#g" /etc/nginx/nginx.conf
 sed -i "s#<USER>#${NGINX_USER}#g" /etc/nginx/nginx.conf
 sed -i "s#<WORKER_CONNECTIONS>#${NGINX_WORKER_CONNECTIONS}#g" /etc/nginx/nginx.conf
 sed -i "s#<WORKER_PROCESSES>#${NGINX_WORKER_PROCESSES}#g" /etc/nginx/nginx.conf
