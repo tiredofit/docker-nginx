@@ -1,3 +1,9 @@
+## 5.11.3 2020-08-12 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add NGINX_CLIENT_BODY_BUFFER_SIZE environment variable
+
+
 ## 5.11.2 2020-07-31 <dave at tiredofit dot ca>
 
    ### Added
