@@ -4,6 +4,15 @@ source /assets/functions/00-container
 prepare_service
 PROCESS_NAME="nginx"
 
+if var_false "${ENABLE_NGINX}" ; then
+    print_notice "Disabling Nginx Functionality"
+    service_stop 10-Nginx
+    service_stop 11-nginx-config-reload
+    rm -rf /etc/logrotate.d/nginx
+    rm -rf /etc/zabbix/nginx*
+    liftoff
+fi
+
 ### Parse Configuration
 sed -i "s#<ACCESS_LOG>#${NGINX_LOG_ACCESS_FILE}#g" /etc/nginx/nginx.conf
 sed -i "s#<ACCESS_LOG_LOCATION>#${NGINX_LOG_ACCESS_LOCATION}#g" /etc/nginx/nginx.conf
