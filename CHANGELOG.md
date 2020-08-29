@@ -1,3 +1,9 @@
+## 5.11.5 2020-08-29 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add ENABLE_NGINX variable
+
+
 ## 5.11.4 2020-08-18 <dave at tiredofit dot ca>
 
    ### Added
