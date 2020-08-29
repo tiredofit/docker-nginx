@@ -8,6 +8,8 @@ if var_false "${ENABLE_NGINX}" ; then
     print_notice "Disabling Nginx Functionality"
     service_stop 10-Nginx
     service_stop 11-nginx-config-reload
+    rm -rf /etc/logrotate.d/nginx
+    rm -rf /etc/zabbix/nginx*
     liftoff
 fi
 
