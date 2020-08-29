@@ -11,6 +11,7 @@ if var_false "${ENABLE_NGINX}" ; then
     rm -rf /etc/logrotate.d/nginx
     rm -rf /etc/zabbix/nginx*
     liftoff
+    exit 0
 fi
 
 ### Parse Configuration
