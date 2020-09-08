@@ -1,3 +1,9 @@
+## 5.11.6 2020-09-07 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change to LLNG Authentication method to address CVE
+
+
 ## 5.11.5 2020-08-29 <dave at tiredofit dot ca>
 
    ### Added
