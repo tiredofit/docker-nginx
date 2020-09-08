@@ -1,4 +1,5 @@
 ### Start LemonLDAP:NG Authentication
+set $original_uri $uri$is_args$args;
 auth_request /lmauth;
 auth_request_set $lmremote_user $upstream_http_lm_remote_user;
 auth_request_set $lmlocation $upstream_http_location;
