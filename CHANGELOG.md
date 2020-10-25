@@ -1,3 +1,9 @@
+## 5.12.0 2020-10-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Added Nginx Ultimate Bad Bot Blocker for blocking bad referrers or scrapers
+
+
 ## 5.11.7 2020-10-01 <dave at tiredofit dot ca>
 
    ### Added
