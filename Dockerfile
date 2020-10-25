@@ -4,7 +4,8 @@ LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 ### Set Nginx Version Number
 ENV NGINX_VERSION=1.19.3 \
     NGINX_AUTH_LDAP_VERSION=master \
-    NGINX_BROTLI_VERSION=e505dce68acc190cc5a1e780a3b0275e39f160ca \
+    NGINX_BROTLI_VERSION=25f86f0bac1101b6512135eac5f93c49c63609e3 \
+    NGINX_BOT_BLOCKER_VERSION=V4.2020.10.2157 \
     NGINX_USER=nginx \
     NGINX_GROUP=www-data \
     NGINX_WEBROOT=/www/html
@@ -59,6 +60,7 @@ RUN set -x && \
 #     --with-http_v3_module \
 #      --with-quiche=/usr/src/quiche \
       --add-module=/usr/src/headers-more-nginx-module \
+      --add-module=/usr/src/nginx_cookie_flag_module \
       --add-module=/usr/src/nginx-brotli \
       --add-module=/usr/src/nginx-auth-ldap \
     " && \
@@ -106,6 +108,7 @@ RUN set -x && \
 #    git clone --recursive https://github.com/cloudflare/quiche /usr/src/quiche && \
     git clone --recursive https://github.com/openresty/headers-more-nginx-module.git /usr/src/headers-more-nginx-module && \
     git clone --recursive https://github.com/google/ngx_brotli.git /usr/src/nginx-brotli && \
+    git clone --recursive https://github.com/AirisX/nginx_cookie_flag_module /usr/src/nginx_cookie_flag_module && \
     cd /usr/src/nginx-brotli && \
     git checkout -b $NGINX_BROTLI_VERSION $NGINX_BROTLI_VERSION && \
     cd /usr/src && \
@@ -151,11 +154,31 @@ RUN set -x && \
         | sort -u \
     )" && \
     \
-    apk add \
+    apk add -t .nginx-run-deps \
         $runDeps \
         apache2-utils \
         inotify-tools \
         && \
+    \
+    mkdir -p /etc/nginx/nginx.conf.d/blockbots && \
+    mkdir -p /etc/nginx/nginx.conf.d/blockbots-custom && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/bad-referrer-words.conf -o /etc/nginx/nginx.conf.d/blockbots/bad-referrer-words.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/bad-referrers.conf -o /etc/nginx/nginx.conf.d/blockbots/bad-referrers.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/blacklist-ips.conf -o /etc/nginx/nginx.conf.d/blockbots/blacklist-ips.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/blacklist-user-agents.conf -o /etc/nginx/nginx.conf.d/blockbots/blacklist-user-agents.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/blockbots.conf -o /etc/nginx/nginx.conf.d/blockbots/blockbots.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/custom-bad-referrers.conf -o /etc/nginx/nginx.conf.d/blockbots/custom-bad-referrers.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/ddos.conf -o /etc/nginx/nginx.conf.d/blockbots/ddos.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/whitelist-domains.conf -o /etc/nginx/nginx.conf.d/blockbots/whitelist-domains.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/whitelist-ips.conf -o /etc/nginx/nginx.conf.d/blockbots/whitelist-ips.conf && \
+    curl -sL https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/conf.d/globalblacklist.conf -o /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
+    sed -i "s|/etc/nginx/bots.d/|/etc/nginx/nginx.conf.d/blockbots/|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
+    sed -i "s|/etc/nginx/nginx.conf.d/blockbots/bad-referrer-words.conf|/etc/nginx/nginx.conf.d/blockbots-custom/bad-referrer-words.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
+    sed -i "s|/etc/nginx/nginx.conf.d/blockbots/blacklist-ips.conf|/etc/nginx/nginx.conf.d/blockbots-custom/blacklist-ips.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
+    sed -i "s|/etc/nginx/nginx.conf.d/blockbots/blacklist-user-agents.conf|/etc/nginx/nginx.conf.d/blockbots-custom/blacklist-user-agents.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
+    sed -i "s|/etc/nginx/nginx.conf.d/blockbots/whitelist-domains.conf|/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-domains.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
+    sed -i "s|/etc/nginx/nginx.conf.d/blockbots/whitelist-ips.conf|/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-ips.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
+
     apk del .nginx-build-deps && \
     apk del .brotli-build-deps && \
     apk del .auth-ldap-build-deps && \

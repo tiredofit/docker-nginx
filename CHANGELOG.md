@@ -1,3 +1,9 @@
+## 5.12.0 2020-10-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add Nginx Ultimate Bad Bot Blocker to issue 444s to crawlers and bad referrers
+
+
 ## 5.11.7 2020-10-01 <dave at tiredofit dot ca>
 
    ### Added

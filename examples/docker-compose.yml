@@ -2,15 +2,13 @@ version: '3.7'
 services:
   
   nginx-app:
-    image: registry.selfdesign.org/docker/nginx
+    image: tiredofit/nginx:latest
     container_name: nginx-app
     labels:
+    labels:
       - traefik.enable=true
-      - traefik.frontend.rule=Host:nginx.example.com
-      - traefik.port=80
-      - traefik.protocol=http
-      - traefik.docker.network=proxy
-      - traefik.backend=nginx-app
+      - traefik.http.routers.nginx-app.rule=Host(`nginx.example.com`)
+      - traefik.http.services.nginx-app.loadbalancer.server.port=80
     volumes:
       - ./data:/www/html
       - ./logs:/www/logs

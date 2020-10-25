@@ -34,6 +34,144 @@ sed -i "s#<WORKER_RLIMIT_NOFILE>#${NGINX_WORKER_RLIMIT_NOFILE}#g" /etc/nginx/ngi
 sed -i "s#<FASTCGI_BUFFERS>#${NGINX_FASTCGI_BUFFERS}#g" /etc/nginx/nginx.conf
 sed -i "s#<FASTCGI_BUFFER_SIZE>#${NGINX_FASTCGI_BUFFER_SIZE}#g" /etc/nginx/nginx.conf
 
+if var_false "$NGINX_ENABLE_BLOCK_BOTS" ; then
+  sed -i "\#include/etc/nginx/nginx.conf.d/bot_blocker.conf;#d" /etc/nginx/nginx.conf
+else
+  sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/nginx.conf.d/blockbots/blockbots.conf;" /etc/nginx/conf.d/*.conf
+  sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/nginx.conf.d/blockbots/ddos.conf;" /etc/nginx/conf.d/*.conf
+  if [ ! -f "/etc/nginx/nginx.conf.d/blockbots-custom/bad-referrer-words.conf" ]; then
+    cp -R /etc/nginx/nginx.conf.d/blockbots/bad-referrer-words.conf /etc/nginx/nginx.conf.d/blockbots-custom/
+  fi
+  if [ ! -f "/etc/nginx/nginx.conf.d/blockbots-custom/blacklist-ips.conf" ]; then
+    cp -R /etc/nginx/nginx.conf.d/blockbots/blacklist-ips.conf /etc/nginx/nginx.conf.d/blockbots-custom/
+  fi
+  if [ ! -f "/etc/nginx/nginx.conf.d/blockbots-custom/blacklist-user-agents.conf" ]; then
+    cp -R /etc/nginx/nginx.conf.d/blockbots/blacklist-user-agents.conf /etc/nginx/nginx.conf.d/blockbots-custom/
+  fi
+  if [ ! -f "/etc/nginx/nginx.conf.d/blockbots-custom/custom-bad-referrers.conf" ]; then
+    cp -R /etc/nginx/nginx.conf.d/blockbots/custom-bad-referrers.conf /etc/nginx/nginx.conf.d/blockbots-custom/
+  fi
+  if [ ! -f "/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-ips.conf" ]; then
+    cp -R /etc/nginx/nginx.conf.d/blockbots/whitelist-ips.conf /etc/nginx/nginx.conf.d/blockbots-custom/
+  fi
+  if [ ! -f "/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-domains.conf" ]; then
+    cp -R /etc/nginx/nginx.conf.d/blockbots/whitelist-domains.conf /etc/nginx/nginx.conf.d/blockbots-custom/
+  fi
+  if [ -d "/assets/nginx/blockbots-custom" ] ; then
+    print_notice "Detected Custom Bot Blocking configuration"
+    cp -R /assets/nginx/blockbots-custom/* /etc/nginx/nginx.conf.d/blockbots-custom/
+  fi
+
+  if [ -n "$NGINX_BLOCK_BOTS_WHITELIST_DOMAIN" ]; then
+    whitelist_domains=$(echo "$NGINX_BLOCK_BOTS_WHITELIST_DOMAIN" | tr "," "\n")
+    for wl_domain in $whitelist_domains
+    do
+      wl_domain_orig=${wl_domain}
+      wl_domain="$(echo $wl_domain | sed "s|\\.|\\\.|g" | sed "s|-|\\\-|g")"
+      if ! grep -q "${wl_domain_orig}" /etc/nginx/nginx.conf.d/blockbots-custom/whitelist-domains.conf ; then
+        print_debug  "Adding '${wl_domain_orig}' domain to bot blocker whitelist"
+        echo '"~*(?:\b)'$(echo $wl_domain)'(?:\b)" 0;' $(echo " # ${wl_domain_orig} automatically added on") $(date +"%Y-%m-%d-%H:%M:%S") >> /etc/nginx/nginx.conf.d/blockbots-custom/whitelist-domains.conf
+      else
+        print_debug "Skipping '${wl_domain_orig}' to be added to bot blocker domain whitelist"
+      fi
+    done
+  fi
+
+  if [ -n "$NGINX_BLOCK_BOTS_WHITELIST_IP" ]; then
+    whitelist_ips=$(echo "$NGINX_BLOCK_BOTS_WHITELIST_IP" | tr "," "\n")
+    for wl_ip in $whitelist_ips
+    do
+      if ! grep -q "${wl_ip}" /etc/nginx/nginx.conf.d/blockbots-custom/whitelist-ips.conf ; then
+        print_debug  "Adding IP: '${wl_ip}' to bot blocker whitelist"
+        echo "${wl_ip} 0; # Automatically added on $(date +"%Y-%m-%d-%H:%M:%S")" >> /etc/nginx/nginx.conf.d/blockbots-custom/whitelist-ips.conf
+      else
+        print_debug "Skipping IP: '${wl_ip}' from being added to bot blocker IP whitelist"
+      fi
+    done
+  fi
+
+  if [ -n ${NGINX_BLOCK_BOTS} ] ; then
+    if [[ "${NGINX_BLOCK_BOTS}" == *"ALL" ]] ; then
+      NGINX_BLOCK_BOTS=ALL
+    fi
+
+     IFS=","
+        for bot in $NGINX_BLOCK_BOTS
+        do
+
+      case $bot in
+          "ALL" | "all" )
+              nginx_block_bots="adidxbot,aolbuild,bingbot,bingpreview,DoCoMo,duckduckgo,facebookexternalhit,facebookplatform,AdsBot-Google,Googlebot,Googlebot-Image,Googlebot-Mobile,Googlebot-News,Googlebot/Test,Googlebot-Video,Google-HTTP-Java-Client,LinkedInBot,Gravityscan,Jakarta\\ Commons,Kraken/0.1,teoma,msnbot,msnbot-media,SAMSUNG,Slackbot,Slackbot-LinkExpanding,slurp,TwitterBot,Wordpress,yahoo"
+          ;;
+          "AOL" | "aol" )
+              nginx_block_bots="aolbuild,${nginx_block_bots}"
+          ;;
+          "BING" | "bing" )
+              nginx_block_bots="bingbot,bingpreview,${nginx_block_bots}"
+          ;;
+          "DOCOMO" | "docomo" )
+              nginx_block_bots="DoCoMo,${nginx_block_bots}"
+          ;;
+          "DUCKDUCKGO" | "duckduckgo" )
+              nginx_block_bots="duckduckgo,${nginx_block_bots}"
+          ;;
+          "FACEBOOK" | "facebook" )
+              nginx_block_bots="developers.facebook.com,facebookexternalhit,facebookplatform,${nginx_block_bots}"
+          ;;
+          "GOOGLE" | "google" )
+              nginx_block_bots="AdsBot-Google,Googlebot,Googlebot-Image,Googlebot-Mobile,Googlebot-News,Googlebot/Test,Googlebot-Video,Google-HTTP-Java-Client,${nginx_block_bots}"
+          ;;
+          "LINKEDIN" | "linkedin" )
+              nginx_block_bots="LinkedInBot,${nginx_block_bots}"
+          ;;
+          "MISC" | "misc" )
+              nginx_block_bots="adidxbot,Gravityscan,'Jakarta\ Commons',Kraken/0.1,teoma,${nginx_block_bots}"
+          ;;
+          "MSN" | "msn" )
+              nginx_block_bots="msnbot,msnbot-media,${nginx_block_bots}"
+          ;;
+          "SAMSUNG" | "samsung" )
+              nginx_block_bots="SAMSUNG,${nginx_block_bots}"
+          ;;
+          "SLACK" | "slack" )
+              nginx_block_bots="Slackbot,Slackbot-LinkExpanding,${nginx_block_bots}"
+          ;;
+          "SLURP" | "slurp" )
+              nginx_block_bots="slurp,${nginx_block_bots}"
+          ;;
+          "TWITTER" | "twitter" )
+              nginx_block_bots="TwitterBot,${nginx_block_bots}"
+          ;;
+          "WORDPRESS" | "wordpress" )
+              nginx_block_bots="Wordpress,${nginx_block_bots}"
+          ;;
+          "YAHOO" | "yahoo" )
+              nginx_block_bots="yahoo,${nginx_block_bots}"
+          ;;
+          * )
+              nginx_block_bots="${bot},${nginx_block_bots}"
+          ;;
+      esac
+    done
+
+    NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS="${nginx_block_bots}"
+  fi
+  if [ -n "$NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS" ]; then
+     IFS=","
+        for blacklist_ua in $NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS
+        do
+
+      blacklist_ua_orig="$(echo $blacklist_ua | sed "s|\\\||g")"
+      if ! grep -q "${blacklist_ua_orig}" /etc/nginx/nginx.conf.d/blockbots-custom/blacklist-user-agents.conf ; then
+        print_debug  "Adding UA: '${blacklist_ua_orig}' to bot blocker blacklist"
+        echo '"~*(?:\b)'$(echo $blacklist_ua)'(?:\b)" 3; # '${blacklist_ua_orig}' Automatically added on '$(date +"%Y-%m-%d-%H:%M:%S") >> /etc/nginx/nginx.conf.d/blockbots-custom/blacklist-user-agents.conf
+      else
+        print_debug "Skipping UA: '${blacklist_ua_orig}' from being added to bot blocker blacklist"
+      fi
+    done
+  fi
+fi
+
 if var_true "$NGINX_ENABLE_COMPRESSION_BROTLI"; then
   sed -i "s#<BROTLI_LEVEL>#${NGINX_COMPRESSION_BROTLI_LEVEL}#g" /etc/nginx/nginx.conf.d/compression_brotli.conf
   sed -i "s#<BROTLI_MIN_LENGTH>#${NGINX_COMPRESSION_BROTLI_MIN_LENGTH}#g" /etc/nginx/nginx.conf.d/compression_brotli.conf

@@ -12,6 +12,7 @@ This will build a container for [Nginx](https://www.nginx.org)
 *    Tracks Mainline release channel
 *    Many options configurable including compression, performance
 *    Includes Zabbix Monitoring (nginx status) on port 73
+*    Includes [Nginx Ultimate Bad Bot Blocker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker)
 *    Logrotate Included to roll over log files at 23:59, compress and retain for 7 days
 *    Ability to Password Protect (Basic), LDAP Authenticate or use LemonLDAP:NG Handler
 
@@ -35,6 +36,7 @@ This Container uses [tiredofit/alpine](https://hub.docker.com/r/tiredofit/alpine
   - [Data-Volumes](#data-volumes)
   - [Environment Variables](#environment-variables)
     - [Authentication Options](#authentication-options)
+    - [Bot Blocking Options](#bot-blocking-options)
     - [Logging Options](#logging-options)
     - [Compression Options](#compression-options)
     - [DDoS Options](#ddos-options)
@@ -118,6 +120,16 @@ You can choose to request visitors be authenticated before accessing your site. 
 When working with `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2` you will need to omit any `$` chracters from your string. It will be added in upon container startup. Example:
 `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1=HTTP_AUTH_USER,uid,upstream_http_uid` will get converted into `HTTP_AUTH_USER,$uid,$upstream_http_uid` and get placed in the appropriate areas in the configuration.
 
+#### Bot Blocking Options
+
+| Parameter                           | Description                                                                                                                                                                                                    | Default                                             |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `NGINX_BLOCK_BOTS_WHITELIST_DOMAIN` | Domains to whitelist from blocking comma seperated e.g. `example1.com,example2.com`                                                                                                                            |                                                     |
+| `NGINX_BLOCK_BOTS_WHITELIST_IP`     | IP Addresses/Networks to Whitelist from Blocking comma seperated                                                                                                                                               | `127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/24` |
+| `NGINX_BLOCK_BOTS`                  | Bots to Block `ALL` `AOL` `BING` `DOCOMO` `DUCKDUCKGO` `FACEBOOK` `GOOGLE` `LINKEDIN` `MISC` `MSN` `SAMSUNG` `SLACK` `SLURP` `TWITTER` `WORDPRESS` `YAHOO` or `yourcustom-useragent` in Comma Seperated values |                                                     |
+| `NGINX_ENABLE_BLOCK_BOTS`           | Block Bots and Crawlers                                                                                                                                                                                        | `FALSE`                                             |
+
+For more details on how Bot Blocking works please visit [Nginx Ultimate Bad Bot Blocker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker)
 
 #### Logging Options
 
