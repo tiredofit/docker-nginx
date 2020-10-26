@@ -1,3 +1,9 @@
+## 5.12.1 2020-10-26 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix when NGINX_ENABLE_BLOCK_BOTS=FALSE throws errors
+
+
 ## 5.12.0 2020-10-25 <dave at tiredofit dot ca>
 
    ### Added

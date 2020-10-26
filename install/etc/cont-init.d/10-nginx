@@ -35,7 +35,7 @@ sed -i "s#<FASTCGI_BUFFERS>#${NGINX_FASTCGI_BUFFERS}#g" /etc/nginx/nginx.conf
 sed -i "s#<FASTCGI_BUFFER_SIZE>#${NGINX_FASTCGI_BUFFER_SIZE}#g" /etc/nginx/nginx.conf
 
 if var_false "$NGINX_ENABLE_BLOCK_BOTS" ; then
-  sed -i "\#include/etc/nginx/nginx.conf.d/bot_blocker.conf;#d" /etc/nginx/nginx.conf
+  sed -i "\#include /etc/nginx/nginx.conf.d/bot_blocker.conf;#d" /etc/nginx/nginx.conf
 else
   sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/nginx.conf.d/blockbots/blockbots.conf;" /etc/nginx/conf.d/*.conf
   sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/nginx.conf.d/blockbots/ddos.conf;" /etc/nginx/conf.d/*.conf
