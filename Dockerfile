@@ -2,7 +2,7 @@ FROM tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.19.4 \
+ENV NGINX_VERSION=1.19.5 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=25f86f0bac1101b6512135eac5f93c49c63609e3 \
     NGINX_BOT_BLOCKER_VERSION=V4.2020.11.2170 \
