@@ -1,3 +1,9 @@
+## 5.12.4 2020-12-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.19.6
+
+
 ## 5.12.3 2020-11-30 <dave at tiredofit dot ca>
 
    ### Added
