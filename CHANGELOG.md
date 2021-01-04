@@ -1,3 +1,9 @@
+## 5.12.5 2021-01-03 <jesper at github>
+
+   ### Fixed
+      - LDAP Configuration was generating bad configuration files. Fix whitespace and Carriage Returns
+
+
 ## 5.12.4 2020-12-22 <dave at tiredofit dot ca>
 
    ### Added
