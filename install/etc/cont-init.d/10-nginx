@@ -321,7 +321,7 @@ if var_true "$NGINX_ENABLE_APPLICATION_CONFIGURATION"; then
         satisfy all;
       }
 EOF
-    sed -i '/ server {/a\ \ \  auth_ldap '${NGINX_AUTHENTICATION_TITLE}'; auth_ldap_servers ldapserver;' /etc/nginx/conf.d/*.conf
+    sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/conf.d/*.conf
     sed -i "\#include /etc/nginx/conf.d/#i\ \ \ \ include /etc/nginx/nginx.conf.d/authentication/ldap_configuration;" /etc/nginx/nginx.conf
     ;;
   "LLNG")
