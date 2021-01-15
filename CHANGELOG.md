@@ -1,3 +1,7 @@
+## 5.12.6 2021-01-15 <dave at tiredofit dot ca>
+
+      - Switch main base to alpine 3.13
+
 ## 5.12.5 2021-01-03 <jesper at github>
 
    ### Fixed
