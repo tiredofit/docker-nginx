@@ -19,6 +19,8 @@ docker rmi tiredofit/nginx:alpine-3.7
 docker rmi tiredofit/nginx:alpine-3.6
 docker rmi tiredofit/nginx:alpine-3.5
 docker rmi tiredofit/nginx:alpine-edge
+docker build -t tiredofit/nginx:alpine-3.13 --compress --squash --no-cache .
+sed -i "s#alpine:3.13#alpine:3.12#g" Dockerfile
 docker build -t tiredofit/nginx:alpine-3.12 --compress --squash --no-cache .
 sed -i "s#alpine:3.12#alpine:3.11#g" Dockerfile
 docker build -t tiredofit/nginx:alpine-3.11 --compress --squash --no-cache .
