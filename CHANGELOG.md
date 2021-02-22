@@ -1,3 +1,9 @@
+## 5.12.7 2021-02-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.19.7
+
+
 ## 5.12.6 2021-01-15 <dave at tiredofit dot ca>
 
       - Switch main base to alpine 3.13
