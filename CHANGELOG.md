@@ -1,3 +1,10 @@
+## 5.12.8 2021-03-11 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update Brotli to 1.09
+      - Nginx 1.19.8
+
+
 ## 5.12.7 2021-02-22 <dave at tiredofit dot ca>
 
    ### Added

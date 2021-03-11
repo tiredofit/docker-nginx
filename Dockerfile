@@ -2,9 +2,9 @@ FROM tiredofit/alpine:3.13
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.19.7 \
+ENV NGINX_VERSION=1.19.8 \
     NGINX_AUTH_LDAP_VERSION=master \
-    NGINX_BROTLI_VERSION=25f86f0bac1101b6512135eac5f93c49c63609e3 \
+    NGINX_BROTLI_VERSION=9aec15e2aa6feea2113119ba06460af70ab3ea62 \
     NGINX_USER=nginx \
     NGINX_GROUP=www-data \
     NGINX_WEBROOT=/www/html

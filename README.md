@@ -1,6 +1,5 @@
 # hub.docker.com/r/tiredofit/nginx
 
-[![Build Status](https://img.shields.io/docker/build/tiredofit/nginx.svg)](https://hub.docker.com/r/tiredofit/nginx)
 [![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/nginx.svg)](https://hub.docker.com/r/tiredofit/nginx)
 [![Docker Stars](https://img.shields.io/docker/stars/tiredofit/nginx.svg)](https://hub.docker.com/r/tiredofit/nginx)
 [![Docker Layers](https://images.microbadger.com/badges/image/tiredofit/nginx.svg)](https://microbadger.com/images/tiredofit/nginx)
