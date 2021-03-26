@@ -15,7 +15,6 @@ services:
     environment:
       - ZABBIX_HOSTNAME=nginx-app
       - CONTAINER_LOG_LEVEL=DEBUG
-      - FOO=BAR
     networks:
       - proxy
       - services

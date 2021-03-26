@@ -8,7 +8,6 @@ on:
       Manual Build:
         description: 'Manual Build'
         required: false
-
 jobs:
   v3-13:
     runs-on: ubuntu-latest
@@ -30,7 +29,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.13,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.13,${DOCKER_IMAGE}:alpine-3.13-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -50,7 +49,7 @@ jobs:
           fi
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.13-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-3.13-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -133,7 +132,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.12,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.12,${DOCKER_IMAGE}:alpine-3.12-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -155,7 +154,7 @@ jobs:
 
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.12-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-3.12-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -238,7 +237,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.11,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.11,${DOCKER_IMAGE}:alpine-3.11-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -260,7 +259,7 @@ jobs:
 
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.11-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-3.11-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -343,7 +342,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.10,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.10,${DOCKER_IMAGE}:alpine-3.10-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -365,7 +364,7 @@ jobs:
 
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.10-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-3.10-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -448,7 +447,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.9,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.9,${DOCKER_IMAGE}:alpine-3.9-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -470,7 +469,7 @@ jobs:
 
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.9-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:-alpine-3.9-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -553,7 +552,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.8,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.8,${DOCKER_IMAGE}:alpine-3.8-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -573,7 +572,7 @@ jobs:
           fi
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.8-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-3.8-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -656,7 +655,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.7,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.7,${DOCKER_IMAGE}:alpine-3.7-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -678,7 +677,7 @@ jobs:
 
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.7-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-3.7-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -761,7 +760,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.6,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.6,${DOCKER_IMAGE}:alpine-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -783,7 +782,7 @@ jobs:
 
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:3.6-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-3.6-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -866,7 +865,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:3.5,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.5,${DOCKER_IMAGE}:alpine-3.5-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -971,7 +970,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:edge,${DOCKER_IMAGE}:latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-edge,${DOCKER_IMAGE}:alpine-edge-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
@@ -993,7 +992,7 @@ jobs:
 
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-               GITTAG="${DOCKER_IMAGE}:edge-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
+               GITTAG="${DOCKER_IMAGE}:alpine-edge-$(echo $GITHUB_REF | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${BRANCHTAG}" ] && [ -n "${GITTAG}" ]; then
@@ -1056,5 +1055,3 @@ jobs:
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
-
-
