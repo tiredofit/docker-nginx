@@ -11,6 +11,8 @@ on:
 jobs:
   v3-13:
     runs-on: ubuntu-latest
+    env:
+      RELEASE: 3.13
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,7 +31,7 @@ jobs:
 
             case ${BRANCH} in
               "main" | "master" )
-                  BRANCHTAG="${DOCKER_IMAGE}:alpine-3.13,${DOCKER_IMAGE}:alpine-3.13-latest"
+                  BRANCHTAG="${DOCKER_IMAGE}:alpine-${RELEASE},${DOCKER_IMAGE}:alpine-${RELEASE}-latest"
                 ;;
               "develop" )
                   BRANCHTAG="${DOCKER_IMAGE}:develop"
