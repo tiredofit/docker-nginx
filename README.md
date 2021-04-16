@@ -15,7 +15,7 @@ This will build a container for [Nginx](https://www.nginx.org)
 *    Logrotate Included to roll over log files at 23:59, compress and retain for 7 days
 *    Ability to Password Protect (Basic), LDAP Authenticate or use LemonLDAP:NG Handler
 
-This Container uses [tiredofit/alpine](https://hub.docker.com/r/tiredofit/alpine) as a base.
+This Container uses [tiredofit/alpine](https://hub.docker.com/r/tiredofit/alpine) or [tiredofit/debian](https://hub.docker.com/r/tiredofit/debian)as a base.
 
 [Changelog](CHANGELOG.md)
 
@@ -59,10 +59,29 @@ in order to serve your pages. However, it will run just fine on it's own if you 
 ## Installation
 
 Automated builds of the image are available on [Docker Hub](https://hub.docker.com/tiredofit/nginx) and is the recommended method of installation.
+You can also pull different variants of the image:
+
+- tiredofit/nginx:latest - Latest Alpine base
+- tiredofit/nginx:debian - Latest Debian base
+- tiredofit/nginx:alpine-edge - Alpine edge base
+- tiredofit/nginx:alpine-3.13 - Alpine 3.13 base
+- tiredofit/nginx:alpine-3.12 - Alpine 3.12 base
+- tiredofit/nginx:alpine-3.11 - Alpine 3.11 base
+- tiredofit/nginx:alpine-3.10 - Alpine 3.10 base
+- tiredofit/nginx:alpine-3.9 - Alpine 3.9 base
+- tiredofit/nginx:alpine-3.8 - Alpine 3.8 base
+- tiredofit/nginx:alpine-3.7 - Alpine 3.7 base
+- tiredofit/nginx:alpine-3.6 - Alpine 3.6 base
+- tiredofit/nginx:alpine-3.5 - Alpine 3.5 base
+- tiredofit/nginx:debian-buster - Debian buster base
+- tiredofit/nginx:debian-stretch - Debian stretch base
+- tiredofit/nginx:debian-jessie - Debian jessie base
 
 ```bash
 docker pull tiredofit/nginx
 ```
+
+
 
 ### Quick Start
 
