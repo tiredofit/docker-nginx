@@ -1,11 +1,11 @@
 # Manual Workflow tiredofit/docker-nginx
-name: Manual
+name: Test
 
 on:
   workflow_dispatch:
     inputs:
       Manual Build:
-        description: 'Manual Build'
+        description: 'Test Build'
         required: false
 jobs:
   debian-buster:
