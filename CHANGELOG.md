@@ -1,3 +1,9 @@
+## 5.12.10 2021-04-20 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update LemonLDAP:NG configuration to suppoprt CDA domains
+
+
 ## 5.12.9 2021-04-07 <dave at tiredofit dot ca>
 
    ### Added
