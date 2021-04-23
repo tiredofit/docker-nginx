@@ -8,6 +8,7 @@ on:
     paths:
     - '**'
     - '!README.md'
+    - '!manual.yml'
 jobs:
   v3-13:
     runs-on: ubuntu-latest
@@ -1373,5 +1374,3 @@ jobs:
           platforms:  linux/amd64,linux/arm/v7
           push: true
           tags: ${{ steps.prep.outputs.tags }}
-
-
