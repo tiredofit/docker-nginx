@@ -56,11 +56,11 @@ RUN set -x && \
       --with-compat \
       --with-file-aio \
       --with-http_v2_module \
- #     --with-pcre=/usr/src/pcre \
- #     --with-pcre-jit \
- #     --with-zlib=/usr/src/zlib \
- #     --with-openssl=/usr/src/openssl \
- #     --with-openssl-opt=no-nextprotoneg \
+#     --with-pcre=/usr/src/pcre \
+#     --with-pcre-jit \
+#     --with-zlib=/usr/src/zlib \
+#     --with-openssl=/usr/src/openssl \
+#     --with-openssl-opt=no-nextprotoneg \
 #     --with-http_v3_module \
 #      --with-quiche=/usr/src/quiche \
       --add-module=/usr/src/headers-more-nginx-module \
