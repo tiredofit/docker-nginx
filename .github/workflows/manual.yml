@@ -1,16 +1,12 @@
-### Application Level Image CI
-### Dave Conroy <dave at tiredofit dot ca>
-
-name: 'Build Images'
+# Manual Workflow tiredofit/docker-nginx
+name: Manual
 
 on:
-  push:
-    paths:
-    - '**'
-    - '!README.md'
-    - '!manual.yml'
-  schedule:
-    - cron: 10 0 * * 6
+  workflow_dispatch:
+    inputs:
+      Manual Build:
+        description: 'Manual Build'
+        required: false
 jobs:
   v3-13:
     runs-on: ubuntu-latest
