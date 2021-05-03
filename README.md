@@ -1,12 +1,18 @@
-# hub.docker.com/r/tiredofit/nginx
+# github.com/tiredofit/docker-nginx
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/nginx.svg)](https://hub.docker.com/r/tiredofit/nginx)
-[![Docker Stars](https://img.shields.io/docker/stars/tiredofit/nginx.svg)](https://hub.docker.com/r/tiredofit/nginx)
-[![Docker Layers](https://images.microbadger.com/badges/image/tiredofit/nginx.svg)](https://microbadger.com/images/tiredofit/nginx)
 
-## Introduction
+[![GitHub release](https://img.shields.io/github/v/tag/tiredofit/docker-nginx?style=flat-square)](https://github.com/tiredofit/docker-nginx/releases/latest)
+[![Build Status](https://img.shields.io/github/workflow/status/tiredofit/docker-nginx/build?style=flat-square)](https://github.com/tiredofit/docker-nginx/actions?query=workflow%3Abuild)
+[![Docker Stars](https://img.shields.io/docker/stars/tiredofit/nginx.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/nginx/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/nginx.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/nginx/)
+[![Become a sponsor](https://img.shields.io/badge/sponsor-tiredofit-181717.svg?logo=github&style=flat-square)](https://github.com/sponsors/tiredofit)
+[![Paypal Donate](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square)](https://www.paypal.me/tiredofit)
 
-This will build a container for [Nginx](https://www.nginx.org)
+* * *
+
+## About
+
+This will build a Docker image for [Nginx](https://www.nginx.org), for serving websites
 
 *    Tracks Mainline release channel
 *    Many options configurable including compression, performance
@@ -15,25 +21,25 @@ This will build a container for [Nginx](https://www.nginx.org)
 *    Logrotate Included to roll over log files at 23:59, compress and retain for 7 days
 *    Ability to Password Protect (Basic), LDAP Authenticate or use LemonLDAP:NG Handler
 
-This Container uses [tiredofit/alpine](https://hub.docker.com/r/tiredofit/alpine) or [tiredofit/debian](https://hub.docker.com/r/tiredofit/debian)as a base.
-
-[Changelog](CHANGELOG.md)
-
-## Authors
+## Maintainer
 
 - [Dave Conroy](https://github.com/tiredofit)
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Authors](#authors)
+- [About](#about)
+- [Maintainer](#maintainer)
 - [Table of Contents](#table-of-contents)
-- [Prerequisites](#prerequisites)
+- [Prerequisites and Assumptions](#prerequisites-and-assumptions)
 - [Installation](#installation)
-  - [Quick Start](#quick-start)
+  - [Build from Source](#build-from-source)
+  - [Prebuilt Images](#prebuilt-images)
+    - [Multi Archictecture](#multi-archictecture)
 - [Configuration](#configuration)
-  - [Data-Volumes](#data-volumes)
+  - [Quick Start](#quick-start)
+  - [Persistent Storage](#persistent-storage)
   - [Environment Variables](#environment-variables)
+    - [Base Images used](#base-images-used)
     - [Authentication Options](#authentication-options)
     - [Bot Blocking Options](#bot-blocking-options)
     - [Logging Options](#logging-options)
@@ -48,40 +54,42 @@ This Container uses [tiredofit/alpine](https://hub.docker.com/r/tiredofit/alpine
   - [Shell Access](#shell-access)
 - [References](#references)
 
-## Prerequisites
-
-This image assumes that you are using a reverse proxy such as
-[jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy) and optionally the [Let's Encrypt Proxy
-Companion @
-https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion)
-in order to serve your pages. However, it will run just fine on it's own if you map appropriate ports.
+## Prerequisites and Assumptions
+*  Assumes you are using some sort of SSL terminating reverse proxy such as:
+   *  [Traefik](https://github.com/tiredofit/docker-traefik)
+   *  [Nginx](https://github.com/jc21/nginx-proxy-manager)
+   *  [Caddy](https://github.com/caddyserver/caddy)
 
 ## Installation
 
-Automated builds of the image are available on [Docker Hub](https://hub.docker.com/tiredofit/nginx) and is the recommended method of installation.
-You can also pull different variants of the image:
+### Build from Source
+Clone this repository and build the image with `docker build <arguments> (imagename) .`
 
-- tiredofit/nginx:latest - Latest Alpine base
-- tiredofit/nginx:debian - Latest Debian base
-- tiredofit/nginx:alpine-edge - Alpine edge base
-- tiredofit/nginx:alpine-3.13 - Alpine 3.13 base
-- tiredofit/nginx:alpine-3.12 - Alpine 3.12 base
-- tiredofit/nginx:alpine-3.11 - Alpine 3.11 base
-- tiredofit/nginx:alpine-3.10 - Alpine 3.10 base
-- tiredofit/nginx:alpine-3.9 - Alpine 3.9 base
-- tiredofit/nginx:alpine-3.8 - Alpine 3.8 base
-- tiredofit/nginx:alpine-3.7 - Alpine 3.7 base
-- tiredofit/nginx:alpine-3.6 - Alpine 3.6 base
-- tiredofit/nginx:alpine-3.5 - Alpine 3.5 base
-- tiredofit/nginx:debian-buster - Debian buster base
-- tiredofit/nginx:debian-stretch - Debian stretch base
-- tiredofit/nginx:debian-jessie - Debian jessie base
+### Prebuilt Images
+Builds of the image are available on [Docker Hub](https://hub.docker.com/r/tiredofit/nginx) and is the recommended method of installation.
+
+The following image tags are available along with their taged release based on what's written in the [Changelog](CHANGELOG.md):
+
+| Alpine Base | Tag            | Debian Base | Tag               |
+| ----------- | -------------- | ----------- | ----------------- |
+| latest      | `:latest`      | latest      | `:debian-latest`  |
+| edge        | `:alpine-edge` | Buster      | `:debian-buster`  |
+| 3.13        | `:alpine-3.13` | Stretch     | `:debian-stretch` |
+| 3.12        | `:alpine-3.12` | Jessie      | `:debian-jessie`  |
+| 3.10        | `:alpine-3.10` |             |                   |
+| 3.9         | `:alpine-3.9`  |             |                   |
+| 3.8         | `:alpine-3.8`  |             |                   |
+| 3.7         | `:alpine-3.7`  |             |                   |
+| 3.6         | `:alpine-3.6`  |             |                   |
+| 3.5         | `:alpine-3.5`  |             |                   |
 
 ```bash
-docker pull tiredofit/nginx
+docker pull tiredofit/nginx:(imagetag)
 ```
+#### Multi Archictecture
+Images are built primarily for `amd64` architecture, and may also include builds for `arm/v6`, `arm/v7`, `arm64` and others. These variants are all unsupported. Consider [sponsoring](https://github.com/sponsors/tiredofit) my work so that I can work with various hardware. To see if this image supports multiple architecures, type `docker manifest (image):(tag)`
 
-
+## Configuration
 
 ### Quick Start
 
@@ -90,10 +98,7 @@ docker pull tiredofit/nginx
 * Set various [environment variables](#environment-variables) to understand the capabilities of this image.
 * Map [persistent storage](#data-volumes) for access to configuration and data files for backup.
 * Make [networking ports](#networking) available for public access if necessary
-
-## Configuration
-
-### Data-Volumes
+### Persistent Storage
 
 The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. `/etc/nginx/conf.d` contains a sample configuration file that can be used to customize a nginx server block.
 
@@ -103,12 +108,18 @@ The following directories are used for configuration and can be mapped for persi
 | ----------- | ----------------------------------------------------------- |
 | `/www/html` | Drop your Datafiles in this Directory to be served by Nginx |
 | `/www/logs` | Logfiles for Nginx error and Access                         |
-
-
 ### Environment Variables
 
+#### Base Images used
 
-Along with the Environment Variables from the [Base image](https://hub.docker.com/r/tiredofit/alpine), below is the complete list of available options that can be used to customize your installation.
+This image relies on an [Alpine Linux](https://hub.docker.com/r/tiredofit/alpine) or [Debian Linux](https://hub.docker.com/r/tiredofit/debian) base image that relies on an [init system](https://github.com/just-containers/s6-overlay) for added capabilities. Outgoing SMTP capabilities are handlded via `msmtp`. Individual container performance monitoring is performed by [zabbix-agent](https://zabbix.org). Additional tools include: `bash`,`curl`,`less`,`logrotate`, `nano`,`vim`.
+
+Be sure to view the following repositories to understand all the customizable options:
+
+| Image                                                  | Description                            |
+| ------------------------------------------------------ | -------------------------------------- |
+| [OS Base](https://github.com/tiredofit/docker-alpine/) | Customized Image based on Alpine Linux |
+| [OS Base](https://github.com/tiredofit/docker-debian/) | Customized Image based on Debian Linux |
 
 #### Authentication Options
 
@@ -261,15 +272,35 @@ The following ports are exposed.
 | ---- | ----------- |
 | `80` | HTTP        |
 
+* * *
 ## Maintenance
+
 ### Shell Access
 
 For debugging and maintenance purposes you may want access the containers shell.
 
-```bash
-docker exec -it (whatever your container name is ie  nginx) bash
-```
+``bash
+docker exec -it (whatever your container name is) bash
+``
+## Support
 
+These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
+### Usage
+- The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) personalized support.
+### Bugfixes
+- Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
+
+### Feature Requests
+- Feel free to submit a feature request, however there is no guarantee that it will be added, or at what timeline.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) regarding development of features.
+
+### Updates
+- Best effort to track upstream changes, More priority if I am actively using the image in a production environment.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for up to date releases.
+
+## License
+MIT. See [LICENSE](LICENSE) for more details.
 ## References
 
 * https://nginx.org/
