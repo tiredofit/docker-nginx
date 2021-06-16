@@ -1,6 +1,6 @@
-version: '3.7'
+version: '2.4'
 services:
-  
+
   nginx-app:
     image: tiredofit/nginx:latest
     container_name: nginx-app

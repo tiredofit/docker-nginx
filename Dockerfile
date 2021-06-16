@@ -1,5 +1,5 @@
 FROM tiredofit/alpine:3.13
-LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
+LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number
 ENV NGINX_VERSION=1.21.0 \
