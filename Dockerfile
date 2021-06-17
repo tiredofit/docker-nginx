@@ -63,7 +63,8 @@ RUN set -x && \
       --add-module=/usr/src/nginx-brotli \
       --add-module=/usr/src/nginx-auth-ldap \
     " && \
-    addgroup -S www-data && \
+    sed -i "/www-data/d" /etc/group* && \
+    addgroup -S -g 82 www-data && \
     adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data nginx && \
     apk update && \
     apk upgrade && \

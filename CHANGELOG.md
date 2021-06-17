@@ -1,3 +1,9 @@
+## 5.13.2 2021-06-17 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix issues with Alpine 3.14 and Edge builds
+
+
 ## 5.13.1 2021-05-25 <dave at tiredofit dot ca>
 
    ### Added
