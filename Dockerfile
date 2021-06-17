@@ -74,7 +74,7 @@ RUN set -x && \
                 geoip-dev \
                 gnupg \
                 libc-dev \
-                libressl-dev \
+                openssl-dev \
                 libxslt-dev \
                 linux-headers \
                 make \
