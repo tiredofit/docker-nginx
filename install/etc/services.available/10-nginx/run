@@ -7,5 +7,5 @@ check_container_initialized
 check_service_initialized init
 liftoff
 
-print_info "Starting nginx ${NGINX_VERSION}"
-exec nginx
+print_start "Starting nginx ${NGINX_VERSION}"
+nginx

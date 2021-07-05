@@ -1,4 +1,4 @@
-FROM tiredofit/alpine:3.13
+FROM tiredofit/alpine:3.14
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number
@@ -74,7 +74,7 @@ RUN set -x && \
                 geoip-dev \
                 gnupg \
                 libc-dev \
-                openssl-dev \
+                libressl-dev \
                 libxslt-dev \
                 linux-headers \
                 make \

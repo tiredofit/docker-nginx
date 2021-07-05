@@ -1,3 +1,9 @@
+## 5.13.3 2021-07-05 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Support upstream image changes
+
+
 ## 5.13.2 2021-06-17 <dave at tiredofit dot ca>
 
    ### Changed
