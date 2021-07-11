@@ -2,7 +2,7 @@ FROM tiredofit/alpine:3.14
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.21.0 \
+ENV NGINX_VERSION=1.21.1 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=9aec15e2aa6feea2113119ba06460af70ab3ea62 \
     NGINX_USER=nginx \
