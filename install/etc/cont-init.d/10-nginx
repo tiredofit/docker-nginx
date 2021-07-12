@@ -90,7 +90,7 @@ else
     done
   fi
 
-  if [ -n ${NGINX_BLOCK_BOTS} ] ; then
+  if [ -n "${NGINX_BLOCK_BOTS}" ] ; then
     if [[ "${NGINX_BLOCK_BOTS}" == *"ALL" ]] ; then
       NGINX_BLOCK_BOTS=ALL
     fi
@@ -325,25 +325,29 @@ EOF
     sed -i "\#include /etc/nginx/conf.d/#i\ \ \ \ include /etc/nginx/nginx.conf.d/authentication/ldap_configuration;" /etc/nginx/nginx.conf
     ;;
   "LLNG")
+
     sed -i "s#<LLNG_HANDLER_HOST>#$NGINX_AUTHENTICATION_LLNG_HANDLER_HOST#g" /etc/nginx/nginx.conf.d/authentication/llng
     sed -i "s#<LLNG_HANDLER_PORT>#$NGINX_AUTHENTICATION_LLNG_HANDLER_PORT#g" /etc/nginx/nginx.conf.d/authentication/llng
     print_notice "Setting LLNG Authentication"
+    if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
+      header_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')
+      for ((i = 1; i <= header_num; i++)); do
+        headers=NGINX_AUTHENTICATION_LLNG_ATTRIBUTE${i}
+        IFS=',' read -r -a array <<<"${!headers}"
 
-    header_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')
-    for ((i = 1; i <= header_num; i++)); do
-      headers=NGINX_AUTHENTICATION_LLNG_ATTRIBUTE${i}
-      IFS=',' read -r -a array <<<"${!headers}"
+        print_notice "Updating Nginx to support recieving attribute from LLNG: '${array[0]}'"
 
-      print_notice "Updating Nginx to support recieving attribute from LLNG: '${array[0]}'"
+        echo "fastcgi_param ${array[0]} \$${array[1]};" >>/etc/nginx/nginx.conf.d/authentication/llng_params
+        echo "auth_request_set \$${array[1]} \$${array[2]};" >>/etc/nginx/nginx.conf.d/authentication/llng_auth_request
+      done
 
-      echo "fastcgi_param ${array[0]} \$${array[1]};" >>/etc/nginx/nginx.conf.d/authentication/llng_params
-      echo "auth_request_set \$${array[1]} \$${array[2]};" >>/etc/nginx/nginx.conf.d/authentication/llng_auth_request
-    done
-
-    sed -i '/server {/a\ \ \ \ \  include /etc/nginx/nginx.conf.d/authentication/llng;' /etc/nginx/conf.d/*.conf
-    sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication handler' /etc/nginx/conf.d/*.conf
-    sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/nginx.conf.d/authentication/llng_auth_request;' /etc/nginx/conf.d/*.conf
-    sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/conf.d/*.conf
+      sed -i '/server {/a\ \ \ \ \  include /etc/nginx/nginx.conf.d/authentication/llng;' /etc/nginx/conf.d/*.conf
+      sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication handler' /etc/nginx/conf.d/*.conf
+      sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/nginx.conf.d/authentication/llng_auth_request;' /etc/nginx/conf.d/*.conf
+      sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/conf.d/*.conf
+    else
+      print_debug "Skipping LLNG Authentication configuration until configured by PHP-FPM"
+    fi
     ;;
   "NONE")
     :

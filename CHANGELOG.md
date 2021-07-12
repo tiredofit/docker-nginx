@@ -1,3 +1,9 @@
+## 5.13.5 2021-07-12 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Skip LLNG authentication routines if it detects downstream php-fpm image being used
+
+
 ## 5.13.4 2021-07-11 <dave at tiredofit dot ca>
 
    ### Added
