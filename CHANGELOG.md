@@ -1,3 +1,9 @@
+## 5.13.6 2021-08-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Change the way logrotate operates
+
+
 ## 5.13.5 2021-07-12 <dave at tiredofit dot ca>
 
    ### Changed
