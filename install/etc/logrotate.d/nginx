@@ -1,3 +1,5 @@
+# logship: nginx,nginx-error,nginx-error-alt,nginx-blocked
+
 <ACCESS_LOG_LOCATION>/*.log <ERROR_LOG_LOCATION>/*.log {
     daily
     ifempty

@@ -178,7 +178,7 @@ RUN set -x && \
     sed -i "s|/etc/nginx/nginx.conf.d/blockbots/blacklist-user-agents.conf|/etc/nginx/nginx.conf.d/blockbots-custom/blacklist-user-agents.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
     sed -i "s|/etc/nginx/nginx.conf.d/blockbots/whitelist-domains.conf|/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-domains.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
     sed -i "s|/etc/nginx/nginx.conf.d/blockbots/whitelist-ips.conf|/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-ips.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
-
+    # Cleanup
     apk del .nginx-build-deps && \
     apk del .brotli-build-deps && \
     apk del .auth-ldap-build-deps && \

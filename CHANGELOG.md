@@ -1,3 +1,9 @@
+## 5.13.7 2021-08-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add parsers for fluent-bit log shipping
+
+
 ## 5.13.6 2021-08-04 <dave at tiredofit dot ca>
 
    ### Added
