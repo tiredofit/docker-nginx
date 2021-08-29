@@ -52,6 +52,12 @@ This will build a Docker image for [Nginx](https://www.nginx.org), for serving w
   - [Networking](#networking)
 - [Maintenance](#maintenance)
   - [Shell Access](#shell-access)
+- [Support](#support)
+  - [Usage](#usage)
+  - [Bugfixes](#bugfixes)
+  - [Feature Requests](#feature-requests)
+  - [Updates](#updates)
+- [License](#license)
 - [References](#references)
 
 ## Prerequisites and Assumptions
@@ -165,6 +171,7 @@ For more details on how Bot Blocking works please visit [Nginx Ultimate Bad Bot 
 | Parameter                   | Description                               | Default           |
 | --------------------------- | ----------------------------------------- | ----------------- |
 | `NGINX_LOG_ACCESS_FILE`     | Nginx websites access logs                | `access.log`      |
+| `NGINX_LOG_ACCESS_FORAMT`   | Log Format `default` or `json`            | `default`         |
 | `NGINX_LOG_ACCESS_LOCATION` | Location inside container for saving logs | `/www/logs/nginx` |
 | `NGINX_LOG_ERROR_FILE`      | Nginx server and websites error log name  | `error.log`       |
 | `NGINX_LOG_ERROR_LOCATION`  | Location inside container for saving logs | `/www/logs/nginx` |

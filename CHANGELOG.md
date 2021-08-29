@@ -1,3 +1,16 @@
+## 5.14.0 2021-08-29 <dave at tiredofit dot ca>
+
+   ### Added
+      - Option to output json for access log
+
+   ### Changed
+      - Reworked fluent bit log parsing regex
+      - Changed output format of access logs
+      - Split logging into its own configuration file
+      - Reworked "blocked" log_format
+      - Renamed "Zabbix" functionality to "Monitoring"
+
+
 ## 5.13.7 2021-08-25 <dave at tiredofit dot ca>
 
    ### Added
