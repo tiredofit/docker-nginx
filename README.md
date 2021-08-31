@@ -16,7 +16,7 @@ This will build a Docker image for [Nginx](https://www.nginx.org), for serving w
 
 *    Tracks Mainline release channel
 *    Many options configurable including compression, performance
-*    Includes Zabbix Monitoring (nginx status) on port 73
+*    Includes Monitoring (nginx status) on port 73
 *    Includes [Nginx Ultimate Bad Bot Blocker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker)
 *    Logrotate Included to roll over log files at 23:59, compress and retain for 7 days
 *    Ability to Password Protect (Basic), LDAP Authenticate or use LemonLDAP:NG Handler

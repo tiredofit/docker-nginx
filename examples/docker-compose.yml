@@ -13,7 +13,7 @@ services:
       - ./data:/www/html
       - ./logs:/www/logs
     environment:
-      - ZABBIX_HOSTNAME=nginx-app
+      - CONTAINER_NAME=nginx-app
       - CONTAINER_LOG_LEVEL=DEBUG
     networks:
       - proxy

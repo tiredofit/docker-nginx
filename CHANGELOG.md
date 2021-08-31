@@ -1,3 +1,9 @@
+## 5.14.1 2021-08-30 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Add two new logformats to support LLNG Authentication
+
+
 ## 5.14.0 2021-08-29 <dave at tiredofit dot ca>
 
    ### Added
