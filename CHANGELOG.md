@@ -1,3 +1,9 @@
+## 5.14.3 2021-09-04 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change the way that logrotat files are utilized
+
+
 ## 5.14.2 2021-09-03 <dave at tiredofit dot ca>
 
    ### Added

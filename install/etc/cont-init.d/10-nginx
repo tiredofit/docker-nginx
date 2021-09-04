@@ -423,11 +423,16 @@ chown -R "${NGINX_USER}" "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCAT
 
 ### Update Logrotate
 if [ "${NGINX_LOG_ERROR_LOCATION}" = "${NGINX_LOG_ACCESS_LOCATION}" ]; then
-  sed -i "s#<ERROR_LOG_LOCATION>/\*.log##g" /etc/logrotate.d/nginx
+  set -f
+  create_logrotate nginx ${NGINX_LOG_ACCESS_LOCATION}/*.log ${NGINX_USER} ${NGINX_GROUP} nginx,nginx-blocked,nginx-error,nginx-error-alt
+  set +f
 else
-  sed -i "s#<ERROR_LOG_LOCATION>#${NGINX_LOG_ERROR_LOCATION}#g" /etc/logrotate.d/nginx
+  set -f
+  create_logrotate nginx ${NGINX_LOG_ACCESS_LOCATION}/*.log ${NGINX_USER} ${NGINX_GROUP} nginx,nginx-blocked,nginx-error,nginx-error-alt
+  create_logrotate nginx-error ${NGINX_LOG_ERROR_LOCATION}/*.log ${NGINX_USER} ${NGINX_GROUP} nginx-error,nginx-error-alt
+  set +f
 fi
-sed -i "s#<ACCESS_LOG_LOCATION>#${NGINX_LOG_ACCESS_LOCATION}#g" /etc/logrotate.d/nginx
+
 sed -i "s#<ACCESS_LOG_LOCATION>#${NGINX_LOG_ACCESS_LOCATION}#g" /etc/nginx/nginx.conf.d/exploit_protection.conf
 
 ### Create Temporary Files
