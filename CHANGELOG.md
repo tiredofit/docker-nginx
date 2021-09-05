@@ -1,3 +1,9 @@
+## 5.14.5 2021-09-05 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Blocked logs configuration fix
+
+
 ## 5.14.4 2021-09-04 <dave at tiredofit dot ca>
 
    ### Changed

@@ -427,7 +427,7 @@ create_logrotate nginx-access ${NGINX_LOG_ACCESS_LOCATION}/${NGINX_LOG_ACCESS_FI
 create_logrotate nginx-error ${NGINX_LOG_ACCESS_LOCATION}/NGINX_LOG_ERROR_FILE nginx-error,nginx-error-alt ${NGINX_USER} ${NGINX_GROUP}
 
 if var_true "${NGINX_ENABLE_EXPLOIT_PROTECTION}" ; then
-  mkdir -p "$NGINX_LOG_BLOCKED_LOCATION}"
+  mkdir -p "${NGINX_LOG_BLOCKED_LOCATION}"
   touch "${NGINX_LOG_BLOCKED_LOCATION}"/"${NGINX_LOG_BLOCKED_FILE}"
   sed -i "s#<BLOCKED_LOG_LOCATION>#${NGINX_LOG_BLOCKED_LOCATION}#g" /etc/nginx/nginx.conf.d/exploit_protection.conf
   sed -i "s#<BLOCKED_LOG_FILE>#${NGINX_LOG_BLOCKED_FILE}#g" /etc/nginx/nginx.conf.d/exploit_protection.conf
