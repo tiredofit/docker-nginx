@@ -1,3 +1,10 @@
+## 5.14.6 2021-09-05 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for Error Logs
+      - Fix for Fluent-bit Log Parsers
+
+
 ## 5.14.5 2021-09-05 <dave at tiredofit dot ca>
 
    ### Changed

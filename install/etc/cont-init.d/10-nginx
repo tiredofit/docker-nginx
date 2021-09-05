@@ -424,7 +424,7 @@ touch "${NGINX_LOG_ACCESS_LOCATION}"/"${NGINX_LOG_ACCESS_FILE}"
 chown -R "${NGINX_USER}" "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
 
 create_logrotate nginx-access ${NGINX_LOG_ACCESS_LOCATION}/${NGINX_LOG_ACCESS_FILE} nginx-${NGINX_LOG_ACCESS_FORMAT} ${NGINX_USER} ${NGINX_GROUP}
-create_logrotate nginx-error ${NGINX_LOG_ACCESS_LOCATION}/NGINX_LOG_ERROR_FILE nginx-error,nginx-error-alt ${NGINX_USER} ${NGINX_GROUP}
+create_logrotate nginx-error ${NGINX_LOG_ACCESS_LOCATION}/${NGINX_LOG_ERROR_FILE} nginx-error-standard,nginx-error-alt-standard ${NGINX_USER} ${NGINX_GROUP}
 
 if var_true "${NGINX_ENABLE_EXPLOIT_PROTECTION}" ; then
   mkdir -p "${NGINX_LOG_BLOCKED_LOCATION}"
@@ -443,7 +443,7 @@ fi
 
 if [ -f "${NGINX_ERROR_LOG_LOCATION}/*-error.log" ] ; then
   set -f
-    create_logrotate nginx-error-wildcard "${NGINX_LOG_ERROR_LOCATION}"/*-error.log nginx-error,nginx-error-alt ${NGINX_USER} ${NGINX_GROUP}
+    create_logrotate nginx-error-wildcard "${NGINX_LOG_ERROR_LOCATION}"/*-error.log nginx-error-standard,nginx-error-alt-standard ${NGINX_USER} ${NGINX_GROUP}
   set +f
 fi
 
