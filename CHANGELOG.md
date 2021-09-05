@@ -1,3 +1,9 @@
+## 5.14.4 2021-09-04 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Customizable Blocked file and further parsing of logrotation files
+
+
 ## 5.14.3 2021-09-04 <dave at tiredofit dot ca>
 
    ### Changed
