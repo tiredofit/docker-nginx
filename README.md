@@ -168,14 +168,17 @@ For more details on how Bot Blocking works please visit [Nginx Ultimate Bad Bot 
 
 #### Logging Options
 
-| Parameter                   | Description                               | Default           |
-| --------------------------- | ----------------------------------------- | ----------------- |
-| `NGINX_LOG_ACCESS_FILE`     | Nginx websites access logs                | `access.log`      |
-| `NGINX_LOG_ACCESS_FORAMT`   | Log Format `default` or `json`            | `default`         |
-| `NGINX_LOG_ACCESS_LOCATION` | Location inside container for saving logs | `/www/logs/nginx` |
-| `NGINX_LOG_ERROR_FILE`      | Nginx server and websites error log name  | `error.log`       |
-| `NGINX_LOG_ERROR_LOCATION`  | Location inside container for saving logs | `/www/logs/nginx` |
-| `NGINX_LOG_LEVEL_ERROR`     | How much verbosity to use with error logs | `warn`            |
+| Parameter                    | Description                               | Default           |
+| ---------------------------- | ----------------------------------------- | ----------------- |
+| `NGINX_LOG_ACCESS_FILE`      | Nginx websites access logs                | `access.log`      |
+| `NGINX_LOG_ACCESS_LOCATION`  | Location inside container for saving logs | `/www/logs/nginx` |
+| `NGINX_LOG_ACCESS_FORMAT`    | Log Format `standard` or `json`           | `standard`        |
+| `NGINX_LOG_BLOCKED_FILE`     | If exploit protection `TRUE`              | `access.log`      |
+| `NGINX_LOG_BLOCKED_LOCATION` | Location inside container for saving logs | `/www/logs/nginx` |
+| `NGINX_LOG_BLOCKED_FORMAT`   | Log Format `standard` or `json`           | `standard`        |
+| `NGINX_LOG_ERROR_FILE`       | Nginx server and websites error log name  | `error.log`       |
+| `NGINX_LOG_ERROR_LOCATION`   | Location inside container for saving logs | `/www/logs/nginx` |
+| `NGINX_LOG_LEVEL_ERROR`      | How much verbosity to use with error logs | `warn`            |
 
 #### Compression Options
 
