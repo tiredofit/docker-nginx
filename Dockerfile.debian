@@ -1,4 +1,4 @@
-FROM tiredofit/debian:buster
+FROM docker.io/tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Nginx Version Number

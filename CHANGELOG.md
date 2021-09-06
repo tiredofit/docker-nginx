@@ -1,3 +1,9 @@
+## 5.14.7 2021-09-06 <dave at tiredofit dot ca>
+
+   ### Changed
+      - For for NGINX_AUTHENTICATION_TYPE
+
+
 ## 5.14.6 2021-09-05 <dave at tiredofit dot ca>
 
    ### Changed

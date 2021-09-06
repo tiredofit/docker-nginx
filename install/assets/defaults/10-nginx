@@ -83,9 +83,9 @@ NGINX_WORKER_RLIMIT_NOFILE=${NGINX_WORKER_RLIMIT_NOFILE:-100000}
 STAGE=${STAGE:-"DEVELOP"}
 
 if [ "${NGINX_LOG_ACCESS_FORMAT,,}" = "standard" ] && [ "${NGINX_AUTHENTICATION_TYPE,,}" = "llng" ] ; then
-    NGINX_AUTHENTICATION_TYPE=llng_standard
+    NGINX_LOG_ACCESS_FORMAT=llng_standard
 fi
 
 if [ "${NGINX_LOG_ACCESS_FORMAT,,}" = "json" ] && [ "${NGINX_AUTHENTICATION_TYPE,,}" = "llng" ] ; then
-    NGINX_AUTHENTICATION_TYPE=llng_json
+    NGINX_LOG_ACCESS_FORMAT=llng_json
 fi

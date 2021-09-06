@@ -355,7 +355,7 @@ EOF
     :
     ;;
   *)
-    print_warn "Unknown AUTHENTICATION_TYPE option. Relying on Application Authentication"
+    print_warn "Unknown NGINX_AUTHENTICATION_TYPE '${NGINX_AUTHENTICATION_TYPE}. Reverting to no/application authentication"
     ;;
   esac
 

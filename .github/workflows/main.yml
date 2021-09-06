@@ -105,7 +105,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.14|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.14|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -209,7 +209,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.13|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.13|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -315,7 +315,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.12|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.12|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -421,7 +421,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.11|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.11|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -527,7 +527,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.10|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.10|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -633,7 +633,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.9|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.9|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -737,7 +737,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.8|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.8|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -843,7 +843,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.7|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.7|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -949,7 +949,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.6|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.6|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -1055,7 +1055,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:3.5|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:3.5|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -1161,7 +1161,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/alpine:.*|FROM tiredofit/alpine:edge|g" Dockerfile
+          sed -i "s|FROM docker.io/tiredofit/alpine:.*|FROM docker.io/tiredofit/alpine:edge|g" Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -1268,7 +1268,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/debian:.*|FROM tiredofit/debian:${RELEASE}|g" Dockerfile.debian
+          sed -i "s|FROM docker.io/tiredofit/debian:.*|FROM docker.io/tiredofit/debian:${RELEASE}|g" Dockerfile.debian
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -1375,7 +1375,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/debian:.*|FROM tiredofit/debian:${RELEASE}|g" Dockerfile.debian
+          sed -i "s|FROM docker.io/tiredofit/debian:.*|FROM docker.io/tiredofit/debian:${RELEASE}|g" Dockerfile.debian
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -1482,7 +1482,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/debian:.*|FROM tiredofit/debian:stretch|g" Dockerfile.debian
+          sed -i "s|FROM docker.io/tiredofit/debian:.*|FROM docker.io/tiredofit/debian:stretch|g" Dockerfile.debian
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -1589,7 +1589,7 @@ jobs:
       - name: Switch
         id: Switch
         run: |
-          sed -i "s|FROM tiredofit/debian:.*|FROM tiredofit/debian:${RELEASE}|g" Dockerfile.debian
+          sed -i "s|FROM docker.io/tiredofit/debian:.*|FROM docker.io/tiredofit/debian:${RELEASE}|g" Dockerfile.debian
 
       - name: Build
         uses: docker/build-push-action@v2
