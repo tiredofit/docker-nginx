@@ -69,7 +69,7 @@ RUN set -x && \
       --add-module=/usr/src/nginx-auth-ldap \
       --add-module=/usr/src/nginx-ext-dav \
     " && \
-    adduser --disabled-password --system --home /var/cache/nginx --shell /sbin/nologin --ingroup www-data nginx && \
+    adduser --disabled-password --system --home /var/cache/nginx --shell /sbin/nologin -u 80 --ingroup www-data nginx && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \

@@ -65,7 +65,7 @@ RUN set -x && \
     " && \
     sed -i "/www-data/d" /etc/group* && \
     addgroup -S -g 82 www-data && \
-    adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data nginx && \
+    adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data -g "nginx" -u 80 nginx && \
     apk update && \
     apk upgrade && \
     apk add -t .nginx-build-deps \

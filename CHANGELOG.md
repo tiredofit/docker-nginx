@@ -1,3 +1,9 @@
+## 5.15.0 2021-09-24 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Pin nginx user to '80' from a randomly generated UID during build process
+
+
 ## 5.14.7 2021-09-06 <dave at tiredofit dot ca>
 
    ### Changed
