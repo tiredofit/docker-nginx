@@ -10,7 +10,7 @@ on:
     - '!README.md'
     - '!manual.yml'
   schedule:
-    - cron: 10 0 * * 6
+    - cron: 10 6 * * 6
 jobs:
   v3-14:
     runs-on: ubuntu-latest
