@@ -34,7 +34,7 @@ This will build a Docker image for [Nginx](https://www.nginx.org), for serving w
 - [Installation](#installation)
   - [Build from Source](#build-from-source)
   - [Prebuilt Images](#prebuilt-images)
-    - [Multi Architecture](#multi-archictecture)
+    - [Multi Architecture](#multi-architecture)
 - [Configuration](#configuration)
   - [Quick Start](#quick-start)
   - [Persistent Storage](#persistent-storage)
@@ -76,18 +76,21 @@ Builds of the image are available on [Docker Hub](https://hub.docker.com/r/tired
 
 The following image tags are available along with their tagged release based on what's written in the [Changelog](CHANGELOG.md):
 
-| Alpine Base | Tag            | Debian Base | Tag               |
-| ----------- | -------------- | ----------- | ----------------- |
-| latest      | `:latest`      | latest      | `:debian-latest`  |
-| edge        | `:alpine-edge` | Buster      | `:debian-buster`  |
-| 3.13        | `:alpine-3.13` | Stretch     | `:debian-stretch` |
-| 3.12        | `:alpine-3.12` | Jessie      | `:debian-jessie`  |
-| 3.10        | `:alpine-3.10` |             |                   |
-| 3.9         | `:alpine-3.9`  |             |                   |
-| 3.8         | `:alpine-3.8`  |             |                   |
-| 3.7         | `:alpine-3.7`  |             |                   |
-| 3.6         | `:alpine-3.6`  |             |                   |
-| 3.5         | `:alpine-3.5`  |             |                   |
+| Alpine Base | Tag            | Debian Base | Tag                |
+| ----------- | -------------- | ----------- | ------------------ |
+| latest      | `:latest`      | latest      | `:debian-latest`   |
+| edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye` |
+| 3.14        | `:alpine-3.14` | Buster      | `:debian-buster`   |
+| 3.13        | `:alpine-3.14` | Stretch     | `:debian-stretch`  |
+| 3.13        | `:alpine-3.13` | Jessie      | `:debian-jessie`   |
+| 3.12        | `:alpine-3.12` |             |                    |
+| 3.11        | `:alpine-3.11` |             |                    |
+| 3.10        | `:alpine-3.10` |             |                    |
+| 3.9         | `:alpine-3.9`  |             |                    |
+| 3.8         | `:alpine-3.8`  |             |                    |
+| 3.7         | `:alpine-3.7`  |             |                    |
+| 3.6         | `:alpine-3.6`  |             |                    |
+| 3.5         | `:alpine-3.5`  |             |                    |
 
 ```bash
 docker pull tiredofit/nginx:(imagetag)
