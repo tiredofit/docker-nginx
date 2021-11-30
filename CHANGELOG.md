@@ -1,3 +1,9 @@
+## 5.15.3 2021-11-30 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for building with GCC 11.2
+
+
 ## 5.15.2 2021-11-02 <dave at tiredofit dot ca>
 
    ### Added

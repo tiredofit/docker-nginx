@@ -1,4 +1,4 @@
-FROM docker.io/tiredofit/alpine:3.15
+FROM docker.io/tiredofit/alpine:3.12
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number
@@ -62,6 +62,8 @@ RUN set -x && \
       --add-module=/usr/src/nginx_cookie_flag_module \
       --add-module=/usr/src/nginx-brotli \
       --add-module=/usr/src/nginx-auth-ldap \
+      ## GCC 11.2 fix https://github.com/google/ngx_brotli/issues/124
+      --with-cc-opt='-Wno-vla-parameter' \
     " && \
     sed -i "/www-data/d" /etc/group* && \
     addgroup -S -g 82 www-data && \
