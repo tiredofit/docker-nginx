@@ -1,3 +1,9 @@
+## 5.16.0 2021-12-06 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change the way that Zabbix monitoring is performed - switch to a more modern template
+
+
 ## 5.15.3 2021-11-30 <dave at tiredofit dot ca>
 
    ### Changed
