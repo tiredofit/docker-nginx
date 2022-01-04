@@ -1,0 +1,1551 @@
+{
+    "zabbix_export": {
+        "version": "5.4",
+        "date": "2021-12-09T00:39:05Z",
+        "groups": [
+            {
+                "uuid": "a571c0d144b14fd4a87a9d9b2aa9fcd6",
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "27f6424905884dbb96ab9210d987a56c",
+                "template": "Nginx",
+                "name": "Nginx",
+                "description": "Get metrics from stub status module using Zabbix agent running on Linux\nhttps://nginx.ru/en/docs/http/ngx_http_stub_status_module.html\n\nThis template automatically subtractts the Active and Writing connection values from the status check for more accurate statistics gathering. It also shows how many worker processes are running as opposed to the master.\n\nThis is designed specifically for https://github.com/tiredofit/docker-nginx/",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "75a7795df3034835bcfd143f7c3e9b94",
+                        "name": "Nginx: Service response time",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "net.tcp.service.perf[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"]",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "f06e76888f464e13b7cc4c3db33e8131",
+                        "name": "Nginx: Service status",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"]",
+                        "history": "7d",
+                        "valuemap": {
+                            "name": "Service state"
+                        },
+                        "preprocessing": [
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "10m"
+                                ]
+                            }
+                        ],
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "c043191c22f34522ba4f83430d9f88b1",
+                                "expression": "last(/Nginx/net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"])=0",
+                                "name": "Nginx: Service is down",
+                                "priority": "AVERAGE",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Nginx: Process is not running",
+                                        "expression": "last(/Nginx/proc.num[nginx,,,master])=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "9e2be446ac79491c8be1bcd789392066",
+                        "name": "Nginx: Connections accepted per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.accepted.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of accepted client connections.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\1"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "436f2dc87cda418eb8f19ed6910c7bd0",
+                        "name": "Nginx: Connections active",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.active",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of active client connections including Waiting connections.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Active connections: ([0-9]+)",
+                                    "\\1"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "4027e6db5e024aff98056faa2d4b43cd",
+                        "name": "Nginx: Connections dropped per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.dropped.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of dropped client connections.",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var a = value.match(/server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)/)\nif (a) {\n    return (a[1]-1)-(a[2]-1)\n}"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "f2d431fa9bc446608caa3f80ef27c41b",
+                                "expression": "min(/Nginx/nginx.connections.dropped.rate,5m) > {$NGINX.DROP_RATE.MAX.WARN}",
+                                "name": "Nginx: High connections drop rate (more than {$NGINX.DROP_RATE.MAX.WARN} for 5m)",
+                                "opdata": "Current rate: {ITEM.LASTVALUE1}",
+                                "priority": "WARNING",
+                                "description": "The dropping rate connections is greater than {$NGINX.DROP_RATE.MAX.WARN} for the last 5 minutes.",
+                                "dependencies": [
+                                    {
+                                        "name": "Nginx: Process is not running",
+                                        "expression": "last(/Nginx/proc.num[nginx,,,master])=0"
+                                    },
+                                    {
+                                        "name": "Nginx: Service is down",
+                                        "expression": "last(/Nginx/net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"])=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "06191636a7104e1bb40d197493b80958",
+                        "name": "Nginx: Connections handled per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.handled.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of handled connections. Generally, the parameter value is the same as accepts unless some resource limits have been reached (for example, the worker_connections limit).",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\2"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "f5925c78389143c7924432483a5c716c",
+                        "name": "Nginx: Connections reading",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.reading",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of connections where nginx is reading the request header.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Reading: ([0-9]+) Writing: ([0-9]+) Waiting: ([0-9]+)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "d6cfa828ba344ffe948d8d985b849316",
+                        "name": "Nginx: Connections waiting",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.waiting",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of idle client connections waiting for a request.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Reading: ([0-9]+) Writing: ([0-9]+) Waiting: ([0-9]+)",
+                                    "\\3"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "c038a572f73f4a418ddcc5aeb8b0a547",
+                        "name": "Nginx: Connections writing",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.writing",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of connections where nginx is writing the response back to the client.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Reading: ([0-9]+) Writing: ([0-9]+) Waiting: ([0-9]+)",
+                                    "\\2"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b28444fb9b834d03a72036882c80b921",
+                        "name": "Nginx: Requests total",
+                        "type": "DEPENDENT",
+                        "key": "nginx.requests.total",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The total number of client requests.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\3"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "2600a696278f490f86cadd8c8836f269",
+                        "name": "Nginx: Requests per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.requests.total.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of client requests.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\3"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "3dcc81006977478f92be6dd040d66eb5",
+                        "name": "Nginx: Version",
+                        "type": "DEPENDENT",
+                        "key": "nginx.version",
+                        "delay": "0",
+                        "history": "7d",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Server: nginx\\/(.+(?<!\\r))",
+                                    "\\1"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "1d"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "7ad80c508f2f48b59f7659c673db9f36",
+                                "expression": "last(/Nginx/nginx.version,#1)<>last(/Nginx/nginx.version,#2) and length(last(/Nginx/nginx.version))>0",
+                                "name": "Nginx: Version has changed (new version: {ITEM.VALUE})",
+                                "priority": "INFO",
+                                "description": "Nginx version has changed. Ack to close.",
+                                "manual_close": "YES"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "84c95c1955bf4ccaa12a060a9acdb478",
+                        "name": "Nginx: CPU utilization",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "proc.cpu.util[nginx]",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "description": "Process CPU utilization percentage.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "64d208475c034bae953a64cde1833ebb",
+                        "name": "Nginx: Memory usage (rss)",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "proc.mem[nginx,,,,rss]",
+                        "history": "7d",
+                        "units": "B",
+                        "description": "Resident set size memory used by process in bytes.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "21fccb0286fb407c85f1972e994c698e",
+                        "name": "Nginx: Memory usage (vsize)",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "proc.mem[nginx,,,,vsize]",
+                        "history": "7d",
+                        "units": "B",
+                        "description": "Virtual memory size used by process in bytes.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "ba3da6baccee4b31947bf20d3cae0e5f",
+                        "name": "Nginx: Number of master processes",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "proc.num[nginx,,,master]",
+                        "history": "7d",
+                        "description": "Number of the Nginx master processes running.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "903e6a1f30154ee49df3f8d87e0164cc",
+                                "expression": "last(/Nginx/proc.num[nginx,,,master])=0",
+                                "name": "Nginx: Process is not running",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "fc5be9e8260a4ac08f9ca2d307bce443",
+                        "name": "Nginx: Number of worker processes",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "proc.num[nginx,,,worker]",
+                        "history": "7d",
+                        "description": "Number of the Nginx worker processes running.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "52a23a9f6d60490c8f5565b938154f61",
+                        "name": "Nginx: Get stub status page",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]",
+                        "history": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "The following status information is provided:\nActive connections - the current number of active client connections including Waiting connections.\nAccepts - the total number of accepted client connections.\nHandled - the total number of handled connections. Generally, the parameter value is the same as accepts unless some resource limits have been reached (for example, the worker_connections limit).\nRequests - the total number of client requests.\nReading - the current number of connections where nginx is reading the request header.\nWriting - the current number of connections where nginx is writing the response back to the client.\nWaiting - the current number of idle client connections waiting for a request.\nhttps://nginx.org/en/docs/http/ngx_http_stub_status_module.html",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Zabbix raw items"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "a497b80eb03f469c9552881b498003b2",
+                                "expression": "find(/Nginx/web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"],,\"like\",\"HTTP/1.1 200\")=0 or\n nodata(/Nginx/web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"],30m)=1",
+                                "name": "Nginx: Failed to fetch stub status page (or no data for 30m)",
+                                "priority": "WARNING",
+                                "description": "Zabbix has not received data for items for the last 30 minutes.",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Nginx: Process is not running",
+                                        "expression": "last(/Nginx/proc.num[nginx,,,master])=0"
+                                    },
+                                    {
+                                        "name": "Nginx: Service is down",
+                                        "expression": "last(/Nginx/net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"])=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$NGINX.DROP_RATE.MAX.WARN}",
+                        "value": "1",
+                        "description": "The critical rate of the dropped connections for trigger expression."
+                    },
+                    {
+                        "macro": "{$NGINX.RESPONSE_TIME.MAX.WARN}",
+                        "value": "10",
+                        "description": "The Nginx maximum response time in seconds for trigger expression."
+                    },
+                    {
+                        "macro": "{$NGINX.STUB_STATUS.HOST}",
+                        "value": "localhost",
+                        "description": "Hostname or IP of Nginx stub_status host or container."
+                    },
+                    {
+                        "macro": "{$NGINX.STUB_STATUS.PATH}",
+                        "value": "stub_status",
+                        "description": "The path of Nginx stub_status page."
+                    },
+                    {
+                        "macro": "{$NGINX.STUB_STATUS.PORT}",
+                        "value": "73",
+                        "description": "The port of Nginx stub_status host or container."
+                    }
+                ],
+                "dashboards": [
+                    {
+                        "uuid": "9d071e3a148c405e85c53ef25d54efaf",
+                        "name": "Nginx performance",
+                        "pages": [
+                            {
+                                "widgets": [
+                                    {
+                                        "type": "GRAPH_CLASSIC",
+                                        "width": "12",
+                                        "height": "5",
+                                        "fields": [
+                                            {
+                                                "type": "INTEGER",
+                                                "name": "source_type",
+                                                "value": "0"
+                                            },
+                                            {
+                                                "type": "GRAPH",
+                                                "name": "graphid",
+                                                "value": {
+                                                    "name": "Nginx: Connections by state",
+                                                    "host": "Nginx"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GRAPH_CLASSIC",
+                                        "x": "12",
+                                        "width": "12",
+                                        "height": "5",
+                                        "fields": [
+                                            {
+                                                "type": "INTEGER",
+                                                "name": "source_type",
+                                                "value": "0"
+                                            },
+                                            {
+                                                "type": "GRAPH",
+                                                "name": "graphid",
+                                                "value": {
+                                                    "name": "Nginx: Requests per second",
+                                                    "host": "Nginx"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GRAPH_CLASSIC",
+                                        "y": "5",
+                                        "width": "12",
+                                        "height": "5",
+                                        "fields": [
+                                            {
+                                                "type": "INTEGER",
+                                                "name": "source_type",
+                                                "value": "0"
+                                            },
+                                            {
+                                                "type": "GRAPH",
+                                                "name": "graphid",
+                                                "value": {
+                                                    "name": "Nginx: Connections per second",
+                                                    "host": "Nginx"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "valuemaps": [
+                    {
+                        "uuid": "53c8528c18814f30a45d1540ab9e5c00",
+                        "name": "Service state",
+                        "mappings": [
+                            {
+                                "value": "0",
+                                "newvalue": "Down"
+                            },
+                            {
+                                "value": "1",
+                                "newvalue": "Up"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "uuid": "27f6423905884dbb96ab9210d987a56c",
+                "template": "Nginx - Passive Monitoring",
+                "name": "Nginx - Passive Monitoring",
+                "description": "Get metrics from stub status module using Zabbix agent running on Linux\nhttps://nginx.ru/en/docs/http/ngx_http_stub_status_module.html\n\nThis template automatically subtracts the Active and Writing connection values from the status check for more accurate statistics gathering. It also shows how many worker processes are running as opposed to the master.\n\nThis is designed specifically for https://github.com/tiredofit/docker-nginx/",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "75a7295df3034835bcfd143f7c3e9b94",
+                        "name": "Nginx: Service response time",
+                        "key": "net.tcp.service.perf[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"]",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "f5db329410a14609a5f3e883ca493cc8",
+                                "expression": "min(/Nginx - Passive Monitoring/net.tcp.service.perf[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"],5m)>{$NGINX.RESPONSE_TIME.MAX.WARN}",
+                                "name": "Nginx: Service response time is too high (over {$NGINX.RESPONSE_TIME.MAX.WARN}s for 5m)",
+                                "priority": "WARNING",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Nginx: Process is not running",
+                                        "expression": "last(/Nginx - Passive Monitoring/proc.num[nginx,,,master])=0"
+                                    },
+                                    {
+                                        "name": "Nginx: Service is down",
+                                        "expression": "last(/Nginx - Passive Monitoring/net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"])=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "f06e76888f464e23b7cc4c3db33e8131",
+                        "name": "Nginx: Service status",
+                        "key": "net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"]",
+                        "history": "7d",
+                        "valuemap": {
+                            "name": "Service state"
+                        },
+                        "preprocessing": [
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "10m"
+                                ]
+                            }
+                        ],
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "c043191222f34522ba4f83430d9f88b1",
+                                "expression": "last(/Nginx - Passive Monitoring/net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"])=0",
+                                "name": "Nginx: Service is down",
+                                "priority": "AVERAGE",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Nginx: Process is not running",
+                                        "expression": "last(/Nginx - Passive Monitoring/proc.num[nginx,,,master])=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "9e2be446ac79491c2be1bcd789392066",
+                        "name": "Nginx: Connections accepted per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.accepted.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of accepted client connections.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\1"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "436f2dc87cda418eb2f19ed6910c7bd0",
+                        "name": "Nginx: Connections active",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.active",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of active client connections including Waiting connections.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Active connections: ([0-9]+)",
+                                    "\\1"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "4027e6db5e024aff98256faa2d4b43cd",
+                        "name": "Nginx: Connections dropped per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.dropped.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of dropped client connections.",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var a = value.match(/server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)/)\nif (a) {\n    return (a[1]-1)-(a[2]-1)\n}"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "f2d431fa9bc246608caa3f80ef27c41b",
+                                "expression": "min(/Nginx - Passive Monitoring/nginx.connections.dropped.rate,5m) > {$NGINX.DROP_RATE.MAX.WARN}",
+                                "name": "Nginx: High connections drop rate (more than {$NGINX.DROP_RATE.MAX.WARN} for 5m)",
+                                "opdata": "Current rate: {ITEM.LASTVALUE1}",
+                                "priority": "WARNING",
+                                "description": "The dropping rate connections is greater than {$NGINX.DROP_RATE.MAX.WARN} for the last 5 minutes.",
+                                "dependencies": [
+                                    {
+                                        "name": "Nginx: Process is not running",
+                                        "expression": "last(/Nginx - Passive Monitoring/proc.num[nginx,,,master])=0"
+                                    },
+                                    {
+                                        "name": "Nginx: Service is down",
+                                        "expression": "last(/Nginx - Passive Monitoring/net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"])=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "06191636a7104e1bb40d297493b80958",
+                        "name": "Nginx: Connections handled per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.handled.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of handled connections. Generally, the parameter value is the same as accepts unless some resource limits have been reached (for example, the worker_connections limit).",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\2"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "f5935c78389143c7924432483a5c716c",
+                        "name": "Nginx: Connections reading",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.reading",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of connections where nginx is reading the request header.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Reading: ([0-9]+) Writing: ([0-9]+) Waiting: ([0-9]+)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "d6cfa828ba344ffe948d8d285b849316",
+                        "name": "Nginx: Connections waiting",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.waiting",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of idle client connections waiting for a request.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Reading: ([0-9]+) Writing: ([0-9]+) Waiting: ([0-9]+)",
+                                    "\\3"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "c038a572f73f4a418ddcc5a2b8b0a547",
+                        "name": "Nginx: Connections writing",
+                        "type": "DEPENDENT",
+                        "key": "nginx.connections.writing",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The current number of connections where nginx is writing the response back to the client.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Reading: ([0-9]+) Writing: ([0-9]+) Waiting: ([0-9]+)",
+                                    "\\2"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return (value - 1)"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b29444fb9b834d03a72036882c80b921",
+                        "name": "Nginx: Requests total",
+                        "type": "DEPENDENT",
+                        "key": "nginx.requests.total",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "The total number of client requests.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\3"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "2600a696278f490f86cadd8c8236f269",
+                        "name": "Nginx: Requests per second",
+                        "type": "DEPENDENT",
+                        "key": "nginx.requests.total.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "The total number of client requests.",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "server accepts handled requests\\s+([0-9]+) ([0-9]+) ([0-9]+)",
+                                    "\\3"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "3dcc81006977478f92be6dd040266eb5",
+                        "name": "Nginx: Version",
+                        "type": "DEPENDENT",
+                        "key": "nginx.version",
+                        "delay": "0",
+                        "history": "7d",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "Server: nginx\\/(.+(?<!\\r))",
+                                    "\\1"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "1d"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "7ad80c508f2f48b59f7259c673db9f36",
+                                "expression": "last(/Nginx - Passive Monitoring/nginx.version,#1)<>last(/Nginx - Passive Monitoring/nginx.version,#2) and length(last(/Nginx - Passive Monitoring/nginx.version))>0",
+                                "name": "Nginx: Version has changed (new version: {ITEM.VALUE})",
+                                "priority": "INFO",
+                                "description": "Nginx version has changed. Ack to close.",
+                                "manual_close": "YES"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "84c95c1955bf4ccaa12a060a9acd2478",
+                        "name": "Nginx: CPU utilization",
+                        "key": "proc.cpu.util[nginx]",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "description": "Process CPU utilization percentage.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "64d208475c034bae953a64cde1823ebb",
+                        "name": "Nginx: Memory usage (rss)",
+                        "key": "proc.mem[nginx,,,,rss]",
+                        "history": "7d",
+                        "units": "B",
+                        "description": "Resident set size memory used by process in bytes.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "21fccb0286fb407c85f1972e994c628e",
+                        "name": "Nginx: Memory usage (vsize)",
+                        "key": "proc.mem[nginx,,,,vsize]",
+                        "history": "7d",
+                        "units": "B",
+                        "description": "Virtual memory size used by process in bytes.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "ba3da6baccee4b31947bf20d3cae2e5f",
+                        "name": "Nginx: Number of master processes",
+                        "key": "proc.num[nginx,,,master]",
+                        "history": "7d",
+                        "description": "Number of the Nginx master processes running.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "903e6a1f30154ee49df3f2d87e0164cc",
+                                "expression": "last(/Nginx - Passive Monitoring/proc.num[nginx,,,master])=0",
+                                "name": "Nginx: Process is not running",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "fc5be9e8260a4ac08f9ca2d307bce423",
+                        "name": "Nginx: Number of worker processes",
+                        "key": "proc.num[nginx,,,worker]",
+                        "history": "7d",
+                        "description": "Number of the Nginx worker processes running.",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Nginx"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "52a23a9f6d60490c8f5565b938154f62",
+                        "name": "Nginx: Get stub status page",
+                        "key": "web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"]",
+                        "history": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "The following status information is provided:\nActive connections - the current number of active client connections including Waiting connections.\nAccepts - the total number of accepted client connections.\nHandled - the total number of handled connections. Generally, the parameter value is the same as accepts unless some resource limits have been reached (for example, the worker_connections limit).\nRequests - the total number of client requests.\nReading - the current number of connections where nginx is reading the request header.\nWriting - the current number of connections where nginx is writing the response back to the client.\nWaiting - the current number of idle client connections waiting for a request.\nhttps://nginx.org/en/docs/http/ngx_http_stub_status_module.html",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "Zabbix raw items"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "a497b80eb03f469c9552881b298003b2",
+                                "expression": "find(/Nginx - Passive Monitoring/web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"],,\"like\",\"HTTP/1.1 200\")=0 or\n nodata(/Nginx - Passive Monitoring/web.page.get[\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PATH}\",\"{$NGINX.STUB_STATUS.PORT}\"],30m)=1",
+                                "name": "Nginx: Failed to fetch stub status page (or no data for 30m)",
+                                "priority": "WARNING",
+                                "description": "Zabbix has not received data for items for the last 30 minutes.",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Nginx: Process is not running",
+                                        "expression": "last(/Nginx - Passive Monitoring/proc.num[nginx,,,master])=0"
+                                    },
+                                    {
+                                        "name": "Nginx: Service is down",
+                                        "expression": "last(/Nginx - Passive Monitoring/net.tcp.service[http,\"{$NGINX.STUB_STATUS.HOST}\",\"{$NGINX.STUB_STATUS.PORT}\"])=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$NGINX.DROP_RATE.MAX.WARN}",
+                        "value": "1",
+                        "description": "The critical rate of the dropped connections for trigger expression."
+                    },
+                    {
+                        "macro": "{$NGINX.RESPONSE_TIME.MAX.WARN}",
+                        "value": "10",
+                        "description": "The Nginx maximum response time in seconds for trigger expression."
+                    },
+                    {
+                        "macro": "{$NGINX.STUB_STATUS.HOST}",
+                        "value": "localhost",
+                        "description": "Hostname or IP of Nginx stub_status host or container."
+                    },
+                    {
+                        "macro": "{$NGINX.STUB_STATUS.PATH}",
+                        "value": "stub_status",
+                        "description": "The path of Nginx stub_status page."
+                    },
+                    {
+                        "macro": "{$NGINX.STUB_STATUS.PORT}",
+                        "value": "73",
+                        "description": "The port of Nginx stub_status host or container."
+                    }
+                ],
+                "dashboards": [
+                    {
+                        "uuid": "9d071e3a148c405e85c53ef25d52efaf",
+                        "name": "Nginx performance",
+                        "pages": [
+                            {
+                                "widgets": [
+                                    {
+                                        "type": "GRAPH_CLASSIC",
+                                        "width": "12",
+                                        "height": "5",
+                                        "fields": [
+                                            {
+                                                "type": "INTEGER",
+                                                "name": "source_type",
+                                                "value": "0"
+                                            },
+                                            {
+                                                "type": "GRAPH",
+                                                "name": "graphid",
+                                                "value": {
+                                                    "name": "Nginx: Connections by state",
+                                                    "host": "Nginx - Passive Monitoring"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GRAPH_CLASSIC",
+                                        "x": "12",
+                                        "width": "12",
+                                        "height": "5",
+                                        "fields": [
+                                            {
+                                                "type": "INTEGER",
+                                                "name": "source_type",
+                                                "value": "0"
+                                            },
+                                            {
+                                                "type": "GRAPH",
+                                                "name": "graphid",
+                                                "value": {
+                                                    "name": "Nginx: Requests per second",
+                                                    "host": "Nginx - Passive Monitoring"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GRAPH_CLASSIC",
+                                        "y": "5",
+                                        "width": "12",
+                                        "height": "5",
+                                        "fields": [
+                                            {
+                                                "type": "INTEGER",
+                                                "name": "source_type",
+                                                "value": "0"
+                                            },
+                                            {
+                                                "type": "GRAPH",
+                                                "name": "graphid",
+                                                "value": {
+                                                    "name": "Nginx: Connections per second",
+                                                    "host": "Nginx - Passive Monitoring"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "valuemaps": [
+                    {
+                        "uuid": "53c8528c18814f30a45d1540ab9e2c00",
+                        "name": "Service state",
+                        "mappings": [
+                            {
+                                "value": "0",
+                                "newvalue": "Down"
+                            },
+                            {
+                                "value": "1",
+                                "newvalue": "Up"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "uuid": "ba234158aeca468a8592d944f9aae691",
+                "name": "Nginx: Connections by state",
+                "graph_items": [
+                    {
+                        "drawtype": "BOLD_LINE",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.connections.active"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.connections.waiting"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.connections.writing"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "A54F10",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.connections.reading"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "ba234158aeca468a8592d944f9aa2691",
+                "name": "Nginx: Connections by state",
+                "graph_items": [
+                    {
+                        "drawtype": "BOLD_LINE",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.connections.active"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.connections.waiting"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.connections.writing"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "A54F10",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.connections.reading"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "b82a5b89864a47638421458f3e74563d",
+                "name": "Nginx: Connections per second",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.connections.accepted.rate"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.connections.handled.rate"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.connections.dropped.rate"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "b82a5b89864a47638421458f3e74523d",
+                "name": "Nginx: Connections per second",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.connections.accepted.rate"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.connections.handled.rate"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.connections.dropped.rate"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "69ca908afa1d468d983a263d06910925",
+                "name": "Nginx: Memory usage",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "proc.mem[nginx,,,,vsize]"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "proc.mem[nginx,,,,rss]"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "69ca908afa1d468d983a263d06910225",
+                "name": "Nginx: Memory usage",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "proc.mem[nginx,,,,vsize]"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "proc.mem[nginx,,,,rss]"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "a2d2fec823514df09731381304c245e9",
+                "name": "Nginx: Requests per second",
+                "graph_items": [
+                    {
+                        "drawtype": "GRADIENT_LINE",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx",
+                            "key": "nginx.requests.total.rate"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "a2d2fec223514df09731381304c245e9",
+                "name": "Nginx: Requests per second",
+                "graph_items": [
+                    {
+                        "drawtype": "GRADIENT_LINE",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Nginx - Passive Monitoring",
+                            "key": "nginx.requests.total.rate"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
