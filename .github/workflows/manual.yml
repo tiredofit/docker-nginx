@@ -952,7 +952,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
   v3-6:
@@ -1058,7 +1058,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
   v3-5:
