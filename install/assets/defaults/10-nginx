@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 
 ENABLE_NGINX=${ENABLE_NGINX:-"TRUE"}
 FORCE_RESET_PERMISSIONS=${FORCE_RESET_PERMISSIONS:-"TRUE"}
