@@ -2,12 +2,14 @@ FROM docker.io/tiredofit/alpine:3.15
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.21.5 \
+ENV NGINX_VERSION=1.21.6 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=9aec15e2aa6feea2113119ba06460af70ab3ea62 \
     NGINX_USER=nginx \
     NGINX_GROUP=www-data \
-    NGINX_WEBROOT=/www/html
+    NGINX_WEBROOT=/www/html \
+    IMAGE_NAME="tiredofit/nginx" \
+    IMAGE_REPO_URL="https://github.com/tiredofit/docker-nginx/"
 
 ### Install Nginx
 RUN set -x && \
