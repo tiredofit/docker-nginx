@@ -374,7 +374,7 @@ EOF
     echo "fastcgi_param  HTTPS 'on';" >>/etc/nginx/fastcgi_params
     PROTOCOL="https://"
   else
-    print_notice "Disable Nginx FastCGI HTTPS Termination Support"
+    print_debug "Disable Nginx FastCGI HTTPS Termination Support"
     echo "fastcgi_param  HTTPS 'off';" >>/etc/nginx/fastcgi_params
     PROTOCOL="http://"
   fi

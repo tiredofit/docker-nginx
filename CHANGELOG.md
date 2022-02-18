@@ -1,3 +1,9 @@
+## 5.16.4 2022-02-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Stop notifying us of disabling a feature all the time
+
+
 ## 5.16.3 2022-02-09 <dave at tiredofit dot ca>
 
    ### Changed
