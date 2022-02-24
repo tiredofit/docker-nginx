@@ -65,8 +65,8 @@ else
     cp -R /assets/nginx/blockbots-custom/* /etc/nginx/nginx.conf.d/blockbots-custom/
   fi
 
-  if [ -n "$NGINX_BLOCK_BOTS_WHITELIST_DOMAIN" ]; then
-    whitelist_domains=$(echo "$NGINX_BLOCK_BOTS_WHITELIST_DOMAIN" | tr "," "\n")
+  if [ -n "${NGINX_BLOCK_BOTS_WHITELIST_DOMAIN}" ]; then
+    whitelist_domains=$(echo "${NGINX_BLOCK_BOTS_WHITELIST_DOMAIN,,}" | tr "," "\n")
     for wl_domain in $whitelist_domains
     do
       wl_domain_orig=${wl_domain}
@@ -80,8 +80,8 @@ else
     done
   fi
 
-  if [ -n "$NGINX_BLOCK_BOTS_WHITELIST_IP" ]; then
-    whitelist_ips=$(echo "$NGINX_BLOCK_BOTS_WHITELIST_IP" | tr "," "\n")
+  if [ -n "${NGINX_BLOCK_BOTS_WHITELIST_IP}" ]; then
+    whitelist_ips=$(echo "${NGINX_BLOCK_BOTS_WHITELIST_IP}" | tr "," "\n")
     for wl_ip in $whitelist_ips
     do
       if ! grep -q "${wl_ip}" /etc/nginx/nginx.conf.d/blockbots-custom/whitelist-ips.conf ; then
@@ -94,7 +94,7 @@ else
   fi
 
   if [ -n "${NGINX_BLOCK_BOTS}" ] ; then
-    if [[ "${NGINX_BLOCK_BOTS}" == *"ALL" ]] ; then
+    if [[ "${NGINX_BLOCK_BOTS,}" == *"all" ]] ; then
       NGINX_BLOCK_BOTS=ALL
     fi
 
@@ -102,53 +102,53 @@ else
         for bot in $NGINX_BLOCK_BOTS
         do
 
-      case $bot in
-          "ALL" | "all" )
+      case "${bot,,}" in
+          "all" )
               nginx_block_bots="adidxbot,aolbuild,bingbot,bingpreview,DoCoMo,duckduckgo,facebookexternalhit,facebookplatform,AdsBot-Google,Googlebot,Googlebot-Image,Googlebot-Mobile,Googlebot-News,Googlebot/Test,Googlebot-Video,Google-HTTP-Java-Client,LinkedInBot,Gravityscan,Jakarta\\ Commons,Kraken/0.1,teoma,msnbot,msnbot-media,SAMSUNG,Slackbot,Slackbot-LinkExpanding,slurp,TwitterBot,Wordpress,yahoo"
           ;;
-          "AOL" | "aol" )
+          "aol" )
               nginx_block_bots="aolbuild,${nginx_block_bots}"
           ;;
-          "BING" | "bing" )
+          "bing" )
               nginx_block_bots="bingbot,bingpreview,${nginx_block_bots}"
           ;;
-          "DOCOMO" | "docomo" )
+          "docomo" )
               nginx_block_bots="DoCoMo,${nginx_block_bots}"
           ;;
-          "DUCKDUCKGO" | "duckduckgo" )
+          "duckduckgo" )
               nginx_block_bots="duckduckgo,${nginx_block_bots}"
           ;;
-          "FACEBOOK" | "facebook" )
+          "facebook" )
               nginx_block_bots="developers.facebook.com,facebookexternalhit,facebookplatform,${nginx_block_bots}"
           ;;
-          "GOOGLE" | "google" )
+          "google" )
               nginx_block_bots="AdsBot-Google,Googlebot,Googlebot-Image,Googlebot-Mobile,Googlebot-News,Googlebot/Test,Googlebot-Video,Google-HTTP-Java-Client,${nginx_block_bots}"
           ;;
-          "LINKEDIN" | "linkedin" )
+          "linkedin" )
               nginx_block_bots="LinkedInBot,${nginx_block_bots}"
           ;;
-          "MISC" | "misc" )
+          "misc" )
               nginx_block_bots="adidxbot,Gravityscan,'Jakarta\ Commons',Kraken/0.1,teoma,${nginx_block_bots}"
           ;;
-          "MSN" | "msn" )
+          "msn" )
               nginx_block_bots="msnbot,msnbot-media,${nginx_block_bots}"
           ;;
-          "SAMSUNG" | "samsung" )
+          "samsung" )
               nginx_block_bots="SAMSUNG,${nginx_block_bots}"
           ;;
-          "SLACK" | "slack" )
+          "slack" )
               nginx_block_bots="Slackbot,Slackbot-LinkExpanding,${nginx_block_bots}"
           ;;
-          "SLURP" | "slurp" )
+          "slurp" )
               nginx_block_bots="slurp,${nginx_block_bots}"
           ;;
-          "TWITTER" | "twitter" )
+          "twitter" )
               nginx_block_bots="TwitterBot,${nginx_block_bots}"
           ;;
-          "WORDPRESS" | "wordpress" )
+          "wordpress" )
               nginx_block_bots="Wordpress,${nginx_block_bots}"
           ;;
-          "YAHOO" | "yahoo" )
+          "yahoo" )
               nginx_block_bots="yahoo,${nginx_block_bots}"
           ;;
           * )
@@ -159,7 +159,7 @@ else
 
     NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS="${nginx_block_bots}"
   fi
-  if [ -n "$NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS" ]; then
+  if [ -n "${NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS}" ]; then
      IFS=","
         for blacklist_ua in $NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS
         do
@@ -239,15 +239,15 @@ else
   sed -i "\#include /etc/nginx/nginx.conf.d/reverse_proxy.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if var_false "$NGINX_ENABLE_SENDFILE"; then
+if var_false "${NGINX_ENABLE_SENDFILE}"; then
   sed -i "\#sendfile#d" /etc/nginx/nginx.conf
 fi
 
-if var_false "$NGINX_ENABLE_SITE_OPTIMIZATION"; then
+if var_false "$${NGINX_ENABLE_SITE_OPTIMIZATION}"; then
   sed -i "\#include /etc/nginx/nginx.conf.d/site_optimization.conf;#d" /etc/nginx/nginx.conf
 fi
 
-if var_false "$NGINX_ENABLE_SERVER_TOKENS"; then
+if var_false "${NGINX_ENABLE_SERVER_TOKENS}"; then
   sed -i "\#server_tokens off;#d" /etc/nginx/nginx.conf
   sed -i "\#more_clear_headers Server;#d" /etc/nginx/nginx.conf
 fi
@@ -264,37 +264,37 @@ if var_false "${ENABLE_ZABBIX}" || var_false "${CONTAINER_ENABLE_MONITORING}" ; 
   sed -i "\#include /etc/nginx/nginx.conf.d/monitoring.conf;#d" /etc/nginx/nginx.conf
 fi
 
-case "${NGINX_MODE}" in
-"MAINTENANCE")
-  print_warn "MAINTENANCE MODE ACTIVATED - THIS IMAGE WILL NOT SERVE PAGES"
-  mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
-  mv /etc/nginx/conf.d/maintenance.template /etc/nginx.conf.d/maintenance.conf
-  ;;
-"NORMAL")
-  :
-  ;;
-"PROXY")
-  sanity_var NGINX_PROXY_URL "No Proxy URL"
-  NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
+case "${NGINX_MODE,,}" in
+  "maintenance" )
+    print_warn "MAINTENANCE MODE ACTIVATED - THIS IMAGE WILL NOT SERVE PAGES"
+    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
+    mv /etc/nginx/conf.d/maintenance.template /etc/nginx.conf.d/maintenance.conf
+    ;;
+  "normal" )
+    :
+    ;;
+  "proxy" )
+    sanity_var NGINX_PROXY_URL "No Proxy URL"
+    NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
 
-  print_notice "Proxy Mode Activated - Proxying all traffic to ${NGINX_PROXY_URL}"
-  sed -i "s#<PROXY_URL>#${NGINX_PROXY_URL}#g" /etc/nginx/conf.d/proxy.template
-  mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
-  mv /etc/nginx/conf.d/proxy.template /etc/nginx/conf.d/proxy.conf
-  ;;
-"REDIRECT")
-  sanity_var NGINX_REDIRECT_URL "No Redirect URL"
-  NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
+    print_notice "Proxy Mode Activated - Proxying all traffic to ${NGINX_PROXY_URL}"
+    sed -i "s#<PROXY_URL>#${NGINX_PROXY_URL}#g" /etc/nginx/conf.d/proxy.template
+    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
+    mv /etc/nginx/conf.d/proxy.template /etc/nginx/conf.d/proxy.conf
+    ;;
+  "redirect" )
+    sanity_var NGINX_REDIRECT_URL "No Redirect URL"
+    NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
 
-  sed -i "s#rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};#g" /etc/nginx/conf.d/redirect.template
+    sed -i "s#rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};#g" /etc/nginx/conf.d/redirect.template
 
-  print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
-  mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
-  mv /etc/nginx/conf.d/redirect.template /etc/nginx/conf.d/redirect.conf
-  ;;
-*)
-  :
-  ;;
+    print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
+    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
+    mv /etc/nginx/conf.d/redirect.template /etc/nginx/conf.d/redirect.conf
+    ;;
+  *)
+    :
+    ;;
 esac
 
 if var_true "${NGINX_ENABLE_APPLICATION_CONFIGURATION}"; then
@@ -328,9 +328,28 @@ EOF
     sed -i "\#include /etc/nginx/conf.d/#i\ \ \ \ include /etc/nginx/nginx.conf.d/authentication/ldap_configuration;" /etc/nginx/nginx.conf
     ;;
   "LLNG")
-    sed -i "s#<LLNG_HANDLER_HOST>#$NGINX_AUTHENTICATION_LLNG_HANDLER_HOST#g" /etc/nginx/nginx.conf.d/authentication/llng
-    sed -i "s#<LLNG_HANDLER_PORT>#$NGINX_AUTHENTICATION_LLNG_HANDLER_PORT#g" /etc/nginx/nginx.conf.d/authentication/llng
     print_notice "Setting LLNG Authentication"
+    ### Create Upstream LLNG Hosts
+    if var_true "${NGINX_ENABLE_UPSTREAM_KEEPALIVE}" ; then
+      upstream_keepalive="keepalive ${NGINX_UPSTREAM_KEEPALIVE};"
+    fi
+    llng_upstream_hosts=$(echo "${NGINX_AUTHENTICATION_LLNG_HANDLER_HOST}" | tr "," "\n")
+     echo "upstream llng-upstream-pool {" >> /etc/nginx/nginx.conf.d/authentication/llng_upstream
+     echo "     ${upstream_keepalive}" >> /etc/nginx/nginx.conf.d/authentication/llng_upstream
+    for host in $llng_upstream_hosts
+        do
+        if [[ ${host} != *":"* ]];then
+          llng_handler_listen_port=":${NGINX_AUTHENTICATION_LLNG_HANDLER_PORT}"
+        else
+          llng_handler_listen_port=""
+        fi
+        echo "    server $host${llng_handler_listen_port} ${NGINX_UPSTREAM_OPTIONS};" >> /etc/nginx/nginx.conf.d/authentication/llng_upstream
+    done
+    echo "}" >> /etc/nginx/nginx.conf.d/authentication/llng_upstream
+    sed -i -e "/ server {/i### LLNG Authentication Multiple Handlers configuration" /etc/nginx/conf.d/default.conf
+    sed -i -e "/ server {/i\include \/etc\/nginx\/nginx.conf.d\/authentication\/llng_upstream;" /etc/nginx/conf.d/default.conf
+    sed -i "s#<LLNG_HANDLER_PORT>#$NGINX_AUTHENTICATION_LLNG_HANDLER_PORT#g" /etc/nginx/nginx.conf.d/authentication/llng_location_block
+
     if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
       header_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')
       for ((i = 1; i <= header_num; i++)); do
@@ -343,8 +362,8 @@ EOF
         echo "auth_request_set \$${array[1]} \$${array[2]};" >>/etc/nginx/nginx.conf.d/authentication/llng_auth_request
       done
 
-      sed -i '/server {/a\ \ \ \ \  include /etc/nginx/nginx.conf.d/authentication/llng;' /etc/nginx/conf.d/*.conf
-      sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication handler' /etc/nginx/conf.d/*.conf
+      sed -i '/server {/a\ \ \ \ \  include /etc/nginx/nginx.conf.d/authentication/llng_location_block;' /etc/nginx/conf.d/*.conf
+      sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication Checkpoint' /etc/nginx/conf.d/*.conf
       sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/nginx.conf.d/authentication/llng_auth_request;' /etc/nginx/conf.d/*.conf
       sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/conf.d/*.conf
     else
@@ -383,16 +402,13 @@ else
 fi
 
 ### Set Stage for Future Development and Production Purposes
-case "$STAGE" in
-"DEVELOP" | "develop")
-  echo 'fastcgi_param STAGE "DEVELOP";' >>/etc/nginx/fastcgi_params
-  ;;
-"PRODUCTION" | "production" | "STAGING" | "staging")
-  echo 'fastcgi_param STAGE "PRODUCTION";' >>/etc/nginx/fastcgi_params
-  ;;
-*)
-  echo 'fastcgi_param STAGE "DEVELOP";' >>/etc/nginx/fastcgi_params
-  ;;
+case "${STAGE,,}" in
+  "production" | "staging")
+    echo 'fastcgi_param STAGE "PRODUCTION";' >>/etc/nginx/fastcgi_params
+    ;;
+  "develop" | *)
+    echo 'fastcgi_param STAGE "DEVELOP";' >>/etc/nginx/fastcgi_params
+    ;;
 esac
 
 #### Create Sample HTML File if doesn't exist
@@ -413,7 +429,7 @@ fi
 
 ### Force Reset Permissions for Accessibility
 mkdir -p "${NGINX_WEBROOT}"
-if [ "${FORCE_RESET_PERMISSIONS}" == "TRUE" ]; then
+if var_true "${FORCE_RESET_PERMISSIONS}" ; then
   chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
 fi
 

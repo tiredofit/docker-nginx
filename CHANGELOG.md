@@ -1,3 +1,13 @@
+## 5.17.0 2022-02-23 <dave at tiredofit dot ca>
+
+   ### Added
+      - Implement multiple upstream hosts for LLNG Authentication
+      - Implement Keepalive for upstreams for better performance
+
+   ### Changed
+      - Cleanup code, properly quote variables, and rename filenames for consistency
+
+
 ## 5.16.4 2022-02-18 <dave at tiredofit dot ca>
 
    ### Changed
