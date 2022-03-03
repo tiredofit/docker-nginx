@@ -1,3 +1,9 @@
+## 5.17.2 2022-03-02 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add NGINX_POST_INIT_COMMAND to execute before nginx process starts
+
+
 ## 5.17.1 2022-03-02 <dave at tiredofit dot ca>
 
    ### Added
