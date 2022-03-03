@@ -223,15 +223,16 @@ Presently you can compress your served content with gzip and brotli. More compre
 
 #### Container Options
 
-| Parameter                                | Description                                                                              | Default     |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
-| `NGINX_ENABLE_APPLICATION_CONFIGURATION` | Don't automatically setup /etc/nginx/conf.d files - Useful for volume mapping/overriding | `TRUE`      |
-| `NGINX_ENABLE_CREATE_SAMPLE_HTML`        | If no index.html found - create a sample one to prove container works                    | `TRUE`      |
-| `NGINX_ENABLE_SITE_OPTIMIZATIONS`        | Deny access to some files and URLs, send caching tags                                    | `TRUE`      |
-| `NGINX_INCLUDE_CONFIGURATION`            | Include configuration in your website application file. eg `/www/website/nginx.conf`     |             |
-| `NGINX_RELOAD_ON_CONFIG_CHANGE`          | Automatically reload nginx on configuration file change                                  | `FALSE`     |
-| `NGINX_LISTEN_PORT`                      | Nginx listening port                                                                     | `80`        |
-| `NGINX_WEBROOT`                          | Where to serve content from inside the container                                         | `/www/html` |
+| Parameter                                | Description                                                                                                      | Default     |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------- |
+| `NGINX_ENABLE_APPLICATION_CONFIGURATION` | Don't automatically setup /etc/nginx/conf.d files - Useful for volume mapping/overriding                         | `TRUE`      |
+| `NGINX_ENABLE_CREATE_SAMPLE_HTML`        | If no index.html found - create a sample one to prove container works                                            | `TRUE`      |
+| `NGINX_ENABLE_SITE_OPTIMIZATIONS`        | Deny access to some files and URLs, send caching tags                                                            | `TRUE`      |
+| `NGINX_INCLUDE_CONFIGURATION`            | Include configuration in your website application file. eg `/www/website/nginx.conf`                             |             |
+| `NGINX_RELOAD_ON_CONFIG_CHANGE`          | Automatically reload nginx on configuration file change                                                          | `FALSE`     |
+| `NGINX_LISTEN_PORT`                      | Nginx listening port                                                                                             | `80`        |
+| `NGINX_POST_INIT_SCRIPT`                 | If you wish to run a bash script before the nginx process runs enter the path here, seperate multiple by commas. |             |
+| `NGINX_WEBROOT`                          | Where to serve content from inside the container                                                                 | `/www/html` |
 
 #### Functionality Options
 

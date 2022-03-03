@@ -1,3 +1,9 @@
+## 5.17.1 2022-03-02 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add NGINX_POST_INIT_SCRIPT environment variable to execute a custom script before starting process
+
+
 ## 5.17.0 2022-02-23 <dave at tiredofit dot ca>
 
    ### Added

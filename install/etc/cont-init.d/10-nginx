@@ -468,4 +468,19 @@ fi
 mkdir -p /tmp/nginx
 chown -R "${NGINX_USER}" /tmp/nginx
 
+if [ -n "${NGINX_POST_INIT_SCRIPT}" ] ; then
+  print_debug "Found Post Init Scripts"
+  post_scripts=$(echo "${NGINX_POST_INIT_SCRIPT}" | tr "," "\n")
+	for post_script in $post_scripts
+	do
+		if [ -f "${post_script}" ] ; then
+      print_debug "Executing post init script '${post_script}'"
+      chmod +x "${post_script}"
+      "${post_script}"
+    else
+      print_error "Tried to run post script '${post_script}' but it does not exist!"
+    fi
+	done
+fi
+
 liftoff
