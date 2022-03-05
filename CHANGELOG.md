@@ -1,3 +1,9 @@
+## 5.17.3 2022-03-04 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Move upstream blocks to dedicated section to nginx.conf as opposed to default.conf
+
+
 ## 5.17.2 2022-03-02 <dave at tiredofit dot ca>
 
    ### Added
