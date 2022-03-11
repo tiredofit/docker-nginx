@@ -1,3 +1,9 @@
+## 5.17.4 2022-03-11 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Sanity checks to be able to survive "warm" container restarts
+
+
 ## 5.17.3 2022-03-04 <dave at tiredofit dot ca>
 
    ### Changed
