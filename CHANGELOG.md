@@ -1,3 +1,9 @@
+## 5.17.5 2022-05-24 <dave at tiredofit dot ca>
+
+   ### Added
+      - Introduce Alpine 3.16 support
+
+
 ## 5.17.4 2022-03-11 <dave at tiredofit dot ca>
 
    ### Changed
