@@ -1,3 +1,9 @@
+## 5.17.6 2022-05-24 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.22.0
+
+
 ## 5.17.5 2022-05-24 <dave at tiredofit dot ca>
 
    ### Added
