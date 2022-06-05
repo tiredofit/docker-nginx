@@ -81,8 +81,8 @@ The following image tags are available along with their tagged release based on 
 | latest      | `:latest`      | latest      | `:debian-latest`   |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye` |
 | 3.14        | `:alpine-3.14` | Buster      | `:debian-buster`   |
-| 3.13        | `:alpine-3.14` | Stretch     | `:debian-stretch`  |
-| 3.13        | `:alpine-3.13` | Jessie      | `:debian-jessie`   |
+| 3.13        | `:alpine-3.14` |             |                    |
+| 3.13        | `:alpine-3.13` |             |                    |
 | 3.12        | `:alpine-3.12` |             |                    |
 | 3.11        | `:alpine-3.11` |             |                    |
 | 3.10        | `:alpine-3.10` |             |                    |
@@ -96,7 +96,7 @@ The following image tags are available along with their tagged release based on 
 docker pull tiredofit/nginx:(imagetag)
 ```
 #### Multi Architecture
-Images are built primarily for `amd64` architecture, and may also include builds for `arm/v6`, `arm/v7`, `arm64` and others. These variants are all unsupported. Consider [sponsoring](https://github.com/sponsors/tiredofit) my work so that I can work with various hardware. To see if this image supports multiple architecures, type `docker manifest (image):(tag)`
+Images are built primarily for `amd64` architecture, and may also include builds for `arm/v7`, `arm64` and others. These variants are all unsupported. Consider [sponsoring](https://github.com/sponsors/tiredofit) my work so that I can work with various hardware. To see if this image supports multiple architecures, type `docker manifest (image):(tag)`
 
 ## Configuration
 
@@ -107,6 +107,7 @@ Images are built primarily for `amd64` architecture, and may also include builds
 * Set various [environment variables](#environment-variables) to understand the capabilities of this image.
 * Map [persistent storage](#data-volumes) for access to configuration and data files for backup.
 * Make [networking ports](#networking) available for public access if necessary
+
 ### Persistent Storage
 
 The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. `/etc/nginx/conf.d` contains a sample configuration file that can be used to customize a nginx server block.
@@ -117,6 +118,7 @@ The following directories are used for configuration and can be mapped for persi
 | ----------- | ----------------------------------------------------------- |
 | `/www/html` | Drop your Datafiles in this Directory to be served by Nginx |
 | `/www/logs` | Logfiles for Nginx error and Access                         |
+
 ### Environment Variables
 
 #### Base Images used
