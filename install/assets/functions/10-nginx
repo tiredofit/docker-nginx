@@ -1,0 +1,621 @@
+#!/command/with-contenv bash
+
+nginx_check_legacy_configuration() {
+    if [ -d "/etc/nginx/conf.d/" ]; then
+        silent cp -R /etc/nginx/conf.d/* /etc/nginx/sites.available
+        print_warn "Found old legacy /etc/nginx/conf.d folder - Please switch to the new method of Nginx configuration using /etc/nginx/sites.available - Moving all files to /etc/nginx/sites.available"
+        silent mv /etc/nginx/conf.d /etc/nginx/conf.d.legacy
+    fi
+}
+
+nginx_configure_authentication() {
+    ### Map Authentication
+    case "${NGINX_AUTHENTICATION_TYPE,,}" in
+        "basic")
+            print_notice "Setting Basic Authentication"
+            user_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_BASIC_USER.*')
+            for ((i = 1; i <= user_num; i++)); do
+                basic_user=NGINX_AUTHENTICATION_BASIC_USER${i}
+                basic_pass=NGINX_AUTHENTICATION_BASIC_PASS${i}
+                print_warn "Creating User: ${!basic_user}"
+                htpasswd -b -n ${!basic_user:-$NGINX_AUTHENTICATION_BASIC_USER} ${!basic_pass:-$NGINX_AUTHENTICATION_BASIC_PASS} >>/etc/nginx/snippets/authentication/basic_authorized_users
+            done
+        ;;
+        "ldap" )
+            cat <<EOF > /etc/nginx/snippets/authentication/ldap_configuration
+        ldap_server ldapserver {
+          url "${NGINX_AUTHENTICATION_LDAP_HOST}/${NGINX_AUTHENTICATION_LDAP_BASE_DN}?${NGINX_AUTHENTICATION_LDAP_ATTRIBUTE}?${NGINX_AUTHENTICATION_LDAP_SCOPE}?${NGINX_AUTHENTICATION_LDAP_FILTER}";
+          binddn "${NGINX_AUTHENTICATION_LDAP_BIND_DN}";
+          binddn_passwd ${NGINX_AUTHENTICATION_LDAP_BIND_PW};
+          group_attribute ${NGINX_AUTHENTICATION_LDAP_GROUP_ATTRIBUTE};
+          group_attribute_is_dn on;
+          require valid_user;
+          satisfy all;
+        }
+EOF
+            sed -i "\|include /etc/nginx/sites.enabled#i\ \ \ \ include /etc/nginx/snippets/authentication/ldap_configuration;" /etc/nginx/nginx.conf
+        ;;
+        "llng" )
+            print_notice "Setting LLNG Authentication"
+            ### Create Upstream LLNG Hosts
+            if var_true "${NGINX_ENABLE_UPSTREAM_KEEPALIVE}" ; then
+                upstream_keepalive="keepalive ${NGINX_UPSTREAM_KEEPALIVE};"
+            fi
+            llng_upstream_hosts=$(echo "${NGINX_AUTHENTICATION_LLNG_HANDLER_HOST}" | tr "," "\n")
+            echo "upstream llng-upstream-pool {" >> /etc/nginx/snippets/authentication/llng_upstream
+            echo "     ${upstream_keepalive}" >> /etc/nginx/snippets/authentication/llng_upstream
+            for host in $llng_upstream_hosts; do
+                if [[ ${host} != *":"* ]];then
+                    llng_handler_listen_port=":${NGINX_AUTHENTICATION_LLNG_HANDLER_PORT}"
+                else
+                    llng_handler_listen_port=""
+                fi
+                echo "    server $host${llng_handler_listen_port} ${NGINX_UPSTREAM_OPTIONS};" >> /etc/nginx/snippets/authentication/llng_upstream
+            done
+            echo "}" >> /etc/nginx/snippets/authentication/llng_upstream
+            sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ include \/etc\/nginx\/snippets\/authentication\/llng_upstream;" /etc/nginx/nginx.conf
+            sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ ### LLNG Authentication Multiple Handlers configuration" /etc/nginx/nginx.conf
+            sed -i "s|<LLNG_HANDLER_PORT>#$NGINX_AUTHENTICATION_LLNG_HANDLER_PORT|g" /etc/nginx/snippets/authentication/llng_location_block
+
+            if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
+                header_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')
+                for ((i = 1; i <= header_num; i++)); do
+                    headers=NGINX_AUTHENTICATION_LLNG_ATTRIBUTE${i}
+                    IFS=',' read -r -a array <<<"${!headers}"
+                    print_notice "Updating Nginx to support recieving attribute from LLNG: '${array[0]}'"
+                    echo "fastcgi_param ${array[0]} \$${array[1]};" >>/etc/nginx/snippets/authentication/llng_params
+                    echo "auth_request_set \$${array[1]} \$${array[2]};" >>/etc/nginx/snippets/authentication/llng_auth_request
+                done
+            else
+                print_debug "Skipping LLNG Authentication configuration until configured by PHP-FPM"
+            fi
+        ;;
+        "none")
+            :
+        ;;
+        *)
+            print_warn "Unknown NGINX_AUTHENTICATION_TYPE '${NGINX_AUTHENTICATION_TYPE}. Reverting to no/application authentication"
+        ;;
+    esac
+}
+
+nginx_configure_blockbots() {
+    sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/snippets/blockbots/ddos.conf;" /etc/nginx/sites.available/*.conf
+    if [ ! -f "/etc/nginx/snippets/blockbots-custom/bad-referrer-words.conf" ]; then
+        cp -R /etc/nginx/snippets/blockbots/bad-referrer-words.conf /etc/nginx/snippets/blockbots-custom/
+    fi
+    if [ ! -f "/etc/nginx/snippets/blockbots-custom/blacklist-ips.conf" ]; then
+        cp -R /etc/nginx/snippets/blockbots/blacklist-ips.conf /etc/nginx/snippets/blockbots-custom/
+    fi
+    if [ ! -f "/etc/nginx/snippets/blockbots-custom/blacklist-user-agents.conf" ]; then
+        cp -R /etc/nginx/snippets/blockbots/blacklist-user-agents.conf /etc/nginx/snippets/blockbots-custom/
+    fi
+    if [ ! -f "/etc/nginx/snippets/blockbots-custom/custom-bad-referrers.conf" ]; then
+        cp -R /etc/nginx/snippets/blockbots/custom-bad-referrers.conf /etc/nginx/snippets/blockbots-custom/
+    fi
+    if [ ! -f "/etc/nginx/snippets/blockbots-custom/whitelist-ips.conf" ]; then
+        cp -R /etc/nginx/snippets/blockbots/whitelist-ips.conf /etc/nginx/snippets/blockbots-custom/
+    fi
+    if [ ! -f "/etc/nginx/snippets/blockbots-custom/whitelist-domains.conf" ]; then
+        cp -R /etc/nginx/snippets/blockbots/whitelist-domains.conf /etc/nginx/snippets/blockbots-custom/
+    fi
+    if [ -d "/assets/nginx/blockbots-custom" ] ; then
+        print_notice "Detected Custom Bot Blocking configuration"
+        cp -R /assets/nginx/blockbots-custom/* /etc/nginx/snippets/blockbots-custom/
+    fi
+
+    if [ -n "${NGINX_BLOCK_BOTS_WHITELIST_DOMAIN}" ]; then
+        whitelist_domains=$(echo "${NGINX_BLOCK_BOTS_WHITELIST_DOMAIN,,}" | tr "," "\n")
+        for wl_domain in $whitelist_domains; do
+            wl_domain_orig=${wl_domain}
+            wl_domain="$(echo "$wl_domain" | sed "s|\\.|\\\.|g" | sed "s|-|\\\-|g")"
+            if ! grep -q "${wl_domain_orig}" /etc/nginx/snippets/blockbots-custom/whitelist-domains.conf ; then
+                print_debug  "Adding '${wl_domain_orig}' domain to bot blocker whitelist"
+                echo '"~*(?:\b)'$(echo "$wl_domain")'(?:\b)" 0;' $(echo " # ${wl_domain_orig} automatically added on") $(date +"%Y-%m-%d-%H:%M:%S") >> /etc/nginx/snippets/blockbots-custom/whitelist-domains.conf
+            else
+                print_debug "Skipping '${wl_domain_orig}' to be added to bot blocker domain whitelist"
+            fi
+        done
+    fi
+
+    if [ -n "${NGINX_BLOCK_BOTS_WHITELIST_IP}" ]; then
+        whitelist_ips=$(echo "${NGINX_BLOCK_BOTS_WHITELIST_IP}" | tr "," "\n")
+        for wl_ip in $whitelist_ips; do
+            if ! grep -q "${wl_ip}" /etc/nginx/snippets/blockbots-custom/whitelist-ips.conf ; then
+                print_debug  "Adding IP: '${wl_ip}' to bot blocker whitelist"
+                echo "${wl_ip} 0; # Automatically added on $(date +"%Y-%m-%d-%H:%M:%S")" >> /etc/nginx/snippets/blockbots-custom/whitelist-ips.conf
+            else
+                print_debug "Skipping IP: '${wl_ip}' from being added to bot blocker IP whitelist"
+            fi
+        done
+    fi
+
+    if [ -n "${NGINX_BLOCK_BOTS}" ] ; then
+        if [[ "${NGINX_BLOCK_BOTS,}" == *"all" ]] ; then
+            NGINX_BLOCK_BOTS=ALL
+        fi
+
+        IFS=","
+        for bot in $NGINX_BLOCK_BOTS ; do
+            case "${bot,,}" in
+                "all" )
+                    nginx_block_bots="adidxbot,aolbuild,bingbot,bingpreview,DoCoMo,duckduckgo,facebookexternalhit,facebookplatform,AdsBot-Google,Googlebot,Googlebot-Image,Googlebot-Mobile,Googlebot-News,Googlebot/Test,Googlebot-Video,Google-HTTP-Java-Client,LinkedInBot,Gravityscan,Jakarta\\ Commons,Kraken/0.1,teoma,msnbot,msnbot-media,SAMSUNG,Slackbot,Slackbot-LinkExpanding,slurp,TwitterBot,Wordpress,yahoo"
+                ;;
+                "aol" )
+                    nginx_block_bots="aolbuild,${nginx_block_bots}"
+                ;;
+                "bing" )
+                    nginx_block_bots="bingbot,bingpreview,${nginx_block_bots}"
+                ;;
+                "docomo" )
+                    nginx_block_bots="DoCoMo,${nginx_block_bots}"
+                ;;
+                "duckduckgo" )
+                    nginx_block_bots="duckduckgo,${nginx_block_bots}"
+                ;;
+                "facebook" )
+                    nginx_block_bots="developers.facebook.com,facebookexternalhit,facebookplatform,${nginx_block_bots}"
+                ;;
+                "google" )
+                    nginx_block_bots="AdsBot-Google,Googlebot,Googlebot-Image,Googlebot-Mobile,Googlebot-News,Googlebot/Test,Googlebot-Video,Google-HTTP-Java-Client,${nginx_block_bots}"
+                ;;
+                "linkedin" )
+                    nginx_block_bots="LinkedInBot,${nginx_block_bots}"
+                ;;
+                "misc" )
+                    nginx_block_bots="adidxbot,Gravityscan,'Jakarta\ Commons',Kraken/0.1,teoma,${nginx_block_bots}"
+                ;;
+                "msn" )
+                    nginx_block_bots="msnbot,msnbot-media,${nginx_block_bots}"
+                ;;
+                "samsung" )
+                    nginx_block_bots="SAMSUNG,${nginx_block_bots}"
+                ;;
+                "slack" )
+                    nginx_block_bots="Slackbot,Slackbot-LinkExpanding,${nginx_block_bots}"
+                ;;
+                "slurp" )
+                    nginx_block_bots="slurp,${nginx_block_bots}"
+                ;;
+                "twitter" )
+                    nginx_block_bots="TwitterBot,${nginx_block_bots}"
+                ;;
+                "wordpress" )
+                    nginx_block_bots="Wordpress,${nginx_block_bots}"
+                ;;
+                "yahoo" )
+                    nginx_block_bots="yahoo,${nginx_block_bots}"
+                ;;
+                * )
+                    nginx_block_bots="${bot},${nginx_block_bots}"
+                ;;
+            esac
+        done
+
+        NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS="${nginx_block_bots}"
+    fi
+
+    if [ -n "${NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS}" ]; then
+        IFS=","
+        for blacklist_ua in $NGINX_BLOCK_BOTS_BLACKLIST_USER_AGENTS; do
+            blacklist_ua_orig="$(echo "$blacklist_ua" | sed "s|\\\||g")"
+            if ! grep -q "${blacklist_ua_orig}" /etc/nginx/snippets/blockbots-custom/blacklist-user-agents.conf ; then
+                print_debug  "Adding UA: '${blacklist_ua_orig}' to bot blocker blacklist"
+                echo '"~*(?:\b)'$(echo "$blacklist_ua")'(?:\b)" 3; # '${blacklist_ua_orig}' Automatically added on '$(date +"%Y-%m-%d-%H:%M:%S") >> /etc/nginx/snippets/blockbots-custom/blacklist-user-agents.conf
+            else
+                print_debug "Skipping UA: '${blacklist_ua_orig}' from being added to bot blocker blacklist"
+            fi
+        done
+    fi
+}
+
+nginx_configure_logging() {
+    sed -i "s|<ACCESS_LOG>|${NGINX_LOG_ACCESS_FILE}|g" /etc/nginx/snippets/logging.conf
+    sed -i "s|<ACCESS_LOG_LOCATION>|${NGINX_LOG_ACCESS_LOCATION}|g" /etc/nginx/snippets/logging.conf
+    sed -i "s|<ACCESS_LOG_FORMAT>|${NGINX_LOG_ACCESS_FORMAT,,}|g" /etc/nginx/snippets/logging.conf
+    sed -i "s|<ERROR_LOG>|${NGINX_LOG_ERROR_FILE}|g" /etc/nginx/snippets/logging.conf
+    sed -i "s|<ERROR_LOG_LEVEL>|${NGINX_LOG_LEVEL_ERROR}|g" /etc/nginx/snippets/logging.conf
+    sed -i "s|<ERROR_LOG_LOCATION>|${NGINX_LOG_ERROR_LOCATION}|g" /etc/nginx/snippets/logging.conf
+    sed -i "s|<ERROR_LOG>|${NGINX_LOG_ERROR_FILE}|g" /etc/nginx/snippets/logging.conf
+
+    mkdir -p "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
+    touch "${NGINX_LOG_ERROR_LOCATION}"/"${NGINX_LOG_ERROR_FILE}"
+    touch "${NGINX_LOG_ACCESS_LOCATION}"/"${NGINX_LOG_ACCESS_FILE}"
+    chown -R "${NGINX_USER}" "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
+
+    create_logrotate nginx-access "${NGINX_LOG_ACCESS_LOCATION}"/"${NGINX_LOG_ACCESS_FILE}" nginx-"${NGINX_LOG_ACCESS_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
+    create_logrotate nginx-error "${NGINX_LOG_ACCESS_LOCATION}"/"${NGINX_LOG_ERROR_FILE}" nginx-error-standard,nginx-error-alt-standard "${NGINX_USER}" "${NGINX_GROUP}"
+
+    if var_true "${NGINX_ENABLE_EXPLOIT_PROTECTION}" ; then
+        mkdir -p "${NGINX_LOG_BLOCKED_LOCATION}"
+        touch "${NGINX_LOG_BLOCKED_LOCATION}"/"${NGINX_LOG_BLOCKED_FILE}"
+        sed -i "s|<BLOCKED_LOG_LOCATION>|${NGINX_LOG_BLOCKED_LOCATION}|g" /etc/nginx/snippets/exploit_protection.conf
+        sed -i "s|<BLOCKED_LOG_FILE>|${NGINX_LOG_BLOCKED_FILE}|g" /etc/nginx/snippets/exploit_protection.conf
+        sed -i "s|<BLOCKED_FORMAT>|${NGINX_LOG_BLOCKED_FORMAT}|g" /etc/nginx/snippets/exploit_protection.conf
+        create_logrotate nginx-blocked "${NGINX_LOG_BLOCKED_LOCATION}"/"${NGINX_LOG_BLOCKED_FILE}" nginx-blocked-"${NGINX_LOG_BLOCKED_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
+    fi
+
+    if [ -f "${NGINX_ACCESS_LOG_LOCATION}/*-access.log" ] ; then
+        set -f
+        create_logrotate nginx-wildcard "${NGINX_LOG_ACCESS_LOCATION}"/*-access.log nginx-"${NGINX_LOG_ACCESS_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
+        set +f
+    fi
+
+    if [ -f "${NGINX_ERROR_LOG_LOCATION}/*-error.log" ] ; then
+        set -f
+        create_logrotate nginx-error-wildcard "${NGINX_LOG_ERROR_LOCATION}"/*-error.log nginx-error-standard,nginx-error-alt-standard "${NGINX_USER}" "${NGINX_GROUP}"
+        set +f
+    fi
+}
+
+nginx_configure_maintenance() {
+        silent sed -i "s|<LISTEN_PORT>|${NGINX_LISTEN_PORT}|g" /etc/nginx/templates/*.template
+        silent sed -i "s|<MAINTENANCE_PATH>|${NGINX_MAINTENANCE_PATH}|g" /etc/nginx/templates/maintenance.template
+        silent sed -i "s|<MAINTENANCE_FILE>|${NGINX_MAINTENANCE_FILE}|g" /etc/nginx/templates/maintenance.template
+
+        if [ -n "${NGINX_MAINTENANCE_REMOTE_URL}" ] ; then
+            print notice "Adding custom maintenance page from '${NGINX_MAINTENANCE_REMOTE_URL}'"
+            silent curl -sSL -o "${NGINX_MAINTENANCE_PATH}"/"${NGINX_MAINTENANCE_FILE}" "${NGINX_MAINTENANCE_REMOTE_URL}"
+        fi
+
+        chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_MAINTENANCE_PATH}"
+}
+
+nginx_configure_mode() {
+    case "${NGINX_MODE,,}" in
+        "maintenance" )
+            print_warn "MAINTENANCE MODE ACTIVATED - THIS IMAGE WILL NOT SERVE PAGES"
+            sed -i "s|include /etc/nginx/sites.available/*.conf;|#include /etc/nginx/sites.available/*.conf;|g" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
+        ;;
+        "proxy" )
+            sanity_var NGINX_PROXY_URL "No Proxy URL"
+            NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
+            print_notice "Proxy Mode Activated - Proxying all traffic to ${NGINX_PROXY_URL}"
+            sed -i "s|<PROXY_URL>|${NGINX_PROXY_URL}|g" /etc/nginx/templates/proxy.template
+            sed -i "/include \/etc\/nginx\/sites.available\/*.conf;/d" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
+        ;;
+        "redirect" )
+            sanity_var NGINX_REDIRECT_URL "No Redirect URL"
+            NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
+            print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
+            sed -i "s|rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};|g" /etc/nginx/templates/redirect.template
+            sed -i "/include \/etc\/nginx\/sites.available\/*.conf;/d" /etc/nginx/nginx.conf
+            sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
+        ;;
+        "normal" | * )
+            sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
+        ;;
+    esac
+}
+
+
+nginx_configure_server() {
+    sed -i "s|<CLIENT_BODY_BUFFER_SIZE>|${NGINX_CLIENT_BODY_BUFFER_SIZE}|g" /etc/nginx/nginx.conf
+    sed -i "s|<CLIENT_BODY_TIMEOUT>|${NGINX_CLIENT_BODY_TIMEOUT}|g" /etc/nginx/nginx.conf
+    sed -i "s|<FASTCGI_BUFFERS>|${NGINX_FASTCGI_BUFFERS}|g" /etc/nginx/nginx.conf
+    sed -i "s|<FASTCGI_BUFFER_SIZE>|${NGINX_FASTCGI_BUFFER_SIZE}|g" /etc/nginx/nginx.conf
+    sed -i "s|<GROUP>|${NGINX_GROUP}|g" /etc/nginx/nginx.conf
+    sed -i "s|<KEEPALIVE_REQUESTS>|${NGINX_KEEPALIVE_REQUESTS}|g" /etc/nginx/nginx.conf
+    sed -i "s|<KEEPALIVE_TIMEOUT>|${NGINX_KEEPALIVE_TIMEOUT}|g" /etc/nginx/nginx.conf
+    sed -i "s|<SEND_TIMEOUT>|${NGINX_SEND_TIMEOUT}|g" /etc/nginx/nginx.conf
+    sed -i "s|<UPLOAD_MAX_SIZE>|${NGINX_UPLOAD_MAX_SIZE}|g" /etc/nginx/nginx.conf
+    sed -i "s|<USER>|${NGINX_USER}|g" /etc/nginx/nginx.conf
+    sed -i "s|<WORKER_CONNECTIONS>|${NGINX_WORKER_CONNECTIONS}|g" /etc/nginx/nginx.conf
+    sed -i "s|<WORKER_PROCESSES>|${NGINX_WORKER_PROCESSES}|g" /etc/nginx/nginx.conf
+    sed -i "s|<WORKER_RLIMIT_NOFILE>|${NGINX_WORKER_RLIMIT_NOFILE}|g" /etc/nginx/nginx.conf
+
+    if var_true "${NGINX_ENABLE_COMPRESSION_BROTLI}"; then
+        sed -i "s|<BROTLI_LEVEL>|${NGINX_COMPRESSION_BROTLI_LEVEL}|g" /etc/nginx/snippets/compression_brotli.conf
+        sed -i "s|<BROTLI_MIN_LENGTH>|${NGINX_COMPRESSION_BROTLI_MIN_LENGTH}|g" /etc/nginx/snippets/compression_brotli.conf
+        sed -i "s|<BROTLI_TYPES>|${NGINX_COMPRESSION_BROTLI_TYPES}|g" /etc/nginx/snippets/compression_brotli.conf
+        sed -i "s|<BROTLI_WINDOW>|${NGINX_COMPRESSION_BROTLI_WINDOW}|g" /etc/nginx/snippets/compression_brotli.conf
+    else
+        sed -i "\|include/etc/nginx/snippets/compression_brotli.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_true "{$NGINX_ENABLE_COMPRESSION_GZIP}"; then
+        sed -i "s|<GZIP_BUFFERS>|${NGINX_COMPRESSION_GZIP_BUFFERS}|g" /etc/nginx/snippets/compression_gzip.conf
+        sed -i "s|<GZIP_DISABLE>|${NGINX_COMPRESSION_GZIP_DISABLE}|g" /etc/nginx/snippets/compression_gzip.conf
+        sed -i "s|<GZIP_HTTP_VERSION>|${NGINX_COMPRESSION_GZIP_HTTP_VERSION}|g" /etc/nginx/snippets/compression_gzip.conf
+        sed -i "s|<GZIP_LEVEL>|${NGINX_COMPRESSION_GZIP_LEVEL}|g" /etc/nginx/snippets/compression_gzip.conf
+        sed -i "s|<GZIP_MIN_LENGTH>|${NGINX_COMPRESSION_GZIP_MIN_LENGTH}|g" /etc/nginx/snippets/compression_gzip.conf
+        sed -i "s|<GZIP_PROXIED>|${NGINX_COMPRESSION_GZIP_PROXIED}|g" /etc/nginx/snippets/compression_gzip.conf
+        sed -i "s|<GZIP_TYPES>|${NGINX_COMPRESSION_GZIP_TYPES}|g" /etc/nginx/snippets/compression_gzip.conf
+        if var_false "${NGINX_COMPRESSION_GZIP_VARY}"; then
+            sed -i "\|gzip_vary on;|d" /etc/nginx/snippets/compression_gzip.conf
+        fi
+    else
+        sed -i "\|include /etc/nginx/snippets/compression_gzip.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_true "${NGINX_ENABLE_DDOS_PROTECTION}"; then
+        sed -i "s|<DDOS_CONNECTIONS_PER_IP>|${NGINX_DDOS_CONNECTIONS_PER_IP}|g" /etc/nginx/snippets/ddos_protection.conf
+        sed -i "s|<DDOS_REQUESTS_PER_IP>|${NGINX_DDOS_REQUESTS_PER_IP}|g" /etc/nginx/snippets/ddos_protection.conf
+    else
+        sed -i "\|include /etc/nginx/snippets/ddos_protection.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_EPOLL}"; then
+        sed -i "\|use_epoll;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_EXPLOIT_PROTECTION}"; then
+        sed -i "\|include /etc/nginx/snippets/exploit_protection.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    ### FastCGI reverse proxy
+    if var_true "${NGINX_ENABLE_FASTCGI_HTTPS}"; then
+        print_notice "Enable Nginx FastCGI HTTPS Termination Support"
+        echo "fastcgi_param  HTTPS 'on';" >>/etc/nginx/fastcgi_params
+        PROTOCOL="https://"
+    else
+        print_debug "Disable Nginx FastCGI HTTPS Termination Support"
+        echo "fastcgi_param  HTTPS 'off';" >>/etc/nginx/fastcgi_params
+        PROTOCOL="http://"
+    fi
+
+    if var_false "${NGINX_ENABLE_MULTI_ACCEPT}"; then
+        sed -i "\|multi_accept on;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_true "${NGINX_ENABLE_OPEN_FILE_CACHE}"; then
+        sed -i "s|<OPEN_FILE_CACHE_MAX>|${NGINX_OPEN_FILE_CACHE_MAX}|g" /etc/nginx/snippets/open_file_cache.conf
+        sed -i "s|<OPEN_FILE_CACHE_INACTIVE>|${NGINX_OPEN_FILE_CACHE_INACTIVE}|g" /etc/nginx/snippets/open_file_cache.conf
+        sed -i "s|<OPEN_FILE_CACHE_VALID>|${NGINX_OPEN_FILE_CACHE_VALID}|g" /etc/nginx/snippets/open_file_cache.conf
+        sed -i "s|<OPEN_FILE_CACHE_MIN_USES>|${NGINX_OPEN_FILE_CACHE_MIN_USES}|g" /etc/nginx/snippets/open_file_cache.conf
+        sed -i "\|open_file_cache_errors on;|d" /etc/nginx/snippets/open_file_cache.conf
+    else
+        sed -i "\|include /etc/nginx/snippets/open_file_cache.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_RESET_TIMEDOUT_CONNECTION}"; then
+        sed -i "\|reset_timedout_connection|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_true "${NGINX_ENABLE_REVERSE_PROXY}"; then
+        sed -i "s|<REAL_IP_HEADER>|${NGINX_REAL_IP_HEADER}|g" /etc/nginx/snippets/reverse_proxy.conf
+        sed -i "s|<SET_REAL_IP_FROM>|${NGINX_SET_REAL_IP_FROM}|g" /etc/nginx/snippets/reverse_proxy.conf
+    else
+        sed -i "\|include /etc/nginx/snippets/reverse_proxy.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_SENDFILE}"; then
+        sed -i "\|sendfile|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_SITE_OPTIMIZATION}"; then
+        sed -i "\|include /etc/nginx/snippets/site_optimization.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_SERVER_TOKENS}"; then
+        sed -i "\|server_tokens off;|d" /etc/nginx/nginx.conf
+        sed -i "\|more_clear_headers Server;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_TCPNOPUSH}"; then
+        sed -i "\|tcp_nopush|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_TCPNODELAY}"; then
+        sed -i "\|tcp_nodelay|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${ENABLE_ZABBIX}" || var_false "${CONTAINER_ENABLE_MONITORING}" ; then
+        sed -i "\|include /etc/nginx/snippets/monitoring.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    case "${STAGE,,}" in
+        "production" | "staging")
+            echo "fastcgi_param STAGE 'PRODUCTION';" >>/etc/nginx/fastcgi_params
+        ;;
+        "develop" | *)
+            echo "fastcgi_param STAGE 'DEVELOP';" >>/etc/nginx/fastcgi_params
+        ;;
+    esac
+}
+
+nginx_configure_site_authentication() {
+    if [ -n "${1}" ]; then
+        if [ "${1,,}" = "all" ] ; then
+            nginx_site_config="*"
+        else
+            if [ -f "/etc/nginx/sites.available/${1}.conf" ]; then
+                nginx_site_config=${1}
+            else
+                print_error "Cannot configure Authentication for Site ${1} as it doesn't exist in /etc/nginx/sites.available!"
+                exit 1
+            fi
+        fi
+    else
+        nginx_site_config="*"
+    fi
+
+    case "${NGINX_AUTHENTICATION_TYPE,,}" in
+        "basic" )
+            sed -i '/ server {/a\ \ \  auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/sites.available/${nginx_site_config}.conf
+        ;;
+        "ldap" )
+            sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/sites.available/${nginx_site_config}.conf
+        ;;
+        "llng" )
+            if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
+                sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/sites.available/${nginx_site_config}.conf
+                sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication Checkpoint' /etc/nginx/sites.available/${nginx_site_config}.conf
+                sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/snippets/authentication/llng_auth_request;' /etc/nginx/sites.available/${nginx_site_config}.conf
+                sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/sites.available/${nginx_site_config}.conf
+            else
+                sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/sites.available/${nginx_site_config}.conf
+                sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication handler' /etc/nginx/sites.available/${nginx_site_config}.conf
+            fi
+        ;;
+    esac
+}
+
+nginx_configure_site_blockbots() {
+    if [ -n "${1}" ]; then
+        if [ "${1,,}" = "all" ] ; then
+            nginx_site_config="*"
+        else
+            if [ -f "/etc/nginx/sites.available/${1}.conf" ]; then
+                nginx_site_config=${1}
+            else
+                print_error "Cannot configure Blockbots for Site ${1} as it doesn't exist in /etc/nginx/sites.available!"
+                exit 1
+            fi
+        fi
+    else
+        nginx_site_config="*"
+    fi
+
+    sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/snippets/blockbots/blockbots.conf;" /etc/nginx/sites.available/${nginx_site_config}.conf
+}
+
+nginx_configure_site_includes() {
+    if [ -n "${1}" ]; then
+        if [ "${1,,}" = "all" ] ; then
+            nginx_site_config="*"
+        else
+            if [ -f "/etc/nginx/sites.available/${1}.conf" ]; then
+                nginx_site_config=${1}
+            else
+                print_error "Cannot configure Includes for Site ${1} as it doesn't exist in /etc/nginx/sites.available!"
+                exit 1
+            fi
+        fi
+    else
+        nginx_site_config="*"
+    fi
+
+    sed -i "\|### Don't edit past here|a\ \ \ \ \  include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/sites.available/${nginx_site_config}.conf
+}
+
+nginx_configure_site_default() {
+    if [ -z "${NGINX_SITE_ENABLED}" ] && [ ! -f "/etc/nginx/sites.available/default.conf" ] && [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
+        cat <<EOF > /etc/nginx/sites.available/default.conf
+  server {
+      ### Don't Touch This
+      listen <LISTEN_PORT>;
+      server_name localhost;
+      root <WEBROOT>;
+      ###
+
+      ### Populate your custom directives here
+      index  index.html index.htm;
+
+      location / {
+      #
+      }
+
+      ### Don't edit past here
+
+      include /etc/nginx/snippets/site_optimization.conf;
+      include /etc/nginx/snippets/exploit_protection.conf;
+}
+EOF
+        NGINX_SITE_ENABLED=default
+    fi
+}
+
+nginx_create_sample_html() {
+    if [ ! -f "${NGINX_WEBROOT}/index.html" ]; then
+        print_notice "Creating sample index.html"
+        mkdir -p "${NGINX_WEBROOT}"
+        cat <<EOF >"${NGINX_WEBROOT}"/index.html
+<html>
+<title>Default Page</title>
+<h2>Container is working</h2>
+Congratulations! Your Nginx image is working. You are seeing this because you don't have an index.html file in your ${NGINX_WEBROOT} directory.
+</html>
+EOF
+        chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
+    fi
+}
+
+nginx_site_enable() {
+    if [ -n "${1}" ]; then
+        if [ "${1,,}" = "all" ] ; then
+            for site in /etc/nginx/sites.available/*.conf; do
+                print_debug "Enabling Nginx Site '$(basename ${site})'"
+                ln -sf /etc/nginx/sites.available/$(basename ${site}) /etc/nginx/sites.enabled/
+            done
+        else
+            if [ -f "/etc/nginx/sites.available/${1}.conf" ]; then
+                print_debug "Enabling Nginx Site '${site}.conf'"
+                ln -sf /etc/nginx/sites.available/"${1}".conf /etc/nginx/sites.enabled
+            else
+                print_error "Cannot enable site ${1} as it doesn't exist in /etc/nginx/sites.available!"
+                exit 1
+            fi
+        fi
+    else
+        print_error "Need configuration file as argument to utilize 'nginx_site_enable' function"
+    fi
+}
+
+nginx_site_disable() {
+    if [ -n "${1}" ]; then
+        if [ "${1,,}" = "all" ] ; then
+            for site in /etc/nginx/sites.enabled/*.conf; do
+                print_debug "Disabling Nginx Site '$(basename ${site})"
+                rm -rf /etc/nginx/sites.enabled/$(basename ${site})
+            done
+        else
+            if [ -f "/etc/nginx/sites.enabled/${1}.conf" ]; then
+                print_debug "Diksabling Nginx Site '${site}.conf'"
+                rm -rf /etc/nginx/sites.enabled/"${site}"*
+            else
+                print_error "Cannot disable site ${1} as it doesn't exist in /etc/nginx/services.enabled!"
+                exit 1
+            fi
+        fi
+    else
+        print_error "Need configuration file as argument to utilize 'nginx_site_disable' function"
+    fi
+}
+
+nginx_post_init() {
+    if [ -n "${NGINX_SITE_ENABLE}" ] ; then
+        sites=$(echo "${NGINX_SITE_ENABLE}" | tr "," "\n")
+    	for site in $sites; do
+		    nginx_site_enable ${site}
+    	done
+    else
+        nginx_site_enable all
+    fi
+
+    if [ -n "${NGINX_POST_INIT_SCRIPT}" ] ; then
+        print_debug "Found Post Init Scripts"
+        post_scripts=$(echo "${NGINX_POST_INIT_SCRIPT}" | tr "," "\n")
+            for post_script in $post_scripts; do
+                if [ -f "${post_script}" ] ; then
+                    print_debug "Executing post init script '${post_script}'"
+                    chmod +x "${post_script}"
+                    "${post_script}"
+                else
+                    print_error "Tried to run post script '${post_script}' but it does not exist!"
+                fi
+            done
+    fi
+
+    if [ -n "${NGINX_POST_INIT_COMMAND}" ] ; then
+        print_debug "Found Post Init Command"
+        post_commands=$(echo "${NGINX_POST_INIT_COMMAND}" | tr "," "\n")
+        for post_command in $post_commands ; do
+            print_debug "Executing post init command '${post_command}'"
+            "${post_command}"
+    	done
+    fi
+
+    mkdir -p "${NGINX_WEBROOT}"
+    if var_true "${NGINX_FORCE_RESET_PERMISSIONS}" ; then
+        chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
+    fi
+}
+
+

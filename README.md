@@ -48,6 +48,7 @@ This will build a Docker image for [Nginx](https://www.nginx.org), for serving w
     - [Reverse Proxy Options](#reverse-proxy-options)
     - [Container Options](#container-options)
     - [Functionality Options](#functionality-options)
+  - [Maintenance Options](#maintenance-options)
     - [Performance Options](#performance-options)
   - [Networking](#networking)
 - [Maintenance](#maintenance)
@@ -108,9 +109,32 @@ Images are built primarily for `amd64` architecture, and may also include builds
 * Map [persistent storage](#data-volumes) for access to configuration and data files for backup.
 * Make [networking ports](#networking) available for public access if necessary
 
-### Persistent Storage
+The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. Configuration of websites are done in `/etc/services.avaialble` with the filename pattern of `site.conf`. You must set an environment variable for `NGINX_SITE_ENABLED` if you have more than one configuration in there if you only want to enable one of the configurartions, otherwise it will enable all of them.
 
-The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. `/etc/nginx/conf.d` contains a sample configuration file that can be used to customize a nginx server block.
+Use this as a starting point for your site configurations:
+````nginx
+  server {
+      ### Don't Touch This
+      listen <LISTEN_PORT>;
+      server_name localhost;
+      root <WEBROOT>;
+      ###
+
+      ### Populate your custom directives here
+      index  index.html index.htm;
+
+      location / {
+      #
+      }
+
+      ### Don't edit past here
+
+      include /etc/nginx/snippets/site_optimization.conf;
+      include /etc/nginx/snippets/exploit_protection.conf;
+}
+````
+
+### Persistent Storage
 
 The following directories are used for configuration and can be mapped for persistent storage.
 
@@ -227,7 +251,7 @@ Presently you can compress your served content with gzip and brotli. More compre
 
 | Parameter                                | Description                                                                                                      | Default     |
 | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------- |
-| `NGINX_ENABLE_APPLICATION_CONFIGURATION` | Don't automatically setup /etc/nginx/conf.d files - Useful for volume mapping/overriding                         | `TRUE`      |
+| `NGINX_ENABLE_APPLICATION_CONFIGURATION` | Don't automatically setup /etc/nginx/sites.available files - Useful for volume mapping/overriding                | `TRUE`      |
 | `NGINX_ENABLE_CREATE_SAMPLE_HTML`        | If no index.html found - create a sample one to prove container works                                            | `TRUE`      |
 | `NGINX_ENABLE_SITE_OPTIMIZATIONS`        | Deny access to some files and URLs, send caching tags                                                            | `TRUE`      |
 | `NGINX_INCLUDE_CONFIGURATION`            | Include configuration in your website application file. eg `/www/website/nginx.conf`                             |             |
@@ -238,16 +262,24 @@ Presently you can compress your served content with gzip and brotli. More compre
 
 #### Functionality Options
 
-| Parameter                 | Description                                                                           | Default    |
-| ------------------------- | ------------------------------------------------------------------------------------- | ---------- |
-| `FORCE_RESET_PERMISSIONS` | Force setting Nginx files ownership to web server user                                | `TRUE`     |
-| `NGINX_MODE`              | Set to `NORMAL`, `MAINTENANCE` , `PROXY`, `REDIRECT`                                  | `NORMAL`   |
-| `NGINX_REDIRECT_URL`      | If `REDIRECT` set enter full url to forward all traffic to eg `https://example.com`   |            |
-| `NGINX_PROXY_URL`         | If `REDIRECT` set enter full url to proxy all traffic to eg `https://example.com:443` |            |
-| `NGINX_USER`              | What user to run nginx as inside container                                            | `nginx`    |
-| `NGINX_GROUP`             | What group to run nginx as inside container                                           | `www-data` |
+| Parameter                       | Description                                                                           | Default    |
+| ------------------------------- | ------------------------------------------------------------------------------------- | ---------- |
+| `NGINX_FORCE_RESET_PERMISSIONS` | Force setting Nginx files ownership to web server user                                | `TRUE`     |
+| `NGINX_MODE`                    | Set to `NORMAL`, `MAINTENANCE` , `PROXY`, `REDIRECT`                                  | `NORMAL`   |
+| `NGINX_REDIRECT_URL`            | If `REDIRECT` set enter full url to forward all traffic to eg `https://example.com`   |            |
+| `NGINX_PROXY_URL`               | If `REDIRECT` set enter full url to proxy all traffic to eg `https://example.com:443` |            |
+| `NGINX_SITE_ENABLE`             | What sites to enable in `/etc/nginx/sites.available` Don't use `.conf` suffix         | `ALL`      |
+| `NGINX_USER`                    | What user to run nginx as inside container                                            | `nginx`    |
+| `NGINX_GROUP`                   | What group to run nginx as inside container                                           | `www-data` |
 
 If set to `MAINTNENANCE` a single page will show visitors that the server is being worked on.
+
+### Maintenance Options
+| Parameter                      | Description                                                                                           | Default                     |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------------- |
+| `NGINX_MAINTENANCE_PATH`       | Path where the maintenance page resides                                                               | `/assets/nginx/maintenance` |
+| `NGINX_MAINTENANCE_FILE`       | File to load while in maintenance mode                                                                | `index.html`                |
+| `NGINX_MAINTENANCE_REMOTE_URL` | If you wish to download an html file from a remote location to overwrite the above enter the URL here |                             |
 
 You can also enter into the container and type `maintenance ARG`, where ARG is either `ON`,`OFF`, or `SLEEP (seconds)` which will temporarily place the site in maintenance mode and then restore it back to normal after time has passed.
 

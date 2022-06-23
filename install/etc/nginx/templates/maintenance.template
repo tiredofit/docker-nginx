@@ -3,8 +3,7 @@
     server_name  localhost;
 
    location / {
-        root   /assets/maintenance;
-        index  maintenance.html;
+        root   <MAINTENANCE_PATH>;
+        index  <MAINTENANCE_FILE>;
     }
-
 }

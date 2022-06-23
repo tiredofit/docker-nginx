@@ -1,3 +1,14 @@
+## 6.0.0 2022-06-23 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.23.0
+      - Rewrote image and seperated into functions for discrete configuration when there is multiple websites or configurations available
+      - Nginx Maintenance mode path has been moved, yet is customizable and volumes can be mapped to the folder
+      - Alternatively, NGINX_MAINTENANCE_REMOTE_URL also works to pull an html file from the web/intranet and take the place of the baked in maintenance page
+      - /etc/nginx/conf.d is being retired. Now drop your custom site configuration into /etc/nginx/sites.available. Also set NGINX_SITE_ENABLED=(config file, without the .conf extension) to have the automation work for things like authentication, blocking bots. You can seperate it via commas to have the image work on multiple configuration files. If the system detects /etc/nginx/conf.d it will move them automatically yet give a warning into /etc/nginx/sites.available and make them ALL enabled at the end of the container initialization, this may not be what you want, but is an attempt to add some backwards compatibility.
+      - /etc/nginx/nginx.conf.d has been renamed to /etc/nginx/snippets, however this shouldn't affect anyone unless they have modified the image extensively.
+
+
 ## 5.17.6 2022-05-24 <dave at tiredofit dot ca>
 
    ### Added

@@ -8,7 +8,7 @@ check_container_initialized
 check_service_initialized init
 liftoff
 
-while inotifywait -q -e create,delete,modify,attrib /etc/nginx/nginx.conf /etc/nginx/conf.d/ /etc/nginx/nginx.conf.d $NGINX_INCLUDE_CONFIGURATION; do
+while inotifywait -q -e create,delete,modify,attrib /etc/nginx/nginx.conf /etc/nginx/services.enabled /etc/nginx/snippets ${NGINX_INCLUDE_CONFIGURATION}; do
   print_info "Reloading Nginx configuration do to a detected change"
   nginx -s reload
   exit 0
