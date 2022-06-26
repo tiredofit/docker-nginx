@@ -438,20 +438,20 @@ nginx_configure_site_authentication() {
 
     case "${NGINX_AUTHENTICATION_TYPE,,}" in
         "basic" )
-            sed -i '/ server {/a\ \ \  auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/sites.available/${nginx_site_config}.conf
+            sed -i '/ server {/a\ \ \  auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/sites.available/"${nginx_site_config}".conf
         ;;
         "ldap" )
-            sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/sites.available/${nginx_site_config}.conf
+            sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/sites.available/"${nginx_site_config}".conf
         ;;
         "llng" )
             if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
-                sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/sites.available/${nginx_site_config}.conf
-                sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication Checkpoint' /etc/nginx/sites.available/${nginx_site_config}.conf
-                sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/snippets/authentication/llng_auth_request;' /etc/nginx/sites.available/${nginx_site_config}.conf
-                sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/sites.available/${nginx_site_config}.conf
+                sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/sites.available/"${nginx_site_config}".conf
+                sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication Checkpoint' /etc/nginx/sites.available/"${nginx_site_config}".conf
+                sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/snippets/authentication/llng_auth_request;' /etc/nginx/sites.available/"${nginx_site_config}".conf
+                sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/sites.available/"${nginx_site_config}".conf
             else
-                sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/sites.available/${nginx_site_config}.conf
-                sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication handler' /etc/nginx/sites.available/${nginx_site_config}.conf
+                sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/sites.available/"${nginx_site_config}".conf
+                sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication handler' /etc/nginx/sites.available/"${nginx_site_config}".conf
             fi
         ;;
     esac
@@ -473,7 +473,7 @@ nginx_configure_site_blockbots() {
         nginx_site_config="*"
     fi
 
-    sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/snippets/blockbots/blockbots.conf;" /etc/nginx/sites.available/${nginx_site_config}.conf
+    sed -i "\|### Don't edit past here|a\ \ \ \ \  include /etc/nginx/snippets/blockbots/blockbots.conf;" /etc/nginx/sites.available/"${nginx_site_config}".conf
 }
 
 nginx_configure_site_includes() {
@@ -492,7 +492,7 @@ nginx_configure_site_includes() {
         nginx_site_config="*"
     fi
 
-    sed -i "\|### Don't edit past here|a\ \ \ \ \  include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/sites.available/${nginx_site_config}.conf
+    sed -i "\|### Don't edit past here|a\ \ \ \ \  include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/sites.available/"${nginx_site_config}".conf
 }
 
 nginx_configure_site_default() {
@@ -542,7 +542,7 @@ nginx_site_enable() {
         if [ "${1,,}" = "all" ] ; then
             for site in /etc/nginx/sites.available/*.conf; do
                 print_debug "Enabling Nginx Site '$(basename ${site})'"
-                ln -sf /etc/nginx/sites.available/$(basename ${site}) /etc/nginx/sites.enabled/
+                ln -sf /etc/nginx/sites.available/"$(basename ${site})" /etc/nginx/sites.enabled/
             done
         else
             if [ -f "/etc/nginx/sites.available/${1}.conf" ]; then
@@ -563,7 +563,7 @@ nginx_site_disable() {
         if [ "${1,,}" = "all" ] ; then
             for site in /etc/nginx/sites.enabled/*.conf; do
                 print_debug "Disabling Nginx Site '$(basename ${site})"
-                rm -rf /etc/nginx/sites.enabled/$(basename ${site})
+                rm -rf /etc/nginx/sites.enabled/"$(basename ${site})"
             done
         else
             if [ -f "/etc/nginx/sites.enabled/${1}.conf" ]; then
@@ -580,13 +580,17 @@ nginx_site_disable() {
 }
 
 nginx_post_init() {
-    if [ -n "${NGINX_SITE_ENABLE}" ] ; then
-        sites=$(echo "${NGINX_SITE_ENABLE}" | tr "," "\n")
-    	for site in $sites; do
-		    nginx_site_enable ${site}
-    	done
-    else
-        nginx_site_enable all
+    if var_true "${NGINX_ENABLE_APPLICATION_CONFIGURATION}" ; then
+        if [ -n "${NGINX_SITE_ENABLED}" ] ; then
+            if [ "${NGINX_SITE_ENABLED,,}" != "null" ] ; then
+                sites=$(echo "${NGINX_SITE_ENABLED}" | tr "," "\n")
+                for site in $sites; do
+                    nginx_site_enable "${site}"
+                done
+            fi
+        else
+            nginx_site_enable all
+        fi
     fi
 
     if [ -n "${NGINX_POST_INIT_SCRIPT}" ] ; then
