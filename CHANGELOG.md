@@ -1,14 +1,7 @@
-## 6.0.2 2022-06-26 <dave at tiredofit dot ca>
+## 6.0.1 2022-06-26 <dave at tiredofit dot ca>
 
    ### Added
       - Add null for value of NGINX_SITE_ENABLED to bust parent image declarations
-      - Cleanup with site-enabled and post-init function
-
-
-## 6.0.1 2022-06-25 <dave at tiredofit dot ca>
-
-   ### Changed
-      - Add null for value of NGINX_SITE_ENABLED to bust parent image delcarations
       - Cleanup with site-enabled and post-init function
 
 
