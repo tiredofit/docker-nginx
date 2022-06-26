@@ -274,7 +274,8 @@ nginx_configure_mode() {
             NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
             print_notice "Proxy Mode Activated - Proxying all traffic to ${NGINX_PROXY_URL}"
             sed -i "s|<PROXY_URL>|${NGINX_PROXY_URL}|g" /etc/nginx/templates/proxy.template
-            sed -i "/include \/etc\/nginx\/sites.available\/*.conf;/d" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/sites.available\/\*.conf;/d" /etc/nginx/nginx.conf
+            sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
         ;;
         "redirect" )
@@ -282,7 +283,7 @@ nginx_configure_mode() {
             NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
             print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
             sed -i "s|rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};|g" /etc/nginx/templates/redirect.template
-            sed -i "/include \/etc\/nginx\/sites.available\/*.conf;/d" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/sites.available\/\*.conf;/d" /etc/nginx/nginx.conf
             sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
         ;;

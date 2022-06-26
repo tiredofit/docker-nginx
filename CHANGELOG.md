@@ -1,3 +1,9 @@
+## 6.0.2 2022-06-26 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for Proxy mode hosting multiple configurations
+
+
 ## 6.0.1 2022-06-26 <dave at tiredofit dot ca>
 
    ### Added
