@@ -1,3 +1,10 @@
+## 6.0.1 2022-06-26 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add null for value of NGINX_SITE_ENABLED to bust parent image declarations
+      - Cleanup with site-enabled and post-init function
+
+
 ## 6.0.0 2022-06-23 <dave at tiredofit dot ca>
 
    ### Added
@@ -7,6 +14,7 @@
       - Alternatively, NGINX_MAINTENANCE_REMOTE_URL also works to pull an html file from the web/intranet and take the place of the baked in maintenance page
       - /etc/nginx/conf.d is being retired. Now drop your custom site configuration into /etc/nginx/sites.available. Also set NGINX_SITE_ENABLED=(config file, without the .conf extension) to have the automation work for things like authentication, blocking bots. You can seperate it via commas to have the image work on multiple configuration files. If the system detects /etc/nginx/conf.d it will move them automatically yet give a warning into /etc/nginx/sites.available and make them ALL enabled at the end of the container initialization, this may not be what you want, but is an attempt to add some backwards compatibility.
       - /etc/nginx/nginx.conf.d has been renamed to /etc/nginx/snippets, however this shouldn't affect anyone unless they have modified the image extensively.
+      - Last version where we are building 3.14, 3.13, 3.11, 3.10, 3.8 and 3.6 Alpine variants as there is no point for PHP-FPM
 
 
 ## 5.17.6 2022-05-24 <dave at tiredofit dot ca>
@@ -531,7 +539,7 @@
 
 ## 4.0.3 2019-02-08 <dave at tiredofit dot ca>
 
-* Bump to Nginx 1.15.8 
+* Bump to Nginx 1.15.8
 
 ## 4.0.2 2018-12-10 <dave at tiredofit dot ca>
 
@@ -562,7 +570,7 @@
 * Fix startup Issues with Logfiles
 
 ## 2018-02-20 3.5 <dave at tiredofit dot ca>
-	
+
 * Add Reverse Proxy Detection
 
 ## 2018-01-29 3.4 <dave at tiredofit dot ca>

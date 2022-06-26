@@ -81,16 +81,10 @@ The following image tags are available along with their tagged release based on 
 | ----------- | -------------- | ----------- | ------------------ |
 | latest      | `:latest`      | latest      | `:debian-latest`   |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye` |
-| 3.14        | `:alpine-3.14` | Buster      | `:debian-buster`   |
-| 3.13        | `:alpine-3.14` |             |                    |
-| 3.13        | `:alpine-3.13` |             |                    |
+| 3.15        | `:alpine-3.16` | Buster      | `:debian-buster`   |
 | 3.12        | `:alpine-3.12` |             |                    |
-| 3.11        | `:alpine-3.11` |             |                    |
-| 3.10        | `:alpine-3.10` |             |                    |
 | 3.9         | `:alpine-3.9`  |             |                    |
-| 3.8         | `:alpine-3.8`  |             |                    |
 | 3.7         | `:alpine-3.7`  |             |                    |
-| 3.6         | `:alpine-3.6`  |             |                    |
 | 3.5         | `:alpine-3.5`  |             |                    |
 
 ```bash
@@ -109,7 +103,7 @@ Images are built primarily for `amd64` architecture, and may also include builds
 * Map [persistent storage](#data-volumes) for access to configuration and data files for backup.
 * Make [networking ports](#networking) available for public access if necessary
 
-The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. Configuration of websites are done in `/etc/services.avaialble` with the filename pattern of `site.conf`. You must set an environment variable for `NGINX_SITE_ENABLED` if you have more than one configuration in there if you only want to enable one of the configurartions, otherwise it will enable all of them.
+The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. Configuration of websites are done in `/etc/services.avaialble` with the filename pattern of `site.conf`. You must set an environment variable for `NGINX_SITE_ENABLED` if you have more than one configuration in there if you only want to enable one of the configurartions, otherwise it will enable all of them. Use `NGINX_SITE_ENABLED=null` to break a parent image declaration.
 
 Use this as a starting point for your site configurations:
 ````nginx
@@ -268,7 +262,7 @@ Presently you can compress your served content with gzip and brotli. More compre
 | `NGINX_MODE`                    | Set to `NORMAL`, `MAINTENANCE` , `PROXY`, `REDIRECT`                                  | `NORMAL`   |
 | `NGINX_REDIRECT_URL`            | If `REDIRECT` set enter full url to forward all traffic to eg `https://example.com`   |            |
 | `NGINX_PROXY_URL`               | If `REDIRECT` set enter full url to proxy all traffic to eg `https://example.com:443` |            |
-| `NGINX_SITE_ENABLE`             | What sites to enable in `/etc/nginx/sites.available` Don't use `.conf` suffix         | `ALL`      |
+| `NGINX_SITE_ENABLED`             | What sites to enable in `/etc/nginx/sites.available` Don't use `.conf` suffix         | `ALL`      |
 | `NGINX_USER`                    | What user to run nginx as inside container                                            | `nginx`    |
 | `NGINX_GROUP`                   | What group to run nginx as inside container                                           | `www-data` |
 
