@@ -1,3 +1,9 @@
+## 6.0.4 2022-06-27 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change from sites.available to sites.enabled
+
+
 ## 6.0.3 2022-06-27 <dave at tiredofit dot ca>
 
    ### Changed

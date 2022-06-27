@@ -16,19 +16,19 @@ fi
 
 case "${1,,}" in
      "on" | "true" )
-        sed -i "s|include /etc/nginx/sites.available/*.conf;|#include /etc/nginx/sites.available/*.conf;|g" /etc/nginx/nginx.conf
+        sed -i "s|include /etc/nginx/sites.enabled/*.conf;|#include /etc/nginx/sites.enabled/*.conf;|g" /etc/nginx/nginx.conf
         sed -i "s|#include /etc/nginx/templates/maintenance.template;|include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
         nginx -s reload
         echo 'Maintenance Mode Activated'
      ;;
      "off" | "false" )
-        sed -i "s|#include /etc/nginx/sites.available/*.conf;|include /etc/nginx/sites.available/*.conf;|g" /etc/nginx/nginx.conf
+        sed -i "s|#include /etc/nginx/sites.enabled/*.conf;|include /etc/nginx/sites.enabled/*.conf;|g" /etc/nginx/nginx.conf
         sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
         nginx -s reload
         echo 'Maintenance Mode Deactivated'
      ;;
      "sleep" | "temp" )
-        sed -i "s|include /etc/nginx/sites.available/*.conf;|#include /etc/nginx/sites.available/*.conf;|g" /etc/nginx/nginx.conf
+        sed -i "s|include /etc/nginx/sites.enabled/*.conf;|#include /etc/nginx/sites.enabled/*.conf;|g" /etc/nginx/nginx.conf
         sed -i "s|#include /etc/nginx/templates/maintenance.template;|include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
         nginx -s reload
         if [ -z $2 ]; then
@@ -61,7 +61,7 @@ case "${1,,}" in
 
         echo 'Maintenance Mode Temporarily Activated for '$sleepnum' '$sleepdesc
         sleep $sleepcalc
-        sed -i "s|#include /etc/nginx/sites.available/*.conf;|include /etc/nginx/sites.available/*.conf;|g" /etc/nginx/nginx.conf
+        sed -i "s|#include /etc/nginx/sites.enabled/*.conf;|include /etc/nginx/sites.enabled/*.conf;|g" /etc/nginx/nginx.conf
         sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
         nginx -s reload
         echo 'Maintenance Mode Deactivated'
