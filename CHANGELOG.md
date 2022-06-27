@@ -1,3 +1,9 @@
+## 6.0.3 2022-06-27 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fixes for environment value buster NGINX_SITE_ENABLED
+
+
 ## 6.0.2 2022-06-26 <dave at tiredofit dot ca>
 
    ### Changed

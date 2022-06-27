@@ -37,12 +37,14 @@ if [ ! -f "/tmp/.container/container-restart" ] ; then
         fi
 
         if [ -n "${NGINX_SITE_ENABLED}" ] ; then
-            sites=$(echo "${NGINX_SITE_ENABLED}" | tr "," "\n")
-            for site in $sites; do
-                nginx_configure_site_authentication "${site}"
-                if var_true "${NGINX_ENABLE_BLOCK_BOTS}" ; then nginx_configure_site_blockbots "${site}" ; fi
-                if [ -n "${NGINX_INCLUDE_CONFIGURATION}" ] ; then nginx_configure_site_includes "${site}" ; fi
-            done
+            if [ "${NGINX_SITE_ENABLED,,}" != "null" ] ; then
+                sites=$(echo "${NGINX_SITE_ENABLED}" | tr "," "\n")
+                for site in $sites; do
+                    nginx_configure_site_authentication "${site}"
+                    if var_true "${NGINX_ENABLE_BLOCK_BOTS}" ; then nginx_configure_site_blockbots "${site}" ; fi
+                    if [ -n "${NGINX_INCLUDE_CONFIGURATION}" ] ; then nginx_configure_site_includes "${site}" ; fi
+                done
+            fi
         fi
     else
         print_notice "Not configurating Website configuration files"
