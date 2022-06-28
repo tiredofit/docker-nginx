@@ -112,7 +112,7 @@ nginx_configure_blockbots() {
             if ! grep -q "${wl_domain_orig}" /etc/nginx/snippets/blockbots-custom/whitelist-domains.conf ; then
                 print_debug  "Adding '${wl_domain_orig}' domain to bot blocker whitelist"
                 echo '"~*(?:\b)'$(echo "$wl_domain")'(?:\b)" 0;' $(echo " # ${wl_domain_orig} automatically added on") $(date +"%Y-%m-%d-%H:%M:%S") >> /etc/nginx/snippets/blockbots-custom/whitelist-domains.conf
-            else
+            elsebolster-zipping-tartly-swimsuit
                 print_debug "Skipping '${wl_domain_orig}' to be added to bot blocker domain whitelist"
             fi
         done
@@ -265,7 +265,7 @@ nginx_configure_mode() {
     case "${NGINX_MODE,,}" in
         "maintenance" )
             print_warn "MAINTENANCE MODE ACTIVATED - THIS IMAGE WILL NOT SERVE PAGES"
-            sed -i "s|include /etc/nginx/sites.available/*.conf;|#include /etc/nginx/sites.available/*.conf;|g" /etc/nginx/nginx.conf
+            sed -i "s|include /etc/nginx/sites.enabled/*.conf;|#include /etc/nginx/sites.enabled/*.conf;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
         ;;
@@ -274,16 +274,30 @@ nginx_configure_mode() {
             NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
             print_notice "Proxy Mode Activated - Proxying all traffic to ${NGINX_PROXY_URL}"
             sed -i "s|<PROXY_URL>|${NGINX_PROXY_URL}|g" /etc/nginx/templates/proxy.template
-            sed -i "/include \/etc\/nginx\/sites.available\/\*.conf;/d" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/sites.enabled\/\*.conf;/d" /etc/nginx/nginx.conf
             sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
+            case "${NGINX_AUTHENTICATION_TYPE,,}" in
+                "basic" )
+                    sed -i '/ server {/a\ \ \  auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/templates/proxy.template
+                ;;
+                "ldap" )
+                    sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/templates/proxy.template
+                ;;
+                "llng" )
+                    sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;'
+                    sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication Checkpoint' /etc/nginx/templates/proxy.template
+                    sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/snippets/authentication/llng_auth_request;' /etc/nginx/templates/proxy.template
+                    sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/templates/proxy.template
+                ;;
+            esac
         ;;
         "redirect" )
             sanity_var NGINX_REDIRECT_URL "No Redirect URL"
             NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
             print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
             sed -i "s|rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};|g" /etc/nginx/templates/redirect.template
-            sed -i "/include \/etc\/nginx\/sites.available\/\*.conf;/d" /etc/nginx/nginx.conf
+            sed -i "/include \/etc\/nginx\/sites.enabled\/\*.conf;/d" /etc/nginx/nginx.conf
             sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
         ;;

@@ -1,3 +1,9 @@
+## 6.1.0 2022-06-27 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add ability to put authentication in front of NGINX_MODE=PROXY
+
+
 ## 6.0.4 2022-06-27 <dave at tiredofit dot ca>
 
    ### Changed
