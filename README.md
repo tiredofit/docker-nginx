@@ -103,7 +103,7 @@ Images are built primarily for `amd64` architecture, and may also include builds
 * Map [persistent storage](#data-volumes) for access to configuration and data files for backup.
 * Make [networking ports](#networking) available for public access if necessary
 
-The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. Configuration of websites are done in `/etc/services.avaialble` with the filename pattern of `site.conf`. You must set an environment variable for `NGINX_SITE_ENABLED` if you have more than one configuration in there if you only want to enable one of the configurartions, otherwise it will enable all of them. Use `NGINX_SITE_ENABLED=null` to break a parent image declaration.
+The container starts up and reads from `/etc/nginx/nginx.conf` for some basic configuration and to listen on port 73 internally for Nginx Status responses. Configuration of websites are done in `/etc/services.available` with the filename pattern of `site.conf`. You must set an environment variable for `NGINX_SITE_ENABLED` if you have more than one configuration in there if you only want to enable one of the configurartions, otherwise it will enable all of them. Use `NGINX_SITE_ENABLED=null` to break a parent image declaration.
 
 Use this as a starting point for your site configurations:
 ````nginx
