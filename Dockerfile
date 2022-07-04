@@ -1,4 +1,6 @@
-FROM docker.io/tiredofit/alpine:3.16
+ARG ALPINE_VERSION=3.16
+
+FROM docker.io/tiredofit/alpine:${ALPINE_VERSION}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number

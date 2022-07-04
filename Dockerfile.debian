@@ -1,4 +1,6 @@
-FROM docker.io/tiredofit/debian:buster
+ARG DEBIAN_VERSION=bullseye
+
+FROM docker.io/tiredofit/debian:bullseye
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ENV NGINX_VERSION=1.23.0 \

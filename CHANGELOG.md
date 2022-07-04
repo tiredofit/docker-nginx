@@ -1,3 +1,9 @@
+## 6.1.1 2022-07-04 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Add ARGs to support easier version switching in Dockerfile
+
+
 ## 6.1.0 2022-06-27 <dave at tiredofit dot ca>
 
    ### Added
