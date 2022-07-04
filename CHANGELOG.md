@@ -1,3 +1,9 @@
+## 6.1.2 2022-07-04 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Add nullglob checking for *.conf files
+
+
 ## 6.1.1 2022-07-04 <dave at tiredofit dot ca>
 
    ### Changed

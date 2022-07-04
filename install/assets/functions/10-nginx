@@ -555,10 +555,14 @@ EOF
 nginx_site_enable() {
     if [ -n "${1}" ]; then
         if [ "${1,,}" = "all" ] ; then
-            for site in /etc/nginx/sites.available/*.conf; do
-                print_debug "Enabling Nginx Site '$(basename ${site})'"
-                ln -sf /etc/nginx/sites.available/"$(basename ${site})" /etc/nginx/sites.enabled/
-            done
+            if [ "$(ls -A /etc/nginx/sites.available/)" ]; then
+                shopt -s nullglob
+                for site in /etc/nginx/sites.available/*.conf; do
+                    print_debug "Enabling Nginx Site '$(basename ${site})'"
+                    ln -sf /etc/nginx/sites.available/"$(basename ${site})" /etc/nginx/sites.enabled/
+                done
+                shopt -u nullglob
+            fi
         else
             if [ -f "/etc/nginx/sites.available/${1}.conf" ]; then
                 print_debug "Enabling Nginx Site '${site}.conf'"
@@ -576,13 +580,15 @@ nginx_site_enable() {
 nginx_site_disable() {
     if [ -n "${1}" ]; then
         if [ "${1,,}" = "all" ] ; then
+            shopt -s nullglob
             for site in /etc/nginx/sites.enabled/*.conf; do
                 print_debug "Disabling Nginx Site '$(basename ${site})"
                 rm -rf /etc/nginx/sites.enabled/"$(basename ${site})"
             done
+            shopt -u nullglob
         else
             if [ -f "/etc/nginx/sites.enabled/${1}.conf" ]; then
-                print_debug "Diksabling Nginx Site '${site}.conf'"
+                print_debug "Disabling Nginx Site '${site}.conf'"
                 rm -rf /etc/nginx/sites.enabled/"${site}"*
             else
                 print_error "Cannot disable site ${1} as it doesn't exist in /etc/nginx/services.enabled!"
