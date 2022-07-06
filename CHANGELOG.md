@@ -1,3 +1,9 @@
+## 6.1.3 2022-07-06 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix when NGINX_ENABLE_BLOCK_BOTS enabled looking for missing file
+
+
 ## 6.1.2 2022-07-04 <dave at tiredofit dot ca>
 
    ### Changed
