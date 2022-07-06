@@ -1,6 +1,6 @@
 ARG DEBIAN_VERSION=bullseye
 
-FROM docker.io/tiredofit/debian:bullseye
+FROM docker.io/tiredofit/debian:${DEBIAN_VERSION}
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ENV NGINX_VERSION=1.23.0 \

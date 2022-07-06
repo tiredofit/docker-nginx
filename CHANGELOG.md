@@ -1,3 +1,9 @@
+## 6.1.4 2022-07-06 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Debian: Load proper OS
+
+
 ## 6.1.3 2022-07-06 <dave at tiredofit dot ca>
 
    ### Changed
