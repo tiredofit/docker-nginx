@@ -10,6 +10,7 @@ if var_false "${ENABLE_NGINX}" ; then
     service_stop 11-nginx-config-reload
     rm -rf /assets/logrotate/nginx*
     rm -rf /etc/logrotate.d/nginx*
+    rm -rf /assets/logrotate/nginx*
     rm -rf /etc/zabbix/*/nginx*
     rm -rf /etc/fluent-bit/conf.d/nginx*
     liftoff

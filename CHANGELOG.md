@@ -1,3 +1,9 @@
+## 6.1.5 2022-07-07 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix sed statement breaking NGINX_MODE=REDIRECT
+
+
 ## 6.1.4 2022-07-06 <dave at tiredofit dot ca>
 
    ### Changed

@@ -1,7 +1,7 @@
   server {
 	listen <LISTEN_PORT>;
 	server_name localhost;
-	root <WEBROOT>;
+	root /usr/share/nginx/html;
 	index  index.html index.htm;
 
 	rewrite ^/(.*) <REDIRECT_URL>;
