@@ -1,3 +1,9 @@
+## 6.1.6 2022-07-07 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Cleanup nginx_site_enable and nginx_site_disable functions
+
+
 ## 6.1.5 2022-07-07 <dave at tiredofit dot ca>
 
    ### Changed

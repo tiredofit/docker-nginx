@@ -565,7 +565,7 @@ nginx_site_enable() {
             fi
         else
             if [ -f "/etc/nginx/sites.available/${1}.conf" ]; then
-                print_debug "Enabling Nginx Site '${site}.conf'"
+                print_debug "Enabling Nginx Site '${1}.conf'"
                 ln -sf /etc/nginx/sites.available/"${1}".conf /etc/nginx/sites.enabled
             else
                 print_error "Cannot enable site ${1} as it doesn't exist in /etc/nginx/sites.available!"
@@ -588,8 +588,8 @@ nginx_site_disable() {
             shopt -u nullglob
         else
             if [ -f "/etc/nginx/sites.enabled/${1}.conf" ]; then
-                print_debug "Disabling Nginx Site '${site}.conf'"
-                rm -rf /etc/nginx/sites.enabled/"${site}"*
+                print_debug "Disabling Nginx Site '${1}.conf'"
+                rm -rf /etc/nginx/sites.enabled/"${1}"*
             else
                 print_error "Cannot disable site ${1} as it doesn't exist in /etc/nginx/services.enabled!"
                 exit 1
