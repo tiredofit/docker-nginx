@@ -31,7 +31,7 @@ if [ ! -f "/tmp/.container/container-restart" ] ; then
         silent sed -i "s|<WEBROOT>|${NGINX_WEBROOT}|g" /etc/nginx/sites.available/*.conf
         silent sed -i "s|<LISTEN_PORT>|${NGINX_LISTEN_PORT}|g" /etc/nginx/sites.available/*.conf
 
-        if [ -f "/etc/nginx/service.available/default.conf" ] ; then
+        if [ -f "/etc/nginx/sites.available/default.conf" ] ; then
             nginx_configure_site_authentication default
             if var_true "${NGINX_ENABLE_BLOCK_BOTS}" ; then nginx_configure_site_blockbots default ; fi
             if [ -n "${NGINX_INCLUDE_CONFIGURATION}" ] ; then nginx_configure_site_includes default ; fi

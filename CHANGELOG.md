@@ -1,3 +1,9 @@
+## 6.1.7 2022-07-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for Proxy mode using LLNG Authentication
+
+
 ## 6.1.6 2022-07-07 <dave at tiredofit dot ca>
 
    ### Changed

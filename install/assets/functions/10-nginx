@@ -55,7 +55,7 @@ EOF
             echo "}" >> /etc/nginx/snippets/authentication/llng_upstream
             sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ include \/etc\/nginx\/snippets\/authentication\/llng_upstream;" /etc/nginx/nginx.conf
             sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ ### LLNG Authentication Multiple Handlers configuration" /etc/nginx/nginx.conf
-            sed -i "s|<LLNG_HANDLER_PORT>#$NGINX_AUTHENTICATION_LLNG_HANDLER_PORT|g" /etc/nginx/snippets/authentication/llng_location_block
+            sed -i "s|<LLNG_HANDLER_PORT>|${NGINX_AUTHENTICATION_LLNG_HANDLER_PORT}|g" /etc/nginx/snippets/authentication/llng_location_block
 
             if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
                 header_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')
@@ -285,7 +285,7 @@ nginx_configure_mode() {
                     sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/templates/proxy.template
                 ;;
                 "llng" )
-                    sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;'
+                    sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/templates/proxy.template
                     sed -i '/server {/a\ \ \ \ \  ### LLNG Authentication Checkpoint' /etc/nginx/templates/proxy.template
                     sed -i '/location \/ {/a\ \ \ \ \ \ \ \ include /etc/nginx/snippets/authentication/llng_auth_request;' /etc/nginx/templates/proxy.template
                     sed -i '/location \/ {/a\ \ \ \ \ \ \ \ ### LLNG Authentication handler' /etc/nginx/templates/proxy.template
@@ -591,7 +591,7 @@ nginx_site_disable() {
                 print_debug "Disabling Nginx Site '${1}.conf'"
                 rm -rf /etc/nginx/sites.enabled/"${1}"*
             else
-                print_error "Cannot disable site ${1} as it doesn't exist in /etc/nginx/services.enabled!"
+                print_error "Cannot disable site ${1} as it doesn't exist in /etc/nginx/sites.enabled!"
                 exit 1
             fi
         fi
