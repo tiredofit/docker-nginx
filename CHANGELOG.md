@@ -1,3 +1,9 @@
+## 6.1.8 2022-07-29 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for broken maintenance script
+
+
 ## 6.1.7 2022-07-18 <dave at tiredofit dot ca>
 
    ### Changed

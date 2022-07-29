@@ -265,7 +265,7 @@ nginx_configure_mode() {
     case "${NGINX_MODE,,}" in
         "maintenance" )
             print_warn "MAINTENANCE MODE ACTIVATED - THIS IMAGE WILL NOT SERVE PAGES"
-            sed -i "s|include /etc/nginx/sites.enabled/*.conf;|#include /etc/nginx/sites.enabled/*.conf;|g" /etc/nginx/nginx.conf
+            sed -i "s|include /etc/nginx/sites.enabled/\*.conf;|#include /etc/nginx/sites.enabled/*.conf;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
         ;;
