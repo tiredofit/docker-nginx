@@ -8,4 +8,4 @@ check_service_initialized init
 liftoff
 
 print_start "Starting nginx ${NGINX_VERSION}"
-nginx
+exec nginx

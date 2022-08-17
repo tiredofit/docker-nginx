@@ -1,3 +1,9 @@
+## 6.1.10 2022-08-17 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Use exec calls when launching process
+
+
 ## 6.1.9 2022-07-31 <dave at tiredofit dot ca>
 
    ### Added
