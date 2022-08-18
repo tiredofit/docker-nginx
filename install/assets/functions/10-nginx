@@ -279,10 +279,10 @@ nginx_configure_mode() {
             sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
             case "${NGINX_AUTHENTICATION_TYPE,,}" in
                 "basic" )
-                    sed -i '/ server {/a\ \ \  auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/templates/proxy.template
+                    sed -i '/server {/a\ \ \ \ \ auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \ \ \ auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/templates/proxy.template
                 ;;
                 "ldap" )
-                    sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/templates/proxy.template
+                    sed -i '/server {/a\ \ \ \ \ auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \ \ \ auth_ldap_servers ldapserver;' /etc/nginx/templates/proxy.template
                 ;;
                 "llng" )
                     sed -i '/server {/a\ \ \ \ \  include /etc/nginx/snippets/authentication/llng_location_block;' /etc/nginx/templates/proxy.template
@@ -453,10 +453,10 @@ nginx_configure_site_authentication() {
 
     case "${NGINX_AUTHENTICATION_TYPE,,}" in
         "basic" )
-            sed -i '/ server {/a\ \ \  auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/sites.available/"${nginx_site_config}".conf
+            sed -i '/server {/a\ \ \ \ auth_basic "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \ \ auth_basic_user_file /etc/nginx/snippets/authentication/basic_authorized_users;' /etc/nginx/sites.available/"${nginx_site_config}".conf
         ;;
         "ldap" )
-            sed -i '/ server {/a\ \ \  auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \  auth_ldap_servers ldapserver;' /etc/nginx/sites.available/"${nginx_site_config}".conf
+            sed -i '/server {/a\ \ \ \ auth_ldap "'"${NGINX_AUTHENTICATION_TITLE}"'";\n\ \ \ \ auth_ldap_servers ldapserver;' /etc/nginx/sites.available/"${nginx_site_config}".conf
         ;;
         "llng" )
             if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
@@ -513,24 +513,24 @@ nginx_configure_site_includes() {
 nginx_configure_site_default() {
     if [ -z "${NGINX_SITE_ENABLED}" ] && [ ! -f "/etc/nginx/sites.available/default.conf" ] && [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
         cat <<EOF > /etc/nginx/sites.available/default.conf
-  server {
-      ### Don't Touch This
-      listen <LISTEN_PORT>;
-      server_name localhost;
-      root <WEBROOT>;
-      ###
+server {
+    ### Don't Touch This
+    listen <LISTEN_PORT>;
+    server_name localhost;
+    root <WEBROOT>;
+    ###
 
-      ### Populate your custom directives here
-      index  index.html index.htm;
+    ### Populate your custom directives here
+    index  index.html index.htm;
 
-      location / {
-      #
-      }
+    location / {
+    #
+    }
 
-      ### Don't edit past here
+    ### Don't edit past here
 
-      include /etc/nginx/snippets/site_optimization.conf;
-      include /etc/nginx/snippets/exploit_protection.conf;
+    include /etc/nginx/snippets/site_optimization.conf;
+    include /etc/nginx/snippets/exploit_protection.conf;
 }
 EOF
         NGINX_SITE_ENABLED=default

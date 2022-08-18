@@ -1,3 +1,9 @@
+## 6.1.11 2022-08-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for default site getting two sets of authentication directives
+
+
 ## 6.1.10 2022-08-17 <dave at tiredofit dot ca>
 
    ### Changed
