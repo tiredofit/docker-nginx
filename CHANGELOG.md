@@ -1,3 +1,9 @@
+## 6.2.2 2022-10-01 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Silence legacy check for webroot/listen_port if there are no files in directory
+
+
 ## 6.2.1 2022-10-01 <dave at tiredofit dot ca>
 
    ### Changed
