@@ -262,18 +262,21 @@ Presently you can compress your served content with gzip and brotli. More compre
 | `NGINX_MODE`                    | Set to `NORMAL`, `MAINTENANCE` , `PROXY`, `REDIRECT`                                  | `NORMAL`   |
 | `NGINX_REDIRECT_URL`            | If `REDIRECT` set enter full url to forward all traffic to eg `https://example.com`   |            |
 | `NGINX_PROXY_URL`               | If `REDIRECT` set enter full url to proxy all traffic to eg `https://example.com:443` |            |
-| `NGINX_SITE_ENABLED`             | What sites to enable in `/etc/nginx/sites.available` Don't use `.conf` suffix         | `ALL`      |
+| `NGINX_SITE_ENABLED`            | What sites to enable in `/etc/nginx/sites.available` Don't use `.conf` suffix         | `ALL`      |
 | `NGINX_USER`                    | What user to run nginx as inside container                                            | `nginx`    |
 | `NGINX_GROUP`                   | What group to run nginx as inside container                                           | `www-data` |
 
 If set to `MAINTNENANCE` a single page will show visitors that the server is being worked on.
 
 ### Maintenance Options
-| Parameter                      | Description                                                                                           | Default                     |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------------- |
-| `NGINX_MAINTENANCE_PATH`       | Path where the maintenance page resides                                                               | `/assets/nginx/maintenance` |
-| `NGINX_MAINTENANCE_FILE`       | File to load while in maintenance mode                                                                | `index.html`                |
-| `NGINX_MAINTENANCE_REMOTE_URL` | If you wish to download an html file from a remote location to overwrite the above enter the URL here |                             |
+| Parameter                        | Description                                                                                                   | Default                     |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `NGINX_MAINTENANCE_TYPE`         | Serve `local` file or `redirect` or `proxy` to a URL                                                          | `local`                     |
+| `NGINX_MAINTENANCE_PATH`         | (local) Path where the maintenance page resides                                                               | `/assets/nginx/maintenance` |
+| `NGINX_MAINTENANCE_FILE`         | (local) File to load while in maintenance mode                                                                | `index.html`                |
+| `NGINX_MAINTENANCE_REMOTE_URL`   | (local) If you wish to download an html file from a remote location to overwrite the above enter the URL here |                             |
+| `NGINX_MAINTENANCE_PROXY_URL`    | What url eg `https://example.com` to transparently proxy for the user when they visit the site                | `http://maintenance`        |
+| `NGINX_MAINTENANCE_REDIRECT_URL` | What url eg `https://example.com` to redirect in a uers browser when they visit the site                      |                             |
 
 You can also enter into the container and type `maintenance ARG`, where ARG is either `ON`,`OFF`, or `SLEEP (seconds)` which will temporarily place the site in maintenance mode and then restore it back to normal after time has passed.
 

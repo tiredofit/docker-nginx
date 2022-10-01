@@ -55,7 +55,7 @@ EOF
             echo "}" >> /etc/nginx/snippets/authentication/llng_upstream
             sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ include \/etc\/nginx\/snippets\/authentication\/llng_upstream;" /etc/nginx/nginx.conf
             sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ ### LLNG Authentication Multiple Handlers configuration" /etc/nginx/nginx.conf
-            sed -i "s|<LLNG_HANDLER_PORT>|${NGINX_AUTHENTICATION_LLNG_HANDLER_PORT}|g" /etc/nginx/snippets/authentication/llng_location_block
+            update_template /etc/nginx/snippets/authentication/llng_location_block NGINX_AUTHENTICATION_LLNG_HANDLER_PORT
 
             if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
                 header_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')
@@ -210,13 +210,13 @@ nginx_configure_blockbots() {
 }
 
 nginx_configure_logging() {
-    sed -i "s|<ACCESS_LOG>|${NGINX_LOG_ACCESS_FILE}|g" /etc/nginx/snippets/logging.conf
-    sed -i "s|<ACCESS_LOG_LOCATION>|${NGINX_LOG_ACCESS_LOCATION}|g" /etc/nginx/snippets/logging.conf
-    sed -i "s|<ACCESS_LOG_FORMAT>|${NGINX_LOG_ACCESS_FORMAT,,}|g" /etc/nginx/snippets/logging.conf
-    sed -i "s|<ERROR_LOG>|${NGINX_LOG_ERROR_FILE}|g" /etc/nginx/snippets/logging.conf
-    sed -i "s|<ERROR_LOG_LEVEL>|${NGINX_LOG_LEVEL_ERROR}|g" /etc/nginx/snippets/logging.conf
-    sed -i "s|<ERROR_LOG_LOCATION>|${NGINX_LOG_ERROR_LOCATION}|g" /etc/nginx/snippets/logging.conf
-    sed -i "s|<ERROR_LOG>|${NGINX_LOG_ERROR_FILE}|g" /etc/nginx/snippets/logging.conf
+    update_template /etc/nginx/snippets/logging.conf \
+                                                    NGINX_LOG_ACCESS_FILE \
+                                                    NGINX_LOG_ACCESS_LOCATION \
+                                                    NGINX_LOG_ACCESS_FORMAT \
+                                                    NGINX_LOG_ERROR_FILE \
+                                                    NGINX_LOG_LEVEL_ERROR \
+                                                    NGINX_LOG_ERROR_LOCATION
 
     mkdir -p "${NGINX_LOG_ERROR_LOCATION}" "${NGINX_LOG_ACCESS_LOCATION}"
     touch "${NGINX_LOG_ERROR_LOCATION}"/"${NGINX_LOG_ERROR_FILE}"
@@ -229,9 +229,10 @@ nginx_configure_logging() {
     if var_true "${NGINX_ENABLE_EXPLOIT_PROTECTION}" ; then
         mkdir -p "${NGINX_LOG_BLOCKED_LOCATION}"
         touch "${NGINX_LOG_BLOCKED_LOCATION}"/"${NGINX_LOG_BLOCKED_FILE}"
-        sed -i "s|<BLOCKED_LOG_LOCATION>|${NGINX_LOG_BLOCKED_LOCATION}|g" /etc/nginx/snippets/exploit_protection.conf
-        sed -i "s|<BLOCKED_LOG_FILE>|${NGINX_LOG_BLOCKED_FILE}|g" /etc/nginx/snippets/exploit_protection.conf
-        sed -i "s|<BLOCKED_FORMAT>|${NGINX_LOG_BLOCKED_FORMAT}|g" /etc/nginx/snippets/exploit_protection.conf
+        update_template /etc/nginx/snippets/exploit_protection.conf \
+                                                                    NGINX_LOG_BLOCKED_LOCATION \
+                                                                    NGINX_LOG_BLOCKED_FILE \
+                                                                    NGINX_LOG_BLOCKED_FORMAT
         create_logrotate nginx-blocked "${NGINX_LOG_BLOCKED_LOCATION}"/"${NGINX_LOG_BLOCKED_FILE}" nginx-blocked-"${NGINX_LOG_BLOCKED_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
     fi
 
@@ -249,15 +250,63 @@ nginx_configure_logging() {
 }
 
 nginx_configure_maintenance() {
-        silent sed -i "s|<LISTEN_PORT>|${NGINX_LISTEN_PORT}|g" /etc/nginx/templates/*.template
-        silent sed -i "s|<MAINTENANCE_PATH>|${NGINX_MAINTENANCE_PATH}|g" /etc/nginx/templates/maintenance.template
-        silent sed -i "s|<MAINTENANCE_FILE>|${NGINX_MAINTENANCE_FILE}|g" /etc/nginx/templates/maintenance.template
+        update_template "/etc/nginx/templates/*.template" NGINX_LISTEN_PORT
 
-        if [ -n "${NGINX_MAINTENANCE_REMOTE_URL}" ] ; then
-            print notice "Adding custom maintenance page from '${NGINX_MAINTENANCE_REMOTE_URL}'"
-            silent curl -sSL -o "${NGINX_MAINTENANCE_PATH}"/"${NGINX_MAINTENANCE_FILE}" "${NGINX_MAINTENANCE_REMOTE_URL}"
-        fi
+        case "${NGINX_MAINTENANCE_TYPE,,}" in
+            local )
+                update_template /etc/nginx/templates/maintenance.template \
+                                                                            NGINX_MAINTENANCE_FILE \
+                                                                            NGINX_MAINTENANCE_PATH
+                if [ -n "${NGINX_MAINTENANCE_REMOTE_URL}" ] ; then
+                    print_notice "Adding custom maintenance page from '${NGINX_MAINTENANCE_REMOTE_URL}'"
+                    silent curl -sSL -o "${NGINX_MAINTENANCE_PATH}"/"${NGINX_MAINTENANCE_FILE}" "${NGINX_MAINTENANCE_REMOTE_URL}"
+                fi
+            ;;
+            proxy )
+                if [ -n "${MAINTENANCE_REDIRECT_PROXY_URL}" ] ; then
+                    cat <<EOF > /etc/nginx/templates/maintenance.template
+server {
+    ### Don't Touch This
+    listen ${NGINX_LISTEN_PORT};
+    server_name localhost;
+    ###
 
+    location / {
+        proxy_pass         ${NGINX_MAINTENANCE_PROXY_URL};
+        proxy_redirect     off;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Host $server_name;
+    }
+
+### Don't edit past here
+}
+EOF
+
+                else
+                    sanity_var NGINX_MAINTENANCE_PROXY_URL "Set NGINX_MAINTENANCE_TYPE=proxy"
+                fi
+            ;;
+            redirect )
+                if [ -n "${NGINX_MAINTENANCE_REDIRECT_URL}" ] ; then
+                    print_notice "Setting maintenance redirect to '${NGINX_MAINTENANCE_REDIRECT_URL}'"
+                    cat <<EOF > /etc/nginx/templates/maintenance.template
+  server {
+    listen       ${NGINX_LISTEN_PORT};
+    server_name  localhost;
+
+	rewrite ^/(.*) {{NGINX_MAINTENANCE_REDIRECT_URL}};
+
+}
+EOF
+                file
+                else
+                    sanity_var NGINX_MAINTENANCE_REDIRECT_URL "Set NGINX_MAINTENANCE_TYPE=redirect"
+                fi
+            ;;
+
+        esac
         chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_MAINTENANCE_PATH}"
 }
 
@@ -273,7 +322,7 @@ nginx_configure_mode() {
             sanity_var NGINX_PROXY_URL "No Proxy URL"
             NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
             print_notice "Proxy Mode Activated - Proxying all traffic to ${NGINX_PROXY_URL}"
-            sed -i "s|<PROXY_URL>|${NGINX_PROXY_URL}|g" /etc/nginx/templates/proxy.template
+            update_template /etc/nginx/templates/proxy.template NGINX_PROXY_URL
             sed -i "/include \/etc\/nginx\/sites.enabled\/\*.conf;/d" /etc/nginx/nginx.conf
             sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/redirect.template;/d" /etc/nginx/nginx.conf
@@ -296,7 +345,7 @@ nginx_configure_mode() {
             sanity_var NGINX_REDIRECT_URL "No Redirect URL"
             NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
             print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
-            sed -i "s|rewrite \^/(\.\*) .*|rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};|g" /etc/nginx/templates/redirect.template
+            updat_template /etc/nginx/templates/redirect.template NGINX_REDIRECT_URL
             sed -i "/include \/etc\/nginx\/sites.enabled\/\*.conf;/d" /etc/nginx/nginx.conf
             sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf
@@ -311,37 +360,40 @@ nginx_configure_mode() {
 
 
 nginx_configure_server() {
-    sed -i "s|<CLIENT_BODY_BUFFER_SIZE>|${NGINX_CLIENT_BODY_BUFFER_SIZE}|g" /etc/nginx/nginx.conf
-    sed -i "s|<CLIENT_BODY_TIMEOUT>|${NGINX_CLIENT_BODY_TIMEOUT}|g" /etc/nginx/nginx.conf
-    sed -i "s|<FASTCGI_BUFFERS>|${NGINX_FASTCGI_BUFFERS}|g" /etc/nginx/nginx.conf
-    sed -i "s|<FASTCGI_BUFFER_SIZE>|${NGINX_FASTCGI_BUFFER_SIZE}|g" /etc/nginx/nginx.conf
-    sed -i "s|<GROUP>|${NGINX_GROUP}|g" /etc/nginx/nginx.conf
-    sed -i "s|<KEEPALIVE_REQUESTS>|${NGINX_KEEPALIVE_REQUESTS}|g" /etc/nginx/nginx.conf
-    sed -i "s|<KEEPALIVE_TIMEOUT>|${NGINX_KEEPALIVE_TIMEOUT}|g" /etc/nginx/nginx.conf
-    sed -i "s|<SEND_TIMEOUT>|${NGINX_SEND_TIMEOUT}|g" /etc/nginx/nginx.conf
-    sed -i "s|<UPLOAD_MAX_SIZE>|${NGINX_UPLOAD_MAX_SIZE}|g" /etc/nginx/nginx.conf
-    sed -i "s|<USER>|${NGINX_USER}|g" /etc/nginx/nginx.conf
-    sed -i "s|<WORKER_CONNECTIONS>|${NGINX_WORKER_CONNECTIONS}|g" /etc/nginx/nginx.conf
-    sed -i "s|<WORKER_PROCESSES>|${NGINX_WORKER_PROCESSES}|g" /etc/nginx/nginx.conf
-    sed -i "s|<WORKER_RLIMIT_NOFILE>|${NGINX_WORKER_RLIMIT_NOFILE}|g" /etc/nginx/nginx.conf
+    update_template /etc/nginx/nginx.conf \
+                                            NGINX_CLIENT_BODY_BUFFER_SIZE \
+                                            NGINX_CLIENT_BODY_TIMEOUT \
+                                            NGINX_FASTCGI_BUFFERS \
+                                            NGINX_FASTCGI_BUFFER_SIZE \
+                                            NGINX_GROUP \
+                                            NGINX_KEEPALIVE_REQUESTS \
+                                            NGINX_KEEPALIVE_TIMEOUT \
+                                            NGINX_SEND_TIMEOUT \
+                                            NGINX_UPLOAD_MAX_SIZE \
+                                            NGINX_USER \
+                                            NGINX_WORKER_CONNECTIONS \
+                                            NGINX_WORKER_PROCESSES \
+                                            NGINX_WORKER_RLIMIT_NOFILE
 
     if var_true "${NGINX_ENABLE_COMPRESSION_BROTLI}"; then
-        sed -i "s|<BROTLI_LEVEL>|${NGINX_COMPRESSION_BROTLI_LEVEL}|g" /etc/nginx/snippets/compression_brotli.conf
-        sed -i "s|<BROTLI_MIN_LENGTH>|${NGINX_COMPRESSION_BROTLI_MIN_LENGTH}|g" /etc/nginx/snippets/compression_brotli.conf
-        sed -i "s|<BROTLI_TYPES>|${NGINX_COMPRESSION_BROTLI_TYPES}|g" /etc/nginx/snippets/compression_brotli.conf
-        sed -i "s|<BROTLI_WINDOW>|${NGINX_COMPRESSION_BROTLI_WINDOW}|g" /etc/nginx/snippets/compression_brotli.conf
+        update_template /etc/nginx/snippets/compression_brotli.conf \
+                                                                    NGINX_COMPRESSION_BROTLI_LEVEL \
+                                                                    NGINX_COMPRESSION_BROTLI_MIN_LENGTH \
+                                                                    NGINX_COMPRESSION_BROTLI_TYPES \
+                                                                    NGINX_COMPRESSION_BROTLI_WINDOW
     else
-        sed -i "\|include/etc/nginx/snippets/compression_brotli.conf;|d" /etc/nginx/nginx.conf
+        sed -i "\|include /etc/nginx/snippets/compression_brotli.conf;|d" /etc/nginx/nginx.conf
     fi
 
-    if var_true "{$NGINX_ENABLE_COMPRESSION_GZIP}"; then
-        sed -i "s|<GZIP_BUFFERS>|${NGINX_COMPRESSION_GZIP_BUFFERS}|g" /etc/nginx/snippets/compression_gzip.conf
-        sed -i "s|<GZIP_DISABLE>|${NGINX_COMPRESSION_GZIP_DISABLE}|g" /etc/nginx/snippets/compression_gzip.conf
-        sed -i "s|<GZIP_HTTP_VERSION>|${NGINX_COMPRESSION_GZIP_HTTP_VERSION}|g" /etc/nginx/snippets/compression_gzip.conf
-        sed -i "s|<GZIP_LEVEL>|${NGINX_COMPRESSION_GZIP_LEVEL}|g" /etc/nginx/snippets/compression_gzip.conf
-        sed -i "s|<GZIP_MIN_LENGTH>|${NGINX_COMPRESSION_GZIP_MIN_LENGTH}|g" /etc/nginx/snippets/compression_gzip.conf
-        sed -i "s|<GZIP_PROXIED>|${NGINX_COMPRESSION_GZIP_PROXIED}|g" /etc/nginx/snippets/compression_gzip.conf
-        sed -i "s|<GZIP_TYPES>|${NGINX_COMPRESSION_GZIP_TYPES}|g" /etc/nginx/snippets/compression_gzip.conf
+    if var_true "${NGINX_ENABLE_COMPRESSION_GZIP}"; then
+        update_template /etc/nginx/snippets/compression_gzip.conf \
+                                                                    NGINX_COMPRESSION_GZIP_BUFFERS \
+                                                                    NGINX_COMPRESSION_GZIP_DISABLE \
+                                                                    NGINX_COMPRESSION_GZIP_HTTP_VERSION \
+                                                                    NGINX_COMPRESSION_GZIP_LEVEL \
+                                                                    NGINX_COMPRESSION_GZIP_MIN_LENGTH \
+                                                                    NGINX_COMPRESSION_GZIP_PROXIED \
+                                                                    NGINX_COMPRESSION_GZIP_TYPES
         if var_false "${NGINX_COMPRESSION_GZIP_VARY}"; then
             sed -i "\|gzip_vary on;|d" /etc/nginx/snippets/compression_gzip.conf
         fi
@@ -350,8 +402,9 @@ nginx_configure_server() {
     fi
 
     if var_true "${NGINX_ENABLE_DDOS_PROTECTION}"; then
-        sed -i "s|<DDOS_CONNECTIONS_PER_IP>|${NGINX_DDOS_CONNECTIONS_PER_IP}|g" /etc/nginx/snippets/ddos_protection.conf
-        sed -i "s|<DDOS_REQUESTS_PER_IP>|${NGINX_DDOS_REQUESTS_PER_IP}|g" /etc/nginx/snippets/ddos_protection.conf
+        update_template /etc/nginx/snippets/ddos_protection.conf \
+                                                                NGINX_DDOS_CONNECTIONS_PER_IP \
+                                                                NGINX_DDOS_REQUESTS_PER_IP
     else
         sed -i "\|include /etc/nginx/snippets/ddos_protection.conf;|d" /etc/nginx/nginx.conf
     fi
@@ -380,10 +433,11 @@ nginx_configure_server() {
     fi
 
     if var_true "${NGINX_ENABLE_OPEN_FILE_CACHE}"; then
-        sed -i "s|<OPEN_FILE_CACHE_MAX>|${NGINX_OPEN_FILE_CACHE_MAX}|g" /etc/nginx/snippets/open_file_cache.conf
-        sed -i "s|<OPEN_FILE_CACHE_INACTIVE>|${NGINX_OPEN_FILE_CACHE_INACTIVE}|g" /etc/nginx/snippets/open_file_cache.conf
-        sed -i "s|<OPEN_FILE_CACHE_VALID>|${NGINX_OPEN_FILE_CACHE_VALID}|g" /etc/nginx/snippets/open_file_cache.conf
-        sed -i "s|<OPEN_FILE_CACHE_MIN_USES>|${NGINX_OPEN_FILE_CACHE_MIN_USES}|g" /etc/nginx/snippets/open_file_cache.conf
+        update_template /etc/nginx/snippets/open_file_cache.conf \
+                                                                    NGINX_OPEN_FILE_CACHE_INACTIVE \
+                                                                    NGINX_OPEN_FILE_CACHE_MAX \
+                                                                    NGINX_OPEN_FILE_CACHE_MIN_USES \
+                                                                    NGINX_OPEN_FILE_CACHE_VALID
         sed -i "\|open_file_cache_errors on;|d" /etc/nginx/snippets/open_file_cache.conf
     else
         sed -i "\|include /etc/nginx/snippets/open_file_cache.conf;|d" /etc/nginx/nginx.conf
@@ -394,8 +448,9 @@ nginx_configure_server() {
     fi
 
     if var_true "${NGINX_ENABLE_REVERSE_PROXY}"; then
-        sed -i "s|<REAL_IP_HEADER>|${NGINX_REAL_IP_HEADER}|g" /etc/nginx/snippets/reverse_proxy.conf
-        sed -i "s|<SET_REAL_IP_FROM>|${NGINX_SET_REAL_IP_FROM}|g" /etc/nginx/snippets/reverse_proxy.conf
+        update_template /etc/nginx/snippets/reverse_proxy.conf \
+                                                                NGINX_REAL_IP_HEADER \
+                                                                NGINX_SET_REAL_IP_FROM
     else
         sed -i "\|include /etc/nginx/snippets/reverse_proxy.conf;|d" /etc/nginx/nginx.conf
     fi
@@ -515,9 +570,9 @@ nginx_configure_site_default() {
         cat <<EOF > /etc/nginx/sites.available/default.conf
 server {
     ### Don't Touch This
-    listen <LISTEN_PORT>;
+    listen ${NGINX_LISTEN_PORT};
     server_name localhost;
-    root <WEBROOT>;
+    root ${NGINX_WEBROOT};
     ###
 
     ### Populate your custom directives here
@@ -545,7 +600,7 @@ nginx_create_sample_html() {
 <html>
 <title>Default Page</title>
 <h2>Container is working</h2>
-Congratulations! Your Nginx image is working. You are seeing this because you don't have an index.html file in your ${NGINX_WEBROOT} directory.
+Congratulations! Your ${IMAGE_NAME} image is working. You are seeing this because you don't have an index.html file in your ${NGINX_WEBROOT} directory.
 </html>
 EOF
         chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
@@ -642,5 +697,3 @@ nginx_post_init() {
         chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
     fi
 }
-
-

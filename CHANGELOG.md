@@ -1,3 +1,14 @@
+## 6.2.0 2022-10-01 <dave at tiredofit dot ca>
+
+   ### Added
+      - Introduce NGINX_MAINTENANCE_MODE variable to redirect, or proxy an external site when in maintenance mode
+
+   ### Changed
+      - Switched configuration from hacky seds to use 'update_template' function
+      - Alerted users of legacy template usage, request to have them move from <TAG> to {{TAG}} format
+      - Fix issue with GZIP compression not working
+
+
 ## 6.1.11 2022-08-18 <dave at tiredofit dot ca>
 
    ### Changed

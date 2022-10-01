@@ -1,9 +1,9 @@
   server {
-    listen       <LISTEN_PORT>;
+    listen       {{NGINX_LISTEN_PORT}};
     server_name  localhost;
 
-   location / {
-        root   <MAINTENANCE_PATH>;
-        index  <MAINTENANCE_FILE>;
+    location / {
+        root   {{NGINX_MAINTENANCE_PATH}};
+        index  {{NGINX_MAINTENANCE_FILE}};
     }
 }

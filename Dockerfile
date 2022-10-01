@@ -13,11 +13,11 @@ ENV NGINX_VERSION=1.23.1 \
     IMAGE_NAME="tiredofit/nginx" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-nginx/"
 
-### Install Nginx
-RUN set -x && \
+RUN source assets/functions/00-container && \
+    set -x && \
     sed -i "/www-data/d" /etc/group* && \
-    addgroup -S -g 82 www-data && \
-    adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data -g "nginx" -u 80 nginx && \
+    addgroup -S -g 82 ${NGINX_GROUP} && \
+    adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G ${NGINX_GROUP} -g "${NGINX_USER}" -u 80 ${NGINX_USER} && \
     apk update && \
     apk upgrade && \
     apk add -t .nginx-build-deps \
@@ -49,14 +49,11 @@ RUN set -x && \
                 && \
     \
     mkdir -p /www /var/log/nginx && \
-    chown -R nginx:www-data /var/log/nginx && \
-    git clone --recursive https://github.com/openresty/headers-more-nginx-module.git /usr/src/headers-more-nginx-module && \
-    git clone --recursive https://github.com/google/ngx_brotli.git /usr/src/nginx-brotli && \
-    git clone --recursive https://github.com/AirisX/nginx_cookie_flag_module /usr/src/nginx_cookie_flag_module && \
-    cd /usr/src/nginx-brotli && \
-    git checkout -b $NGINX_BROTLI_VERSION $NGINX_BROTLI_VERSION && \
-    cd /usr/src && \
-    git clone https://github.com/kvspb/nginx-auth-ldap /usr/src/nginx-auth-ldap && \
+    chown -R ${NGINX_USER}:${NGINX_GROUP} /var/log/nginx && \
+    clone_git_repo https://github.com/openresty/headers-more-nginx-module.git && \
+    clone_git_repo https://github.com/google/ngx_brotli.git $NGINX_BROTLI_VERSION && \
+    clone_git_repo https://github.com/AirisX/nginx_cookie_flag_module && \
+    clone_git_repo https://github.com/kvspb/nginx-auth-ldap && \
     mkdir -p /usr/src/nginx && \
     curl -sSL http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/nginx && \
     cd /usr/src/nginx && \
@@ -73,12 +70,12 @@ RUN set -x && \
       --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
       --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
       --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
-      --user=nginx \
-      --group=www-data \
-      --add-module=/usr/src/headers-more-nginx-module \
-      --add-module=/usr/src/nginx-auth-ldap \
-      --add-module=/usr/src/nginx-brotli \
-      --add-module=/usr/src/nginx_cookie_flag_module \
+      --user=${NGINX_USER} \
+      --group=${NGINX_GROUP} \
+      --add-module=${GIT_REPO_SRC_NGINX_AUTH_LDAP} \
+      --add-module=${GIT_REPO_SRC_NGX_BROTLI} \
+      --add-module=${GIT_REPO_SRC_NGINX_COOKIE_FLAG_MODULE} \
+      --add-module=${GIT_REPO_SRC_HEADERS_MORE_NGINX_MODULE} \
       ## GCC 11.2 fix https://github.com/google/ngx_brotli/issues/124
       --with-cc-opt='-Wno-vla-parameter' \
       --with-compat \

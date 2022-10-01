@@ -12,8 +12,9 @@ ENV NGINX_VERSION=1.23.1 \
     IMAGE_NAME="tiredofit/nginx" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-nginx/"
 
-RUN set -x && \
-    adduser --disabled-password --system --home /var/cache/nginx --shell /sbin/nologin -u 80 --ingroup www-data nginx && \
+RUN source /assets/functions/00-container && \
+    set -x && \
+    adduser --disabled-password --system --home /var/cache/nginx --shell /sbin/nologin -u 80 --ingroup ${NGINX_GROUP} ${NGINX_USER} && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
@@ -41,78 +42,79 @@ RUN set -x && \
                     libldap2-dev \
                     && \
     \
-    git clone --recursive https://github.com/openresty/headers-more-nginx-module.git /usr/src/headers-more-nginx-module && \
-    git clone --recursive https://github.com/google/ngx_brotli.git /usr/src/nginx-brotli && \
-    git clone --recursive https://github.com/AirisX/nginx_cookie_flag_module /usr/src/nginx_cookie_flag_module && \
-    cd /usr/src/nginx-brotli && \
-    git checkout -b $NGINX_BROTLI_VERSION $NGINX_BROTLI_VERSION && \
-    cd /usr/src && \
-    git clone https://github.com/arut/nginx-dav-ext-module/ /usr/src/nginx-ext-dav && \
-    git clone https://github.com/kvspb/nginx-auth-ldap /usr/src/nginx-auth-ldap && \
+    mkdir -p /www /var/log/nginx && \
+    chown -R ${NGINX_USER}:${NGINX_GROUP} /var/log/nginx && \
+    clone_git_repo https://github.com/openresty/headers-more-nginx-module.git && \
+    clone_git_repo https://github.com/google/ngx_brotli.git $NGINX_BROTLI_VERSION && \
+    clone_git_repo https://github.com/AirisX/nginx_cookie_flag_module && \
+    clone_git_repo https://github.com/kvspb/nginx-auth-ldap && \
     mkdir -p /usr/src/nginx && \
-    curl -sSLk http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/nginx && \
+    curl -sSL http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/nginx && \
     cd /usr/src/nginx && \
-    ./configure\
-        --prefix=/etc/nginx \
-        --sbin-path=/usr/sbin/nginx \
-        --modules-path=/usr/lib/nginx/modules \
-        --conf-path=/etc/nginx/nginx.conf \
-        --error-log-path=/dev/null \
-        --http-log-path=/dev/null \
-        --pid-path=/var/run/nginx.pid \
-        --lock-path=/var/run/nginx.lock \
-        --http-client-body-temp-path=/var/cache/nginx/client_temp \
-        --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
-        --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
-        --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
-        --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
-        --user=nginx \
-        --group=www-data \
-        --add-module=/usr/src/headers-more-nginx-module \
-        --add-module=/usr/src/nginx-auth-ldap \
-        --add-module=/usr/src/nginx-brotli \
-        --add-module=/usr/src/nginx-ext-dav \
-        --add-module=/usr/src/nginx_cookie_flag_module \
-        --with-compat \
-        --with-file-aio \
-        --with-http_addition_module \
-        --with-http_auth_request_module \
-        --with-http_dav_module \
-        --with-http_flv_module \
-        --with-http_geoip_module=dynamic \
-        --with-http_gunzip_module \
-        --with-http_gzip_static_module \
-        --with-http_image_filter_module=dynamic \
-        --with-http_mp4_module \
-        --with-http_perl_module=dynamic \
-        --with-http_random_index_module \
-        --with-http_realip_module \
-        --with-http_secure_link_module \
-        --with-http_slice_module \
-        --with-http_ssl_module \
-        --with-http_stub_status_module \
-        --with-http_sub_module \
-        --with-http_v2_module \
-        --with-http_xslt_module=dynamic \
-        --with-mail \
-        --with-mail_ssl_module \
-        --with-stream \
-        --with-stream_geoip_module=dynamic \
-        --with-stream_realip_module \
-        --with-stream_ssl_module \
-        --with-stream_ssl_preread_module \
-        --with-threads \
+    ./configure --prefix=/etc/nginx \
+      --sbin-path=/usr/sbin/nginx \
+      --modules-path=/usr/lib/nginx/modules \
+      --conf-path=/etc/nginx/nginx.conf \
+      --error-log-path=/dev/null \
+      --http-log-path=/dev/null \
+      --pid-path=/var/run/nginx.pid \
+      --lock-path=/var/run/nginx.lock \
+      --http-client-body-temp-path=/var/cache/nginx/client_temp \
+      --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
+      --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
+      --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
+      --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
+      --user=${NGINX_USER} \
+      --group=${NGINX_GROUP} \
+      --add-module=${GIT_REPO_SRC_NGINX_AUTH_LDAP} \
+      --add-module=${GIT_REPO_SRC_NGX_BROTLI} \
+      --add-module=${GIT_REPO_SRC_NGINX_COOKIE_FLAG_MODULE} \
+      --add-module=${GIT_REPO_SRC_HEADERS_MORE_NGINX_MODULE} \
+      ## GCC 11.2 fix https://github.com/google/ngx_brotli/issues/124
+      --with-cc-opt='-Wno-vla-parameter' \
+      --with-compat \
+      --with-file-aio \
+      --with-http_addition_module \
+      --with-http_auth_request_module \
+      --with-http_dav_module \
+      --with-http_flv_module \
+      --with-http_geoip_module=dynamic \
+      --with-http_gunzip_module \
+      --with-http_gzip_static_module \
+      --with-http_image_filter_module=dynamic \
+      --with-http_mp4_module \
+      --with-http_perl_module=dynamic \
+      --with-http_random_index_module \
+      --with-http_realip_module \
+      --with-http_secure_link_module \
+      --with-http_slice_module \
+      --with-http_ssl_module \
+      --with-http_stub_status_module \
+      --with-http_sub_module \
+      --with-http_v2_module \
+      --with-http_xslt_module=dynamic \
+      --with-mail \
+      --with-mail_ssl_module \
+      --with-stream \
+      --with-stream_geoip_module=dynamic \
+      --with-stream_realip_module \
+      --with-stream_ssl_module \
+      --with-stream_ssl_preread_module \
+      --with-threads \
+#      --with-quiche=/usr/src/quiche \
+#     --with-http_v3_module \
     && \
     make -j$(getconf _NPROCESSORS_ONLN) && \
     make install && \
     rm -rf /etc/nginx/html/ && \
-    mkdir -p /etc/nginx/sites.available && \
     mkdir -p /etc/nginx/sites.enabled && \
+    mkdir -p /etc/nginx/sites.available && \
     mkdir -p /usr/share/nginx/html/ && \
     install -m644 html/index.html /usr/share/nginx/html/ && \
     install -m644 html/50x.html /usr/share/nginx/html/ && \
     ln -s ../../usr/lib/nginx/modules /etc/nginx/modules && \
-    mkdir -p /var/log/nginx && \
+    strip /usr/sbin/nginx* && \
+    strip /usr/lib/nginx/modules/*.so && \
     mkdir -p /etc/nginx/snippets/blockbots && \
     mkdir -p /etc/nginx/snippets/blockbots-custom && \
     curl -sSLk https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/bad-referrer-words.conf -o /etc/nginx/snippets/blockbots/bad-referrer-words.conf && \
