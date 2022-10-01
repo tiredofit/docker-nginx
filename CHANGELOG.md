@@ -1,3 +1,9 @@
+## 6.2.1 2022-10-01 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix not including backslash when configuring default site
+
+
 ## 6.2.0 2022-10-01 <dave at tiredofit dot ca>
 
    ### Added

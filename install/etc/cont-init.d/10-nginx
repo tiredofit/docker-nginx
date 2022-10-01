@@ -29,7 +29,7 @@ if [ ! -f "/tmp/.container/container-restart" ] ; then
         nginx_configure_site_default
         if var_true "${NGINX_ENABLE_CREATE_SAMPLE_HTML}" ; then nginx_create_sample_html ; fi
         update_template "/etc/nginx.sites.available/*.conf" \
-                                                            NGINX_LISTEN_PORT
+                                                            NGINX_LISTEN_PORT \
                                                             NGINX_WEBROOT
         if grep -q '<WEBOOT>' /etc/nginx/sites.available/*.conf ; then
             print_notice "Detected Legacy templates in /etc/nginx/sites.avaialble. Please change '<WEBROOT>' to {{NGINX_WEBROOT}}"
