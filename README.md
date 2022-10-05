@@ -109,9 +109,9 @@ Use this as a starting point for your site configurations:
 ````nginx
   server {
       ### Don't Touch This
-      listen <LISTEN_PORT>;
+      listen {{NGINX_LISTEN_PORT}};
       server_name localhost;
-      root <WEBROOT>;
+      root {{NGINX_WEBROOT}};
       ###
 
       ### Populate your custom directives here
