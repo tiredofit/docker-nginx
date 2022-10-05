@@ -1,3 +1,9 @@
+## 6.2.5 2022-10-05 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix path for update_template
+
+
 ## 6.2.4 2022-10-05 <dave at tiredofit dot ca>
 
    ### Changed
