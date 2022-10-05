@@ -6,7 +6,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 ### Set Nginx Version Number
 ENV NGINX_VERSION=1.23.1 \
     NGINX_AUTH_LDAP_VERSION=master \
-    NGINX_BROTLI_VERSION=9aec15e2aa6feea2113119ba06460af70ab3ea62 \
+    NGINX_BROTLI_VERSION=6e975bcb015f62e1f303054897783355e2a877dc \
     NGINX_USER=nginx \
     NGINX_GROUP=www-data \
     NGINX_WEBROOT=/www/html \
@@ -50,10 +50,10 @@ RUN source assets/functions/00-container && \
     \
     mkdir -p /www /var/log/nginx && \
     chown -R ${NGINX_USER}:${NGINX_GROUP} /var/log/nginx && \
-    clone_git_repo https://github.com/openresty/headers-more-nginx-module.git && \
-    clone_git_repo https://github.com/google/ngx_brotli.git $NGINX_BROTLI_VERSION && \
+    clone_git_repo https://github.com/openresty/headers-more-nginx-module && \
+    clone_git_repo https://github.com/kvspb/nginx-auth-ldap ${NGINX_LDAP_VERSION} && \
     clone_git_repo https://github.com/AirisX/nginx_cookie_flag_module && \
-    clone_git_repo https://github.com/kvspb/nginx-auth-ldap && \
+    clone_git_repo https://github.com/google/ngx_brotli ${NGINX_BROTLI_VERSION} && \
     mkdir -p /usr/src/nginx && \
     curl -sSL http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/nginx && \
     cd /usr/src/nginx && \

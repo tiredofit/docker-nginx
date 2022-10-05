@@ -1,3 +1,9 @@
+## 6.2.3 2022-10-04 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix an issue with Brotli module not pulling submodules
+
+
 ## 6.2.2 2022-10-01 <dave at tiredofit dot ca>
 
    ### Changed
