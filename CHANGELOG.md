@@ -1,3 +1,9 @@
+## 6.2.4 2022-10-05 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix legacy Webroot configuration check
+
+
 ## 6.2.3 2022-10-04 <dave at tiredofit dot ca>
 
    ### Changed

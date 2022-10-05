@@ -31,7 +31,7 @@ if [ ! -f "/tmp/.container/container-restart" ] ; then
         update_template "/etc/nginx.sites.available/*.conf" \
                                                             NGINX_LISTEN_PORT \
                                                             NGINX_WEBROOT
-        if silent grep -q '<WEBOOT>' /etc/nginx/sites.available/*.conf ; then
+        if silent grep -q '<WEBROOT>' /etc/nginx/sites.available/*.conf ; then
             print_notice "Detected Legacy templates in /etc/nginx/sites.avaialble. Please change '<WEBROOT>' to {{NGINX_WEBROOT}}"
             silent sed -i "s|<WEBROOT>|${NGINX_WEBROOT}|g" /etc/nginx/sites.available/*.conf
         fi
