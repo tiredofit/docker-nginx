@@ -4,7 +4,7 @@ FROM docker.io/tiredofit/alpine:${ALPINE_VERSION}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.23.1 \
+ENV NGINX_VERSION=1.23.2 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=6e975bcb015f62e1f303054897783355e2a877dc \
     NGINX_USER=nginx \
