@@ -5,7 +5,6 @@ services:
     image: tiredofit/nginx:latest
     container_name: nginx-app
     labels:
-    labels:
       - traefik.enable=true
       - traefik.http.routers.nginx-app.rule=Host(`nginx.example.com`)
       - traefik.http.services.nginx-app.loadbalancer.server.port=80
