@@ -152,4 +152,4 @@ RUN source /assets/functions/00-container && \
            /var/lib/apt/lists/*
 
 EXPOSE 80
-ADD install /
+COPY install /

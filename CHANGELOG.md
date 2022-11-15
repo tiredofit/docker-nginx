@@ -1,3 +1,9 @@
+## 6.2.7 2022-11-15 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix spelling mistake with update_template for NGINX_MODE=REDIRECT
+
+
 ## 6.2.6 2022-10-19 <dave at tiredofit dot ca>
 
    ### Added
