@@ -1,3 +1,9 @@
+## 6.2.8 2022-11-21 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for LDAP authentication not configuring (credit radarsymphony@github)
+
+
 ## 6.2.7 2022-11-15 <dave at tiredofit dot ca>
 
    ### Changed
