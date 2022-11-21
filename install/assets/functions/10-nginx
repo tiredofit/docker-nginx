@@ -33,7 +33,7 @@ nginx_configure_authentication() {
           satisfy all;
         }
 EOF
-            sed -i "\|include /etc/nginx/sites.enabled#i\ \ \ \ include /etc/nginx/snippets/authentication/ldap_configuration;" /etc/nginx/nginx.conf
+            sed -i "\|include /etc/nginx/sites.enabled| i\ \ \ \ include /etc/nginx/snippets/authentication/ldap_configuration;" /etc/nginx/nginx.conf
         ;;
         "llng" )
             print_notice "Setting LLNG Authentication"
