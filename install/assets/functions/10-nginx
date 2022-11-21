@@ -345,7 +345,7 @@ nginx_configure_mode() {
             sanity_var NGINX_REDIRECT_URL "No Redirect URL"
             NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
             print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
-            updat_template /etc/nginx/templates/redirect.template NGINX_REDIRECT_URL
+            update_template /etc/nginx/templates/redirect.template NGINX_REDIRECT_URL
             sed -i "/include \/etc\/nginx\/sites.enabled\/\*.conf;/d" /etc/nginx/nginx.conf
             sed -i "s|include /etc/nginx/templates/maintenance.template;|#include /etc/nginx/templates/maintenance.template;|g" /etc/nginx/nginx.conf
             sed -i "/include \/etc\/nginx\/templates\/proxy.template;/d" /etc/nginx/nginx.conf

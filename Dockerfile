@@ -166,4 +166,4 @@ RUN source assets/functions/00-container && \
 EXPOSE 80
 
 ### Files Addition
-ADD install /
+COPY install /
