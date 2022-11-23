@@ -1,4 +1,4 @@
-ARG ALPINE_VERSION=3.16
+ARG ALPINE_VERSION=3.17
 
 FROM docker.io/tiredofit/alpine:${ALPINE_VERSION}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
@@ -13,7 +13,12 @@ ENV NGINX_VERSION=1.23.2 \
     IMAGE_NAME="tiredofit/nginx" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-nginx/"
 
-RUN source assets/functions/00-container && \
+RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 1,2 | cut -d _ -f 1)" in \
+        3.5 | 3.6 | 3.7 | 3.8 | 3.9 | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 | 3.15 | 3.16 ) alpine_ssl=libressl ;; \
+        3.17* | 3.18* ) alpine_ssl=openssl ;; \
+        *) : ;; \
+    esac ; \
+    source assets/functions/00-container && \
     set -x && \
     sed -i "/www-data/d" /etc/group* && \
     addgroup -S -g 82 ${NGINX_GROUP} && \
@@ -25,7 +30,7 @@ RUN source assets/functions/00-container && \
                 gd-dev \
                 geoip-dev \
                 libc-dev \
-                libressl-dev \
+                ${alpine_ssl}-dev \
                 libxslt-dev \
                 linux-headers \
                 make \

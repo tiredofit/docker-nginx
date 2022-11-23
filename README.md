@@ -81,7 +81,9 @@ The following image tags are available along with their tagged release based on 
 | ----------- | -------------- | ----------- | ------------------ |
 | latest      | `:latest`      | latest      | `:debian-latest`   |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye` |
-| 3.15        | `:alpine-3.16` | Buster      | `:debian-buster`   |
+| 3.17        | `:alpine-3.17` | Buster      | `:debian-buster`   |
+| 3.12        | `:alpine-3.16` |             |                    |
+| 3.15        | `:alpine-3.15` |             |                    |
 | 3.12        | `:alpine-3.12` |             |                    |
 | 3.9         | `:alpine-3.9`  |             |                    |
 | 3.7         | `:alpine-3.7`  |             |                    |
