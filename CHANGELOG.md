@@ -1,3 +1,9 @@
+## 6.2.11 2022-11-29 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Bugfix
+
+
 ## 6.2.10 2022-11-29 <dave at tiredofit dot ca>
 
    ### Changed
