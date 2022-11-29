@@ -1,3 +1,9 @@
+## 6.2.10 2022-11-29 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Rework HTTPs switch in fastcgi_params
+
+
 ## 6.2.9 2022-11-23 <dave at tiredofit dot ca>
 
    ### Added
