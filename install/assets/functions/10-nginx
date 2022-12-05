@@ -13,12 +13,12 @@ nginx_configure_authentication() {
     case "${NGINX_AUTHENTICATION_TYPE,,}" in
         "basic")
             print_notice "Setting Basic Authentication"
-            user_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_BASIC_USER.*')
+            user_num=$(printenv | sort | grep -c 'NGINX_AUTHENTICATION_BASIC_USER.*')
             for ((i = 1; i <= user_num; i++)); do
                 basic_user=NGINX_AUTHENTICATION_BASIC_USER${i}
                 basic_pass=NGINX_AUTHENTICATION_BASIC_PASS${i}
                 print_warn "Creating User: ${!basic_user}"
-                htpasswd -b -n ${!basic_user:-$NGINX_AUTHENTICATION_BASIC_USER} ${!basic_pass:-$NGINX_AUTHENTICATION_BASIC_PASS} >>/etc/nginx/snippets/authentication/basic_authorized_users
+                htpasswd -b -n ${!basic_user:-$NGINX_AUTHENTICATION_BASIC_USER} ${!basic_pass:-$NGINX_AUTHENTICATION_BASIC_PASS} >> /etc/nginx/snippets/authentication/basic_authorized_users
             done
         ;;
         "ldap" )

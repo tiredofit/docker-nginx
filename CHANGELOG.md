@@ -1,3 +1,10 @@
+## 6.2.12 2022-12-05 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Big warning when using Basic Authentication
+      - Indent some nginx configuration
+
+
 ## 6.2.11 2022-11-29 <dave at tiredofit dot ca>
 
    ### Changed
