@@ -296,7 +296,7 @@ EOF
     listen       ${NGINX_LISTEN_PORT};
     server_name  localhost;
 
-	rewrite ^/(.*) {{NGINX_MAINTENANCE_REDIRECT_URL}};
+	rewrite ^/(.*) ${NGINX_MAINTENANCE_REDIRECT_URL};
 
 }
 EOF
