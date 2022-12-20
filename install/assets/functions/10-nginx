@@ -272,12 +272,12 @@ server {
     ###
 
     location / {
-        proxy_pass         ${NGINX_MAINTENANCE_PROXY_URL};
-        proxy_redirect     off;
-        proxy_set_header   Host $host;
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header   X-Forwarded-Host $server_name;
+        proxy_pass              ${NGINX_MAINTENANCE_PROXY_URL};
+        proxy_redirect          off;
+        proxy_set_header        X-Real-IP \$remote_addr;
+        proxy_set_header        X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Host \$server_name;
+        proxy_ssl_server_name   on;
     }
 
 ### Don't edit past here
@@ -300,7 +300,6 @@ EOF
 
 }
 EOF
-                file
                 else
                     sanity_var NGINX_MAINTENANCE_REDIRECT_URL "Set NGINX_MAINTENANCE_TYPE=redirect"
                 fi

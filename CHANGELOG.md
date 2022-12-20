@@ -1,3 +1,9 @@
+## 6.2.14 2022-12-20 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix NGINX_PROXY_URL and NGINX_MAINTENANCE_PROXY_URL if host is https
+
+
 ## 6.2.13 2022-12-20 <dave at tiredofit dot ca>
 
    ### Added

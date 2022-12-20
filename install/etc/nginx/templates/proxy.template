@@ -1,18 +1,16 @@
-   server {
-      ### Don't Touch This
-      listen {{NGINX_LISTEN_PORT}};
-      server_name localhost;
-      ###
+    server {
+        ### Don't Touch This
+        listen {{NGINX_LISTEN_PORT}};
+        server_name localhost;
+        ###
 
-      location / {
-         proxy_pass         {{NGINX_PROXY_URL}};
-         proxy_redirect     off;
-         proxy_set_header   Host $host;
-         proxy_set_header   X-Real-IP $remote_addr;
-         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-         proxy_set_header   X-Forwarded-Host $server_name;
-      }
-
-      ### Don't edit past here
-
-}
+        location / {
+            proxy_pass              {{NGINX_PROXY_URL}};
+            proxy_redirect          off;
+            proxy_set_header        X-Real-IP $remote_addr;
+            proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header        X-Forwarded-Host $server_name;
+            proxy_ssl_server_name   on;
+        }
+        ### Don't edit past here
+    }
