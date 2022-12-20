@@ -263,7 +263,7 @@ nginx_configure_maintenance() {
                 fi
             ;;
             proxy )
-                if [ -n "${MAINTENANCE_REDIRECT_PROXY_URL}" ] ; then
+                if [ -n "${NGINX_MAINTENANCE_PROXY_URL}" ] ; then
                     cat <<EOF > /etc/nginx/templates/maintenance.template
 server {
     ### Don't Touch This
