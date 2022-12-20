@@ -1,3 +1,13 @@
+## 6.2.13 2022-12-20 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.23.3
+
+   ### Changed
+      - Fix issue with NGINX_MAINTENANCE_PROXY_URL
+      - Fix issue with NGINX_MAINTENANCE_REDIRECT_URL
+
+
 ## 6.2.12 2022-12-05 <dave at tiredofit dot ca>
 
    ### Changed
