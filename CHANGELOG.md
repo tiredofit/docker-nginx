@@ -1,3 +1,9 @@
+## 6.2.15 2022-12-24 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Tweak site_optimization configuration file to serve "text/plain" and allow .well-known responses
+
+
 ## 6.2.14 2022-12-20 <dave at tiredofit dot ca>
 
    ### Changed
