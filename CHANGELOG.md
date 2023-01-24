@@ -1,3 +1,10 @@
+## 6.2.16 2023-01-24 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Update "proxy" redirect template to support WS/WSS
+      - Fix for 'NGINX_ENABLE_FASTCGI_HTTPS' not working (credit joergmschulz@github)
+
+
 ## 6.2.15 2022-12-24 <dave at tiredofit dot ca>
 
    ### Changed
