@@ -419,7 +419,7 @@ nginx_configure_server() {
     ### FastCGI reverse proxy
     if var_true "${NGINX_ENABLE_FASTCGI_HTTPS}"; then
         print_notice "Enable Nginx FastCGI HTTPS Termination Support"
-        sed -i "s|fastcgi_param  HTTPS '.*';|fastcgi_param  HTTPS 'on';|g" /etc/nginx/fastcgi_params
+        ssed -i "s/fastcgi_param  HTTPS .*;/fastcgi_param  HTTPS 'on';/g" /etc/nginx/fastcgi_params
         PROTOCOL="https://"
     else
         print_debug "Disable Nginx FastCGI HTTPS Termination Support"
