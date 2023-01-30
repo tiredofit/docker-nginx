@@ -1756,7 +1756,7 @@ jobs:
                       if [ "${{ env.LATEST }}" = "TRUE" ] || [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST }}" ]; then
                           image_latest=",${GITHUB_REPOSITORY}:latest"
                       fi
-                      if [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST_ALPINE }}" ]; then
+                      if [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST_DEBIAN }}" ]; then
                           image_latest+=",${GITHUB_REPOSITORY}:${DISTRO}"
                       fi
                       branch_tag="${GITHUB_REPOSITORY}:${DISTRO}-${DISTRO_VARIANT}${image_latest}"
@@ -1878,7 +1878,7 @@ jobs:
                       if [ "${{ env.LATEST }}" = "TRUE" ] || [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST }}" ]; then
                           image_latest=",${GITHUB_REPOSITORY}:latest"
                       fi
-                      if [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST_ALPINE }}" ]; then
+                      if [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST_DEBIAN }}" ]; then
                           image_latest+=",${GITHUB_REPOSITORY}:${DISTRO}"
                       fi
                       branch_tag="${GITHUB_REPOSITORY}:${DISTRO}-${DISTRO_VARIANT}${image_latest}"
@@ -2000,7 +2000,7 @@ jobs:
                       if [ "${{ env.LATEST }}" = "TRUE" ] || [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST }}" ]; then
                           image_latest=",${GITHUB_REPOSITORY}:latest"
                       fi
-                      if [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST_ALPINE }}" ]; then
+                      if [ "${DISTRO_VARIANT}" = "${{ secrets.LATEST_DEBIAN }}" ]; then
                           image_latest+=",${GITHUB_REPOSITORY}:${DISTRO}"
                       fi
                       branch_tag="${GITHUB_REPOSITORY}:${DISTRO}-${DISTRO_VARIANT}${image_latest}"
