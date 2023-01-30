@@ -90,7 +90,7 @@ The following image tags are available along with their tagged release based on 
 | Alpine Base | Tag            | Debian Base | Tag                |
 | ----------- | -------------- | ----------- | ------------------ |
 | latest      | `:latest`      | latest      | `:debian`          |
-| latest      | `:alpine`      | Bookworm    | `:debian-bookworm  |
+| latest      | `:alpine`      | Bookworm    | `:debian-bookworm ` |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye` |
 | 3.17        | `:alpine-3.17` | Buster      | `:debian-buster`   |
 | 3.12        | `:alpine-3.16` |             |                    |
