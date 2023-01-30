@@ -1,6 +1,7 @@
-ARG ALPINE_VERSION=3.17
+ARG DISTRO=alpine
+ARG DISTRO_VARIANT=3.17
 
-FROM docker.io/tiredofit/alpine:${ALPINE_VERSION}
+FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Nginx Version Number

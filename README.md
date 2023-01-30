@@ -73,13 +73,24 @@ This will build a Docker image for [Nginx](https://www.nginx.org), for serving w
 Clone this repository and build the image with `docker build <arguments> (imagename) .`
 
 ### Prebuilt Images
-Builds of the image are available on [Docker Hub](https://hub.docker.com/r/tiredofit/nginx) and is the recommended method of installation.
+Builds of the image are available on [Docker Hub](https://hub.docker.com/r/tiredofit/nginx)
+
+```
+docker pull docker.io/tiredofit/nginx):(imagetag)
+```
+
+Builds of the image are also available on the [Github Container Registry](https://github.com/tiredofit/docker-nginx/pkgs/container/docker-nginx)
+
+```
+docker pull ghcr.io/tiredofit/docker-nginx:(imagetag)
+```
 
 The following image tags are available along with their tagged release based on what's written in the [Changelog](CHANGELOG.md):
 
 | Alpine Base | Tag            | Debian Base | Tag                |
 | ----------- | -------------- | ----------- | ------------------ |
-| latest      | `:latest`      | latest      | `:debian-latest`   |
+| latest      | `:latest`      | latest      | `:debian`          |
+| latest      | `:alpine`      |             |                    |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye` |
 | 3.17        | `:alpine-3.17` | Buster      | `:debian-buster`   |
 | 3.12        | `:alpine-3.16` |             |                    |
@@ -90,7 +101,7 @@ The following image tags are available along with their tagged release based on 
 | 3.5         | `:alpine-3.5`  |             |                    |
 
 ```bash
-docker pull tiredofit/nginx:(imagetag)
+docker pull docker.io/tiredofdit/nginx:(imagetag)
 ```
 #### Multi Architecture
 Images are built primarily for `amd64` architecture, and may also include builds for `arm/v7`, `arm64` and others. These variants are all unsupported. Consider [sponsoring](https://github.com/sponsors/tiredofit) my work so that I can work with various hardware. To see if this image supports multiple architecures, type `docker manifest (image):(tag)`
@@ -336,7 +347,7 @@ docker exec -it (whatever your container name is) bash
 These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
 ### Usage
 - The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) personalized support.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for personalized support
 ### Bugfixes
 - Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
 
