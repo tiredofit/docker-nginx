@@ -87,18 +87,18 @@ docker pull ghcr.io/tiredofit/docker-nginx:(imagetag)
 
 The following image tags are available along with their tagged release based on what's written in the [Changelog](CHANGELOG.md):
 
-| Alpine Base | Tag            | Debian Base | Tag                |
-| ----------- | -------------- | ----------- | ------------------ |
-| latest      | `:latest`      | latest      | `:debian`          |
+| Alpine Base | Tag            | Debian Base | Tag                 |
+| ----------- | -------------- | ----------- | ------------------- |
+| latest      | `:latest`      | latest      | `:debian`           |
 | latest      | `:alpine`      | Bookworm    | `:debian-bookworm ` |
-| edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye` |
-| 3.17        | `:alpine-3.17` | Buster      | `:debian-buster`   |
-| 3.12        | `:alpine-3.16` |             |                    |
-| 3.15        | `:alpine-3.15` |             |                    |
-| 3.12        | `:alpine-3.12` |             |                    |
-| 3.9         | `:alpine-3.9`  |             |                    |
-| 3.7         | `:alpine-3.7`  |             |                    |
-| 3.5         | `:alpine-3.5`  |             |                    |
+| edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye`  |
+| 3.17        | `:alpine-3.17` | Buster      | `:debian-buster`    |
+| 3.12        | `:alpine-3.16` |             |                     |
+| 3.15        | `:alpine-3.15` |             |                     |
+| 3.12        | `:alpine-3.12` |             |                     |
+| 3.9         | `:alpine-3.9`  |             |                     |
+| 3.7         | `:alpine-3.7`  |             |                     |
+| 3.5         | `:alpine-3.5`  |             |                     |
 
 ```bash
 docker pull docker.io/tiredofdit/nginx:(imagetag)
