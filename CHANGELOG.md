@@ -1,3 +1,9 @@
+## 6.2.17 2023-02-17 <radarsymphony@github>
+
+   ### Changed
+      - Fix for LLNG_AUTHENTICATION_TYPE not sending correct header variables
+
+
 ## 6.2.16 2023-01-24 <dave at tiredofit dot ca>
 
    ### Changed
