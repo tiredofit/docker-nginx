@@ -125,15 +125,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-17:
@@ -248,15 +248,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-16:
@@ -371,15 +371,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 ###
   alpine_3-15:
     env:
@@ -493,15 +493,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 ###
   alpine_3-14:
     env:
@@ -615,15 +615,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-13:
@@ -738,15 +738,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-12:
@@ -861,15 +861,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-11:
@@ -984,15 +984,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-10:
@@ -1107,15 +1107,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-9:
@@ -1230,15 +1230,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-8:
@@ -1353,15 +1353,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-7:
@@ -1476,15 +1476,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
 ###
   alpine_3-6:
@@ -1599,15 +1599,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 ###
   alpine_3-5:
     env:
@@ -1721,15 +1721,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
   debian_bookworm:
     env:
@@ -1843,15 +1843,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 ###
   debian_bullseye:
     env:
@@ -1965,15 +1965,15 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
   debian_buster:
     env:
@@ -2087,13 +2087,13 @@ jobs:
              DISTRO=${{ env.DISTRO }}
              DISTRO_VARIANT=${{ env.DISTRO_VARIANT }}
 
-      - name: Update Docker Hub Information
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.dockerhub_repo }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
+#      - name: Update Docker Hub Information
+#        if: github.event_name != 'pull_request'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#          repository: ${{ env.dockerhub_repo }}
+#          short-description: ${{ github.event.repository.description }}
+#          readme-filepath: ./README.md
 
