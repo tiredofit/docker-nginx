@@ -4,7 +4,8 @@ ARG DISTRO_VARIANT=bullseye
 FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
-ENV NGINX_VERSION=1.23.3 \
+ARG NGINX_VERSION
+ENV NGINX_VERSION=${NGINX_VERSION:-"1.23.3"} \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=6e975bcb015f62e1f303054897783355e2a877dc \
     NGINX_USER=nginx \
@@ -16,9 +17,9 @@ ENV NGINX_VERSION=1.23.3 \
 RUN source /assets/functions/00-container && \
     set -x && \
     adduser --disabled-password --system --home /var/cache/nginx --shell /sbin/nologin -u 80 --ingroup ${NGINX_GROUP} ${NGINX_USER} && \
-    apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
+    package update && \
+    package upgrade && \
+    package install \
                     build-essential \
                     git \
                     software-properties-common \
@@ -134,23 +135,25 @@ RUN source /assets/functions/00-container && \
     sed -i "s|/etc/nginx/snippets/blockbots/blacklist-user-agents.conf|/etc/nginx/snippets/blockbots-custom/blacklist-user-agents.conf|g" /etc/nginx/snippets/blockbots/globalblacklist.conf && \
     sed -i "s|/etc/nginx/snippets/blockbots/whitelist-domains.conf|/etc/nginx/snippets/blockbots-custom/whitelist-domains.conf|g" /etc/nginx/snippets/blockbots/globalblacklist.conf && \
     sed -i "s|/etc/nginx/snippets/blockbots/whitelist-ips.conf|/etc/nginx/snippets/blockbots-custom/whitelist-ips.conf|g" /etc/nginx/snippets/blockbots/globalblacklist.conf && \
-    apt-get purge -y  build-essential \
-                      git \
-                      libgd-dev \
-                      libgeoip-dev \
-                      libldap2-dev \
-                      libperl-dev \
-                      libpcre3-dev \
-                      libssl-dev \
-                      libxml2-dev \
-                      libxslt1-dev \
-                      zlib1g-dev \
-                      && \
-    apt-get autoremove -y && \
-    rm -rf /etc/nginx/*.default \
-           /usr/src/* \
-           /var/tmp/* \
-           /var/lib/apt/lists/*
+    package remove \
+                    build-essential \
+                    git \
+                    libgd-dev \
+                    libgeoip-dev \
+                    libldap2-dev \
+                    libperl-dev \
+                    libpcre3-dev \
+                    libssl-dev \
+                    libxml2-dev \
+                    libxslt1-dev \
+                    zlib1g-dev \
+                    && \
+    package cleanup && \
+    rm -rf \
+            /etc/nginx/*.default \
+            /usr/src/* \
+            /var/log/* \
+            /var/tmp/*
 
 EXPOSE 80
 COPY install /

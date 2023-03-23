@@ -4,8 +4,9 @@ ARG DISTRO_VARIANT=3.17
 FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
-### Set Nginx Version Number
-ENV NGINX_VERSION=1.23.3 \
+ARG NGINX_VERSION
+
+ENV NGINX_VERSION=${NGINX_VERSION:-"1.23.3"} \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=6e975bcb015f62e1f303054897783355e2a877dc \
     NGINX_USER=nginx \
@@ -19,40 +20,40 @@ RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 
         3.17* | 3.18* ) alpine_ssl=openssl ;; \
         *) : ;; \
     esac ; \
-    source assets/functions/00-container && \
+    source /assets/functions/00-container && \
     set -x && \
     sed -i "/www-data/d" /etc/group* && \
     addgroup -S -g 82 ${NGINX_GROUP} && \
     adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G ${NGINX_GROUP} -g "${NGINX_USER}" -u 80 ${NGINX_USER} && \
-    apk update && \
-    apk upgrade && \
-    apk add -t .nginx-build-deps \
-                gcc \
-                gd-dev \
-                geoip-dev \
-                libc-dev \
-                ${alpine_ssl}-dev \
-                libxslt-dev \
-                linux-headers \
-                make \
-                pcre-dev \
-                perl-dev \
-                tar \
-                zlib-dev \
-                && \
+    package update && \
+    package upgrade && \
+    package install .nginx-build-deps \
+                    gcc \
+                    gd-dev \
+                    geoip-dev \
+                    libc-dev \
+                    ${alpine_ssl}-dev \
+                    libxslt-dev \
+                    linux-headers \
+                    make \
+                    pcre-dev \
+                    perl-dev \
+                    tar \
+                    zlib-dev \
+                    && \
+        \
+    package install .brotli-build-deps \
+                    autoconf \
+                    automake \
+                    cmake \
+                    g++ \
+                    git \
+                    libtool \
+                    && \
     \
-    apk add -t .brotli-build-deps \
-                autoconf \
-                automake \
-                cmake \
-                g++ \
-                git \
-                libtool \
-                && \
-    \
-    apk add -t .auth-ldap-build-deps \
-                openldap-dev \
-                && \
+    package install .auth-ldap-build-deps \
+                    openldap-dev \
+                    && \
     \
     mkdir -p /www /var/log/nginx && \
     chown -R ${NGINX_USER}:${NGINX_GROUP} /var/log/nginx && \
@@ -132,15 +133,15 @@ RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 
       scanelf --needed --nobanner /usr/sbin/nginx /usr/lib/nginx/modules/*.so /tmp/envsubst \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
         | sort -u \
-        | xargs -r apk info --installed \
+        | xargs -r package info --installed \
         | sort -u \
     )" && \
     \
-    apk add -t .nginx-run-deps \
-        $runDeps \
-        apache2-utils \
-        inotify-tools \
-        && \
+    package install .nginx-run-deps \
+                    $runDeps \
+                    apache2-utils \
+                    inotify-tools \
+                    && \
     \
     mkdir -p /etc/nginx/snippets/blockbots && \
     mkdir -p /etc/nginx/snippets/blockbots-custom && \
@@ -160,16 +161,20 @@ RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 
     sed -i "s|/etc/nginx/snippets/blockbots/blacklist-user-agents.conf|/etc/nginx/snippets/blockbots-custom/blacklist-user-agents.conf|g" /etc/nginx/snippets/blockbots/globalblacklist.conf && \
     sed -i "s|/etc/nginx/snippets/blockbots/whitelist-domains.conf|/etc/nginx/snippets/blockbots-custom/whitelist-domains.conf|g" /etc/nginx/snippets/blockbots/globalblacklist.conf && \
     sed -i "s|/etc/nginx/snippets/blockbots/whitelist-ips.conf|/etc/nginx/snippets/blockbots-custom/whitelist-ips.conf|g" /etc/nginx/snippets/blockbots/globalblacklist.conf && \
-    # Cleanup
-    apk del .nginx-build-deps \
+    \
+    package remove \
+            .nginx-build-deps \
             .brotli-build-deps \
             .auth-ldap-build-deps \
             && \
     \
-    rm -rf /etc/nginx/*.default /usr/src/* /var/tmp/* /var/cache/apk/*
+    package cleanup && \
+    \
+    rm -rf \
+            /etc/nginx/*.default \
+            /usr/src/* \
+            /var/tmp/*
 
-### Networking Configuration
 EXPOSE 80
 
-### Files Addition
 COPY install /

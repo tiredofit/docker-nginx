@@ -462,7 +462,7 @@ nginx_configure_server() {
         sed -i "\|include /etc/nginx/snippets/site_optimization.conf;|d" /etc/nginx/nginx.conf
     fi
 
-    if var_false "${NGINX_ENABLE_SERVER_TOKENS}"; then
+    if var_true "${NGINX_ENABLE_SERVER_TOKENS}"; then
         sed -i "\|server_tokens off;|d" /etc/nginx/nginx.conf
         sed -i "\|more_clear_headers Server;|d" /etc/nginx/nginx.conf
     fi

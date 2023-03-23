@@ -1,3 +1,10 @@
+## 6.2.18 2023-03-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for NGINX_ENABLE_SERVER_TOKENS
+      - Fix for NGINX_FORCE_RESET_PERMISSIONS
+
+
 ## 6.2.17 2023-02-17 <radarsymphony@github>
 
    ### Changed
