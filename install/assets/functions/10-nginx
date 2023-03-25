@@ -612,8 +612,8 @@ nginx_site_enable() {
             if [ "$(ls -A /etc/nginx/sites.available/)" ]; then
                 shopt -s nullglob
                 for site in /etc/nginx/sites.available/*.conf; do
-                    print_debug "Enabling Nginx Site '$(basename ${site})'"
-                    ln -sf /etc/nginx/sites.available/"$(basename ${site})" /etc/nginx/sites.enabled/
+                    print_debug "Enabling Nginx Site '$(basename "${site}")'"
+                    ln -sf /etc/nginx/sites.available/"$(basename "${site}")" /etc/nginx/sites.enabled/
                 done
                 shopt -u nullglob
             fi
@@ -636,8 +636,8 @@ nginx_site_disable() {
         if [ "${1,,}" = "all" ] ; then
             shopt -s nullglob
             for site in /etc/nginx/sites.enabled/*.conf; do
-                print_debug "Disabling Nginx Site '$(basename ${site})"
-                rm -rf /etc/nginx/sites.enabled/"$(basename ${site})"
+                print_debug "Disabling Nginx Site '$(basename "${site}")"
+                rm -rf /etc/nginx/sites.enabled/"$(basename "${site}")"
             done
             shopt -u nullglob
         else

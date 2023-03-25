@@ -1,3 +1,9 @@
+## 6.2.19 2023-03-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add libldap to alpine Dockerfile
+
+
 ## 6.2.18 2023-03-23 <dave at tiredofit dot ca>
 
    ### Changed

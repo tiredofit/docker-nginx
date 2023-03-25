@@ -1,7 +1,8 @@
-ARG DISTRO=alpine
-ARG DISTRO_VARIANT=3.17
+#ARG DISTRO=alpine
+#ARG DISTRO_VARIANT=3.17
 
-FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
+#FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
+FROM tiredofit/alpine:develop
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG NGINX_VERSION
@@ -41,7 +42,7 @@ RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 
                     tar \
                     zlib-dev \
                     && \
-        \
+    \
     package install .brotli-build-deps \
                     autoconf \
                     automake \
@@ -141,6 +142,7 @@ RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 
                     $runDeps \
                     apache2-utils \
                     inotify-tools \
+                    libldap \
                     && \
     \
     mkdir -p /etc/nginx/snippets/blockbots && \
