@@ -1,8 +1,7 @@
-#ARG DISTRO=alpine
-#ARG DISTRO_VARIANT=3.17
+ARG DISTRO=alpine
+ARG DISTRO_VARIANT=3.17
 
-#FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
-FROM tiredofit/alpine:develop
+FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG NGINX_VERSION

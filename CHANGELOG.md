@@ -1,3 +1,9 @@
+## 6.2.20 2023-03-26 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Stop building from tiredofit/alpine:develop
+
+
 ## 6.2.19 2023-03-25 <dave at tiredofit dot ca>
 
    ### Added
