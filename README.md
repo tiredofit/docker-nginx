@@ -167,26 +167,26 @@ Be sure to view the following repositories to understand all the customizable op
 
 You can choose to request visitors be authenticated before accessing your site. Options are below.
 
-| Parameter                                   | Description                                                                                 | Default             |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------- |
-| `NGINX_AUTHENTICATION_TYPE`                 | Protect the site with `BASIC`, `LDAP`, `LLNG`                                               | `NONE`              |
-| `NGINX_AUTHENTICATION_TITLE`                | Challenge response when visiting protected site                                             | `Please login`      |
-| `NGINX_AUTHENTICATION_BASIC_USER1`          | If `BASIC` chosen enter this for the username to protect site                               | `admin`             |
-| `NGINX_AUTHENTICATION_BASIC_PASS1`          | If `BASIC` chosen enter this for the password to protect site                               | `password`          |
-| `NGINX_AUTHENTICATION_BASIC_USER2`          | As above, increment for more users                                                          |                     |
-| `NGINX_AUTHENTICATION_BASIC_PASS2`          | As above, increment for more users                                                          |                     |
-| `NGINX_AUTHENTICATION_LDAP_HOST`            | Hostname and port number of LDAP Server - eg  `ldap://ldapserver:389`                       |                     |
-| `NGINX_AUTHENTICATION_LDAP_BIND_DN`         | User to Bind to LDAP - eg   `cn=admin,dc=orgname,dc=org`                                    |                     |
-| `NGINX_AUTHENTICATION_LDAP_BIND_PW`         | Password for Above Bind User - eg   `password`                                              |                     |
-| `NGINX_AUTHENTICATION_LDAP_BASE_DN`         | Base Distringuished Name - eg `dc=hostname,dc=com`                                          |                     |
-| `NGINX_AUTHENTICATION_LDAP_ATTRIBUTE`       | Unique Identifier Attrbiute -ie  `uid`                                                      |                     |
-| `NGINX_AUTHENTICATION_LDAP_SCOPE`           | LDAP Scope for searching - eg  `sub`                                                        |                     |
-| `NGINX_AUTHENTICATION_LDAP_FILTER`          | Define what object that is searched for (ie  `objectClass=person`)                          |                     |
-| `NGINX_AUTHENTICATION_LDAP_GROUP_ATTRIBUTE` | If searching inside of a group what is the Group Attribute - eg  `uniquemember`             |                     |
-| `NGINX_AUTHENTICATION_LLNG_HANDLER_HOST`    | If `LLNG` chosen use hostname and port of handler. Add multiple by seperating with comments | `llng-handler:2884` |
-| `NGINX_AUTHENTICATION_LLNG_HANDLER_PORT`    | If `LLNG` chosen use this port for handler                                                  | `2884`              |
-| `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1`      | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below                           |                     |
-| `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2`      | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below                           |                     |
+| Parameter                                   | Description                                                                                 | Default             | `_NAME` |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------- | ------- |
+| `NGINX_AUTHENTICATION_TYPE`                 | Protect the site with `BASIC`, `LDAP`, `LLNG`                                               | `NONE`              |         |
+| `NGINX_AUTHENTICATION_TITLE`                | Challenge response when visiting protected site                                             | `Please login`      |         |
+| `NGINX_AUTHENTICATION_BASIC_USER1`          | If `BASIC` chosen enter this for the username to protect site                               | `admin`             | x       |
+| `NGINX_AUTHENTICATION_BASIC_PASS1`          | If `BASIC` chosen enter this for the password to protect site                               | `password`          | x       |
+| `NGINX_AUTHENTICATION_BASIC_USER2`          | As above, increment for more users                                                          |                     | x       |
+| `NGINX_AUTHENTICATION_BASIC_PASS2`          | As above, increment for more users                                                          |                     | x       |
+| `NGINX_AUTHENTICATION_LDAP_HOST`            | Hostname and port number of LDAP Server - eg  `ldap://ldapserver:389`                       |                     | x       |
+| `NGINX_AUTHENTICATION_LDAP_BIND_DN`         | User to Bind to LDAP - eg   `cn=admin,dc=orgname,dc=org`                                    |                     | x       |
+| `NGINX_AUTHENTICATION_LDAP_BIND_PW`         | Password for Above Bind User - eg   `password`                                              |                     | x       |
+| `NGINX_AUTHENTICATION_LDAP_BASE_DN`         | Base Distringuished Name - eg `dc=hostname,dc=com`                                          |                     | x       |
+| `NGINX_AUTHENTICATION_LDAP_ATTRIBUTE`       | Unique Identifier Attrbiute -ie  `uid`                                                      |                     |         |
+| `NGINX_AUTHENTICATION_LDAP_SCOPE`           | LDAP Scope for searching - eg  `sub`                                                        |                     |         |
+| `NGINX_AUTHENTICATION_LDAP_FILTER`          | Define what object that is searched for (ie  `objectClass=person`)                          |                     |         |
+| `NGINX_AUTHENTICATION_LDAP_GROUP_ATTRIBUTE` | If searching inside of a group what is the Group Attribute - eg  `uniquemember`             |                     |         |
+| `NGINX_AUTHENTICATION_LLNG_HANDLER_HOST`    | If `LLNG` chosen use hostname and port of handler. Add multiple by seperating with comments | `llng-handler:2884` | x       |
+| `NGINX_AUTHENTICATION_LLNG_HANDLER_PORT`    | If `LLNG` chosen use this port for handler                                                  | `2884`              | x       |
+| `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1`      | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below                           |                     |         |
+| `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2`      | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below                           |                     |         |
 
 When working with `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2` you will need to omit any `$` chracters from your string. It will be added in upon container startup. Example:
 `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1=HTTP_AUTH_USER,uid,upstream_http_uid` will get converted into `HTTP_AUTH_USER,$uid,$upstream_http_uid` and get placed in the appropriate areas in the configuration.

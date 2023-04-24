@@ -15,6 +15,9 @@ nginx_configure_authentication() {
             print_notice "Setting Basic Authentication"
             user_num=$(printenv | sort | grep -c 'NGINX_AUTHENTICATION_BASIC_USER.*')
             for ((i = 1; i <= user_num; i++)); do
+                transform_var \
+                                NGINX_AUTHENTICATION_BASIC_USER${i}
+                                NGINX_AUTHENTICATION_BASIC_PASS${i}
                 basic_user=NGINX_AUTHENTICATION_BASIC_USER${i}
                 basic_pass=NGINX_AUTHENTICATION_BASIC_PASS${i}
                 print_warn "Creating User: ${!basic_user}"
@@ -22,6 +25,12 @@ nginx_configure_authentication() {
             done
         ;;
         "ldap" )
+            transform_var \
+                            NGINX_AUTHENTICATION_LDAP_HOST \
+                            NGINX_AUTHENTICATION_LDAP_PORT \
+                            NGINX_AUTHENTICATION_LDAP_BASE_DN \
+                            NGINX_AUTHENTICATION_LDAP_BIND_DN \
+                            NGINX_AUTHENTICATION_LDAP_BIND_PW
             cat <<EOF > /etc/nginx/snippets/authentication/ldap_configuration
         ldap_server ldapserver {
           url "${NGINX_AUTHENTICATION_LDAP_HOST}/${NGINX_AUTHENTICATION_LDAP_BASE_DN}?${NGINX_AUTHENTICATION_LDAP_ATTRIBUTE}?${NGINX_AUTHENTICATION_LDAP_SCOPE}?${NGINX_AUTHENTICATION_LDAP_FILTER}";
@@ -41,6 +50,8 @@ EOF
             if var_true "${NGINX_ENABLE_UPSTREAM_KEEPALIVE}" ; then
                 upstream_keepalive="keepalive ${NGINX_UPSTREAM_KEEPALIVE};"
             fi
+            transform_var NGINX_AUTHENTICATION_LLNG_HANDLER_HOST
+            transform_var NGINX_AUTHENTICATION_LLNG_HANDLER_PORT
             llng_upstream_hosts=$(echo "${NGINX_AUTHENTICATION_LLNG_HANDLER_HOST}" | tr "," "\n")
             echo "upstream llng-upstream-pool {" >> /etc/nginx/snippets/authentication/llng_upstream
             echo "     ${upstream_keepalive}" >> /etc/nginx/snippets/authentication/llng_upstream
