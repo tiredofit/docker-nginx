@@ -167,7 +167,7 @@ Be sure to view the following repositories to understand all the customizable op
 
 You can choose to request visitors be authenticated before accessing your site. Options are below.
 
-| Parameter                                   | Description                                                                                 | Default             | `_NAME` |
+| Parameter                                   | Description                                                                                 | Default             | `_FILE` |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------- | ------- |
 | `NGINX_AUTHENTICATION_TYPE`                 | Protect the site with `BASIC`, `LDAP`, `LLNG`                                               | `NONE`              |         |
 | `NGINX_AUTHENTICATION_TITLE`                | Challenge response when visiting protected site                                             | `Please login`      |         |
