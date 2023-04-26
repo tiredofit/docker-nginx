@@ -15,7 +15,7 @@ nginx_configure_authentication() {
             print_notice "Setting Basic Authentication"
             user_num=$(printenv | sort | grep -c 'NGINX_AUTHENTICATION_BASIC_USER.*')
             for ((i = 1; i <= user_num; i++)); do
-                transform_var \
+                transform_file_var \
                                 NGINX_AUTHENTICATION_BASIC_USER${i}
                                 NGINX_AUTHENTICATION_BASIC_PASS${i}
                 basic_user=NGINX_AUTHENTICATION_BASIC_USER${i}
@@ -25,7 +25,7 @@ nginx_configure_authentication() {
             done
         ;;
         "ldap" )
-            transform_var \
+            transform_file_var \
                             NGINX_AUTHENTICATION_LDAP_HOST \
                             NGINX_AUTHENTICATION_LDAP_PORT \
                             NGINX_AUTHENTICATION_LDAP_BASE_DN \
@@ -50,7 +50,7 @@ EOF
             if var_true "${NGINX_ENABLE_UPSTREAM_KEEPALIVE}" ; then
                 upstream_keepalive="keepalive ${NGINX_UPSTREAM_KEEPALIVE};"
             fi
-            transform_var \
+            transform_file_var \
                             NGINX_AUTHENTICATION_LLNG_HANDLER_HOST \
                             NGINX_AUTHENTICATION_LLNG_HANDLER_PORT
             llng_upstream_hosts=$(echo "${NGINX_AUTHENTICATION_LLNG_HANDLER_HOST}" | tr "," "\n")
