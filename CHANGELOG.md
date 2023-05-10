@@ -1,7 +1,7 @@
 ## 6.3.1 2023-05-09 <dave at tiredofit dot ca>
 
    ### Added
-      - Drop Alpine 3.17 and 3.16 builds and Introduce Alpine 3.18 build
+      - Drop Alpine 3.17 builds and Introduce Alpine 3.18 build
 
 
 ## 6.3.0 2023-04-26 <dave at tiredofit dot ca>
