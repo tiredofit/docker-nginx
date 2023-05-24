@@ -101,7 +101,7 @@ The following image tags are available along with their tagged release based on 
 | 3.5         | `:alpine-3.5`  |             |                     |
 
 ```bash
-docker pull docker.io/tiredofdit/nginx:(imagetag)
+docker pull docker.io/tiredofit/nginx:(imagetag)
 ```
 #### Multi Architecture
 Images are built primarily for `amd64` architecture, and may also include builds for `arm/v7`, `arm64` and others. These variants are all unsupported. Consider [sponsoring](https://github.com/sponsors/tiredofit) my work so that I can work with various hardware. To see if this image supports multiple architecures, type `docker manifest (image):(tag)`
