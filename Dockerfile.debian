@@ -1,5 +1,5 @@
 ARG DISTRO=debian
-ARG DISTRO_VARIANT=bullseye
+ARG DISTRO_VARIANT=bookworm
 
 FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"

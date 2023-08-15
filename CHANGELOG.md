@@ -1,3 +1,9 @@
+## 6.3.5 2023-08-15 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.25.2
+
+
 ## 6.3.4 2023-07-15 <dave at tiredofit dot ca>
 
    ### Changed
