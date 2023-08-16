@@ -380,6 +380,9 @@ nginx_configure_server() {
                                             NGINX_KEEPALIVE_REQUESTS \
                                             NGINX_KEEPALIVE_TIMEOUT \
                                             NGINX_SEND_TIMEOUT \
+                                            NGINX_PROXY_BUFFERS \
+                                            NGINX_PROXY_BUFFERS_SIZE \
+                                            NGINX_PROXY_BUSY_BUFFERS_SIZE \
                                             NGINX_UPLOAD_MAX_SIZE \
                                             NGINX_USER \
                                             NGINX_WORKER_CONNECTIONS \
@@ -452,6 +455,13 @@ nginx_configure_server() {
         sed -i "\|open_file_cache_errors on;|d" /etc/nginx/snippets/open_file_cache.conf
     else
         sed -i "\|include /etc/nginx/snippets/open_file_cache.conf;|d" /etc/nginx/nginx.conf
+    fi
+
+    if var_false "${NGINX_ENABLE_PROXY_BUFFERING}"; then
+        sed -i \
+            -e "/proxy.*/d" \
+            -e "/fastcgi_buffer_size/a\ \n    proxy_buffering off;" \
+            /etc/nginx/nginx.conf
     fi
 
     if var_false "${NGINX_ENABLE_RESET_TIMEDOUT_CONNECTION}"; then

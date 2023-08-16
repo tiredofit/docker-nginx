@@ -1,3 +1,9 @@
+## 6.4.0 2023-08-16 <dave at tiredofit dot ca>
+
+   ### Added
+      - Introduce NGINX_ENABLE_PROXY_BUFFERING and associated environment variables for better upstream proxy support
+
+
 ## 6.3.5 2023-08-15 <dave at tiredofit dot ca>
 
    ### Added

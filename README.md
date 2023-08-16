@@ -319,6 +319,10 @@ You can also enter into the container and type `maintenance ARG`, where ARG is e
 | `NGINX_OPEN_FILE_CACHE_MAX`              | Maximum files to cache                                                                  | `200000` |
 | `NGINX_OPEN_FILE_CACHE_MIN_USES`         | Minimum uses of file before cashing                                                     | `2`      |
 | `NGINX_OPEN_FILE_CACHE_VALID`            | Cache a file if has been accessed within this window                                    | `2m`     |
+| `NGINX_ENABLE_PROXY_BUFFERING`           | Enable Proxy Buffering                                                                  | `TRUE`   |
+| `NGINX_PROXY_BUFFERS`                    | Proxy Buffers                                                                           | `4 256k` |
+| `NGINX_PROXY_BUFFER_SIZE`                | Proxy Buffer Size                                                                       | `128k`   |
+| `NGINX_PROXY_BUSY_BUFFERS_SIZE`          | Proxy Busy Buffers Size                                                                 | `256k`   |
 | `NGINX_CLIENT_BODY_BUFFER_SIZE`          | Client Buffer size                                                                      | `16k`    |
 | `NGINX_UPSTREAM_KEEPALIVE`               | Keepalive connections to utilize for upstream                                           | `32`     |
 | `NGINX_FASTCGI_BUFFERS`                  | Amount of FastCGI Buffers                                                               | `16 16k` |
