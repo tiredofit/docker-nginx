@@ -1,3 +1,9 @@
+## 6.4.1 2023-08-18 <fermion2020@github>
+
+   ### Changed
+      - Fix for 6.4.0
+
+
 ## 6.4.0 2023-08-16 <dave at tiredofit dot ca>
 
    ### Added
