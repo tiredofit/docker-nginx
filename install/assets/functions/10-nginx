@@ -381,7 +381,7 @@ nginx_configure_server() {
                                             NGINX_KEEPALIVE_TIMEOUT \
                                             NGINX_SEND_TIMEOUT \
                                             NGINX_PROXY_BUFFERS \
-                                            NGINX_PROXY_BUFFERS_SIZE \
+                                            NGINX_PROXY_BUFFER_SIZE \
                                             NGINX_PROXY_BUSY_BUFFERS_SIZE \
                                             NGINX_UPLOAD_MAX_SIZE \
                                             NGINX_USER \
