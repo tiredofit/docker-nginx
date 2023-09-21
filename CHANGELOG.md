@@ -1,3 +1,12 @@
+## 6.4.2 2023-09-21 <dave at tiredofit dot ca>
+
+   ### Added
+      - Turn on JIT for regex
+
+   ### Changed
+      - Allow secrets to work with basic authentication
+
+
 ## 6.4.1 2023-08-18 <fermion2020@github>
 
    ### Changed
