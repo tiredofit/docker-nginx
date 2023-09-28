@@ -585,7 +585,7 @@ nginx_configure_site_includes() {
         nginx_site_config="*"
     fi
 
-    sed -i "\|### Don't edit past here|a\ \ \ \ \  include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/sites.available/"${nginx_site_config}".conf
+    sed -i "\|### Don't edit past here|a\ \ \ \ \    include ${NGINX_INCLUDE_CONFIGURATION};" /etc/nginx/sites.available/"${nginx_site_config}".conf
 }
 
 nginx_configure_site_default() {
