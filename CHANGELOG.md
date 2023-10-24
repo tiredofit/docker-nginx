@@ -1,3 +1,9 @@
+## 6.4.4 2023-10-24 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Restore Edge builds
+
+
 ## 6.4.3 2023-10-24 <dave at tiredofit dot ca>
 
    ### Added
