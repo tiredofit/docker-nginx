@@ -28,9 +28,15 @@ if [ ! -f "/tmp/.container/container-restart" ] ; then
     if var_true "${NGINX_ENABLE_APPLICATION_CONFIGURATION}"; then
         nginx_configure_site_default
         if var_true "${NGINX_ENABLE_CREATE_SAMPLE_HTML}" ; then nginx_create_sample_html ; fi
+        if [ -n "${NGINX_WEBROOT_SUFFIX}" ]; then
+            _nginx_webroot=${NGINX_WEBROOT}${NGINX_WEBROOT_SUFFIX}
+        else
+            _nginx_webroot=${NGINX_WEBROOT}
+        fi
+
         update_template "/etc/nginx/sites.available/*.conf" \
                                                             NGINX_LISTEN_PORT \
-                                                            NGINX_WEBROOT
+                                                            _nginx_webroot
         if silent grep -q '<WEBROOT>' /etc/nginx/sites.available/*.conf ; then
             print_notice "Detected Legacy templates in /etc/nginx/sites.avaialable. Please change '<WEBROOT>' to {{NGINX_WEBROOT}}"
             silent sed -i "s|<WEBROOT>|${NGINX_WEBROOT}|g" /etc/nginx/sites.available/*.conf

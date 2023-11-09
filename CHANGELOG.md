@@ -1,3 +1,9 @@
+## 6.4.5 2023-11-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add NGINX_WEBROOT_SUFFIX to allow adding custom directories for the root command in nginx
+
+
 ## 6.4.4 2023-10-24 <dave at tiredofit dot ca>
 
    ### Changed
