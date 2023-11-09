@@ -266,6 +266,7 @@ Presently you can compress your served content with gzip and brotli. More compre
 | `NGINX_LISTEN_PORT`                      | Nginx listening port                                                                                             | `80`        |
 | `NGINX_POST_INIT_SCRIPT`                 | If you wish to run a bash script before the nginx process runs enter the path here, seperate multiple by commas. |             |
 | `NGINX_WEBROOT`                          | Where to serve content from inside the container                                                                 | `/www/html` |
+| `NGINX_WEBROOT_SUFFIX`                   | Append a suffix onto the nginx configuration to serve files from a subfolder e.g. `/public`                      |             |
 
 #### Functionality Options
 
