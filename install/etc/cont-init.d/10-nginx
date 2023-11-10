@@ -25,19 +25,22 @@ if [ ! -f "/tmp/.container/container-restart" ] ; then
     if var_true "${NGINX_ENABLE_BLOCK_BOTS}" ; then nginx_configure_blockbots ; else sed -i "\|include /etc/nginx/snippets/bot_blocker.conf;|d" /etc/nginx/nginx.conf ; fi
     nginx_configure_logging
     nginx_configure_maintenance
+
     if var_true "${NGINX_ENABLE_APPLICATION_CONFIGURATION}"; then
-        nginx_configure_site_default
-        if var_true "${NGINX_ENABLE_CREATE_SAMPLE_HTML}" ; then nginx_create_sample_html ; fi
         if [ -n "${NGINX_WEBROOT_SUFFIX}" ]; then
             _nginx_webroot_original="${NGINX_WEBROOT}"
             NGINX_WEBROOT=${NGINX_WEBROOT}${NGINX_WEBROOT_SUFFIX}
         fi
+        nginx_configure_site_default
+
         update_template "/etc/nginx/sites.available/*.conf" \
                                                             NGINX_LISTEN_PORT \
                                                             NGINX_WEBROOT
         if [ -n "${NGINX_WEBROOT_SUFFIX}" ]; then
             NGINX_WEBROOT=${_nginx_webroot_original}
         fi
+
+        if var_true "${NGINX_ENABLE_CREATE_SAMPLE_HTML}" ; then nginx_create_sample_html ; fi
         if silent grep -q '<WEBROOT>' /etc/nginx/sites.available/*.conf ; then
             print_notice "Detected Legacy templates in /etc/nginx/sites.avaialable. Please change '<WEBROOT>' to {{NGINX_WEBROOT}}"
             silent sed -i "s|<WEBROOT>|${NGINX_WEBROOT}|g" /etc/nginx/sites.available/*.conf
