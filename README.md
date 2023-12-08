@@ -92,7 +92,8 @@ The following image tags are available along with their tagged release based on 
 | latest      | `:latest`      | latest      | `:debian`           |
 | latest      | `:alpine`      | Bookworm    | `:debian-bookworm ` |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye`  |
-| 3.18        | `:alpine-3.18` | Buster      | `:debian-buster`    |
+| 3.19        | `:alpine-3.18` | Buster      | `:debian-buster`    |
+| 3.18        | `:alpine-3.18` |             |                     |
 | 3.16        | `:alpine-3.16` |             |                     |
 | 3.15        | `:alpine-3.15` |             |                     |
 | 3.12        | `:alpine-3.12` |             |                     |
@@ -352,17 +353,17 @@ docker exec -it (whatever your container name is) bash
 These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
 ### Usage
 - The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for personalized support
+- [Sponsor me](https://tiredofit.ca/sponsor) for personalized support
 ### Bugfixes
 - Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
 
 ### Feature Requests
 - Feel free to submit a feature request, however there is no guarantee that it will be added, or at what timeline.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) regarding development of features.
+- [Sponsor me](https://tiredofit.ca/sponsor) regarding development of features.
 
 ### Updates
 - Best effort to track upstream changes, More priority if I am actively using the image in a production environment.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for up to date releases.
+- [Sponsor me](https://tiredofit.ca/sponsor) for up to date releases.
 
 ## License
 MIT. See [LICENSE](LICENSE) for more details.
