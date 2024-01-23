@@ -1,3 +1,9 @@
+## 6.4.9 2024-01-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Restore Alpine Edge builds
+
+
 ## 6.4.8 2024-01-23 <dave at tiredofit dot ca>
 
    ### Added
