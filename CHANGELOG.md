@@ -1,3 +1,9 @@
+## 6.4.8 2024-01-23 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add NGINX_SERVER_NAMES_HASH_BUCKET_SIZE environment variable
+
+
 ## 6.4.7 2023-12-08 <dave at tiredofit dot ca>
 
    ### Added

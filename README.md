@@ -92,7 +92,7 @@ The following image tags are available along with their tagged release based on 
 | latest      | `:latest`      | latest      | `:debian`           |
 | latest      | `:alpine`      | Bookworm    | `:debian-bookworm ` |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye`  |
-| 3.19        | `:alpine-3.18` | Buster      | `:debian-buster`    |
+| 3.19        | `:alpine-3.19` | Buster      | `:debian-buster`    |
 | 3.18        | `:alpine-3.18` |             |                     |
 | 3.16        | `:alpine-3.16` |             |                     |
 | 3.15        | `:alpine-3.15` |             |                     |
@@ -329,6 +329,7 @@ You can also enter into the container and type `maintenance ARG`, where ARG is e
 | `NGINX_UPSTREAM_KEEPALIVE`               | Keepalive connections to utilize for upstream                                           | `32`     |
 | `NGINX_FASTCGI_BUFFERS`                  | Amount of FastCGI Buffers                                                               | `16 16k` |
 | `NGINX_FASTCGI_BUFFER_SIZE`              | FastCGI Buffer Size                                                                     | `32k`    |
+| `NGINX_SERVER_NAMES_HASH_BUCKET_SIZE`    | Server names hash size (`256`` if `NGINX_ENABLE_BLOCK_BOTS=TRUE`)                       | `32`     |
 
 ### Networking
 

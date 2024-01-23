@@ -22,7 +22,12 @@ if [ ! -f "/tmp/.container/container-restart" ] ; then
     nginx_configure_mode
     nginx_configure_server
     nginx_configure_authentication
-    if var_true "${NGINX_ENABLE_BLOCK_BOTS}" ; then nginx_configure_blockbots ; else sed -i "\|include /etc/nginx/snippets/bot_blocker.conf;|d" /etc/nginx/nginx.conf ; fi
+    if var_true "${NGINX_ENABLE_BLOCK_BOTS}" ; then
+        sed -i "/server_names_hash_bucket_size/d" /etc/nginx/nginx.conf
+        nginx_configure_blockbots
+    else
+        sed -i "\|include /etc/nginx/snippets/bot_blocker.conf;|d" /etc/nginx/nginx.conf
+    fi
     nginx_configure_logging
     nginx_configure_maintenance
 

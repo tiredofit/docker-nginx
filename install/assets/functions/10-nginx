@@ -380,6 +380,7 @@ nginx_configure_server() {
                                             NGINX_KEEPALIVE_REQUESTS \
                                             NGINX_KEEPALIVE_TIMEOUT \
                                             NGINX_SEND_TIMEOUT \
+                                            NGINX_SERVER_NAMES_HASH_BUCKET_SIZE \
                                             NGINX_PROXY_BUFFERS \
                                             NGINX_PROXY_BUFFER_SIZE \
                                             NGINX_PROXY_BUSY_BUFFERS_SIZE \
