@@ -1,3 +1,9 @@
+## 6.4.10 2024-02-14 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.25.4
+
+
 ## 6.4.9 2024-01-23 <dave at tiredofit dot ca>
 
    ### Changed
