@@ -135,7 +135,7 @@ jobs:
 #          short-description: ${{ github.event.repository.description }}
 #          readme-filepath: ./README.md
 
-alpine_3-20:
+  alpine_3-20:
     env:
       DISTRO: "alpine"
       DISTRO_VARIANT: "3.20"
@@ -261,7 +261,7 @@ alpine_3-20:
 #          short-description: ${{ github.event.repository.description }}
 #          readme-filepath: ./README.md
 
-alpine_3-19:
+  alpine_3-19:
     env:
       DISTRO: "alpine"
       DISTRO_VARIANT: "3.19"
