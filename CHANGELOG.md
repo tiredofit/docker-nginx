@@ -1,3 +1,9 @@
+## 6.4.13 2024-05-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Force Nginx version to be output when monitoring active to solve Zabbix version issues
+
+
 ## 6.4.12 2024-04-24 <dave at tiredofit dot ca>
 
    ### Added

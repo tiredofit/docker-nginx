@@ -500,6 +500,7 @@ nginx_configure_server() {
 
     if var_false "${ENABLE_ZABBIX}" || var_false "${CONTAINER_ENABLE_MONITORING}" ; then
         sed -i "\|include /etc/nginx/snippets/monitoring.conf;|d" /etc/nginx/nginx.conf
+        update_template /etc/nginx/snippets/monitoring.conf NGINX_VERSION
     fi
 
     case "${STAGE,,}" in
