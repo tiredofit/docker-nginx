@@ -170,6 +170,7 @@ You can choose to request visitors be authenticated before accessing your site. 
 
 | Parameter                                   | Description                                                                                 | Default             | `_FILE` |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------- | ------- |
+| `NGINX_RESOLVER`                            | resolver                                               | `127.0.0.11`              |         |
 | `NGINX_AUTHENTICATION_TYPE`                 | Protect the site with `BASIC`, `LDAP`, `LLNG`                                               | `NONE`              |         |
 | `NGINX_AUTHENTICATION_TITLE`                | Challenge response when visiting protected site                                             | `Please login`      |         |
 | `NGINX_AUTHENTICATION_BASIC_USER1`          | If `BASIC` chosen enter this for the username to protect site                               | `admin`             | x       |
