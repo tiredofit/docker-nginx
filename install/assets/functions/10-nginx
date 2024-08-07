@@ -372,6 +372,7 @@ nginx_configure_mode() {
 
 nginx_configure_server() {
     update_template /etc/nginx/nginx.conf \
+                                            NGINX_RESOLVER \
                                             NGINX_CLIENT_BODY_BUFFER_SIZE \
                                             NGINX_CLIENT_BODY_TIMEOUT \
                                             NGINX_FASTCGI_BUFFERS \
