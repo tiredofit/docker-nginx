@@ -1,3 +1,12 @@
+## 6.5.0 2024-08-07 <terryzwt>
+
+   ### Added
+      - Add NGINX_RESOLVER environment variable to use a specific resolver when looking up DNS hostnames in proxy mode
+
+   ### Changed
+      - Fix nginx reload configuration service to look for proper config folders
+
+
 ## 6.4.15 2024-05-29 <dave at tiredofit dot ca>
 
    ### Added

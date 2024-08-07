@@ -170,7 +170,6 @@ You can choose to request visitors be authenticated before accessing your site. 
 
 | Parameter                                   | Description                                                                                 | Default             | `_FILE` |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------- | ------- |
-| `NGINX_RESOLVER`                            | resolver                                               | `127.0.0.11`              |         |
 | `NGINX_AUTHENTICATION_TYPE`                 | Protect the site with `BASIC`, `LDAP`, `LLNG`                                               | `NONE`              |         |
 | `NGINX_AUTHENTICATION_TITLE`                | Challenge response when visiting protected site                                             | `Please login`      |         |
 | `NGINX_AUTHENTICATION_BASIC_USER1`          | If `BASIC` chosen enter this for the username to protect site                               | `admin`             | x       |
@@ -277,6 +276,7 @@ Presently you can compress your served content with gzip and brotli. More compre
 | `NGINX_FORCE_RESET_PERMISSIONS` | Force setting Nginx files ownership to web server user                                | `TRUE`     |
 | `NGINX_MODE`                    | Set to `NORMAL`, `MAINTENANCE` , `PROXY`, `REDIRECT`                                  | `NORMAL`   |
 | `NGINX_REDIRECT_URL`            | If `REDIRECT` set enter full url to forward all traffic to eg `https://example.com`   |            |
+| `NGINX_RESOLVER`                | Resolve hostnames via DNS. Space seperated values. e.g. `127.0.0.11`                  |            |
 | `NGINX_PROXY_URL`               | If `REDIRECT` set enter full url to proxy all traffic to eg `https://example.com:443` |            |
 | `NGINX_SITE_ENABLED`            | What sites to enable in `/etc/nginx/sites.available` Don't use `.conf` suffix         | `ALL`      |
 | `NGINX_USER`                    | What user to run nginx as inside container                                            | `nginx`    |

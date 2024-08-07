@@ -372,7 +372,6 @@ nginx_configure_mode() {
 
 nginx_configure_server() {
     update_template /etc/nginx/nginx.conf \
-                                            NGINX_RESOLVER \
                                             NGINX_CLIENT_BODY_BUFFER_SIZE \
                                             NGINX_CLIENT_BODY_TIMEOUT \
                                             NGINX_FASTCGI_BUFFERS \
@@ -442,6 +441,13 @@ nginx_configure_server() {
         print_debug "Disable Nginx FastCGI HTTPS Termination Support"
         sed -i "s|fastcgi_param  HTTPS .*;|fastcgi_param  HTTPS off;|g" /etc/nginx/fastcgi_params
         PROTOCOL="http://"
+    fi
+
+    if [ -n "${NGINX_RESOLVER}" ]; then
+        update_template /etc/nginx/snippets/resolver.conf \
+                                                            NGINX_RESOLVER
+    else
+        sed -i "\|include /etc/nginx/snippets/resolver.conf;|d" /etc/nginx/nginx.conf
     fi
 
     if var_false "${NGINX_ENABLE_MULTI_ACCEPT}"; then
