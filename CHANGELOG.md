@@ -1,3 +1,13 @@
+## 6.5.1 2024-09-24 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.27.1
+      - Nginx Auth LDAP pinned to 241200eac8e4acae74d353291bd27f79e5ca3dc4
+      - Nginx Brotly pinned to 6e975bcb015f62e1f303054897783355e2a877dc
+      - Nginx Cookie Flag pinned to c4ff449318474fbbb4ba5f40cb67ccd54dc595d4
+      - Nginx More Headers pinned to f8f80997f19a41dc4181987544b9f3570cc3d6da
+
+
 ## 6.5.0 2024-08-07 <terryzwt>
 
    ### Added

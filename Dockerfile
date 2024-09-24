@@ -6,9 +6,11 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG NGINX_VERSION
 
-ENV NGINX_VERSION=${NGINX_VERSION:-"1.27.0"} \
-    NGINX_AUTH_LDAP_VERSION=master \
-    NGINX_BROTLI_VERSION=6e975bcb015f62e1f303054897783355e2a877dc \
+ENV NGINX_VERSION=${NGINX_VERSION:-"1.27.1"} \
+    NGINX_MODULE_AUTH_LDAP_VERSION=241200eac8e4acae74d353291bd27f79e5ca3dc4 \
+    NGINX_MODULE_BROTLI_VERSION=6e975bcb015f62e1f303054897783355e2a877dc \
+    NGINX_MODULE_COOKIE_FLAG_VERSION=c4ff449318474fbbb4ba5f40cb67ccd54dc595d4 \
+    NGINX_MODULE_MORE_HEADERS_VERSION=f8f80997f19a41dc4181987544b9f3570cc3d6da \
     NGINX_USER=nginx \
     NGINX_GROUP=www-data \
     NGINX_WEBROOT=/www/html \
@@ -57,10 +59,10 @@ RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 
     \
     mkdir -p /www /var/log/nginx && \
     chown -R ${NGINX_USER}:${NGINX_GROUP} /var/log/nginx && \
-    clone_git_repo https://github.com/openresty/headers-more-nginx-module && \
-    clone_git_repo https://github.com/kvspb/nginx-auth-ldap ${NGINX_LDAP_VERSION} && \
-    clone_git_repo https://github.com/AirisX/nginx_cookie_flag_module && \
-    clone_git_repo https://github.com/google/ngx_brotli ${NGINX_BROTLI_VERSION} && \
+    clone_git_repo https://github.com/openresty/headers-more-nginx-module ${NGINX_MODULE_MORE_HEADERS_VERSION} && \
+    clone_git_repo https://github.com/kvspb/nginx-auth-ldap ${NGINX_MODULE_AUTH_LDAP_VERSION} && \
+    clone_git_repo https://github.com/google/ngx_brotli ${NGINX_MODULE_BROTLI_VERSION} && \
+    clone_git_repo https://github.com/AirisX/nginx_cookie_flag_module ${NGINX_MODULE_COOKIE_FLAG_VERSION} && \
     mkdir -p /usr/src/nginx && \
     curl -sSL http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/nginx && \
     cd /usr/src/nginx && \
