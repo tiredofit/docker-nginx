@@ -1,7 +1,7 @@
 ARG DISTRO=alpine
 ARG DISTRO_VARIANT=3.20
 
-FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
+FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}-7.10.14
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG NGINX_VERSION
@@ -81,11 +81,10 @@ RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 
       --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
       --user=${NGINX_USER} \
       --group=${NGINX_GROUP} \
-      --add-module=${GIT_REPO_SRC_NGINX_AUTH_LDAP} \
-      --add-module=${GIT_REPO_SRC_NGX_BROTLI} \
-      --add-module=${GIT_REPO_SRC_NGINX_COOKIE_FLAG_MODULE} \
       --add-module=${GIT_REPO_SRC_HEADERS_MORE_NGINX_MODULE} \
-      ## GCC 11.2 fix https://github.com/google/ngx_brotli/issues/124
+      --add-module=${GIT_REPO_SRC_NGINX_AUTH_LDAP} \
+      --add-module=${GIT_REPO_SRC_NGINX_COOKIE_FLAG_MODULE} \
+      --add-module=${GIT_REPO_SRC_NGX_BROTLI} \
       --with-cc-opt='-Wno-vla-parameter' \
       --with-compat \
       --with-file-aio \

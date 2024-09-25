@@ -1,3 +1,9 @@
+## 6.5.2 2024-09-25 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Pin to base image 7.10.14
+
+
 ## 6.5.1 2024-09-24 <dave at tiredofit dot ca>
 
    ### Added
