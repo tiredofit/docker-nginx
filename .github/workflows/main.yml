@@ -50,7 +50,7 @@ jobs:
           fi
 
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-              git_tag="${GITHUB_REPOSITORY}:${DISTRO_VARIANT}-$(echo ${GITHUB_REF} | sed 's|refs/tags/||g')"
+              git_tag="${GITHUB_REPOSITORY}:${DISTRO}-${DISTRO_VARIANT}-$(echo ${GITHUB_REF} | sed 's|refs/tags/||g')"
           fi
 
           if [ -n "${branch_tag}" ] && [ -n "${git_tag}" ]; then
