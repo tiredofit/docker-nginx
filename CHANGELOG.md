@@ -1,3 +1,10 @@
+## 6.5.3 2024-10-02 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.27.2
+      - Pin to tiredofit/alpine:7.10.15
+
+
 ## 6.5.2 2024-09-25 <dave at tiredofit dot ca>
 
    ### Changed
