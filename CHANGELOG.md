@@ -1,3 +1,10 @@
+## 6.5.7 2024-12-07 <dave at tiredofit dot ca>
+
+   ### Added
+      - Pin to tiredofit/alpine:7.10.24
+      - Add Alpine 3.21 builds
+
+
 ## 6.5.6 2024-11-26 <dave at tiredofit dot ca>
 
    ### Added

@@ -92,7 +92,8 @@ The following image tags are available along with their tagged release based on 
 | latest      | `:latest`      | latest      | `:debian`           |
 | latest      | `:alpine`      | Bookworm    | `:debian-bookworm ` |
 | edge        | `:alpine-edge` | Bullseye    | `:debian-bullseye`  |
-| 3.20        | `:alpine-3.20` | Buster      | `:debian-buster`    |
+| 3.21        | `:alpine-3.21` | Buster      | `:debian-buster`    |
+| 3.20        | `:alpine-3.20` |             |                     |
 | 3.19        | `:alpine-3.19` |             |                     |
 | 3.16        | `:alpine-3.16` |             |                     |
 | 3.15        | `:alpine-3.15` |             |                     |
