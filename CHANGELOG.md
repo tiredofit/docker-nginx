@@ -1,3 +1,9 @@
+## 6.5.10 2024-12-12 <dave at tiredofit dot ca>
+
+   ### Added
+      - Pin to tiredofit/alpine:7.10.27
+
+
 ## 6.5.9 2024-12-12 <dave at tiredofit dot ca>
 
    ### Added
