@@ -1,7 +1,7 @@
 ARG DISTRO=alpine
 ARG DISTRO_VARIANT=3.21
 
-FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}-7.10.27
+FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}-7.10.28
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG NGINX_VERSION
@@ -18,8 +18,8 @@ ENV NGINX_VERSION=${NGINX_VERSION:-"1.27.3"} \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-nginx/"
 
 RUN case "$(cat /etc/os-release | grep VERSION_ID | cut -d = -f 2 | cut -d . -f 1,2 | cut -d _ -f 1)" in \
-        3.5 | 3.6 | 3.7 | 3.8 | 3.9 | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 | 3.15 | 3.16 ) alpine_ssl=libressl ;; \
-        3.17* | 3.18* | 3.19* | 3.20* | 3.21* ) alpine_ssl=openssl ;; \
+        3.[5-9] | 3.1[0-6] ) alpine_ssl=libressl ;; \
+        3.1[7-9] | 3.2[0-9] ) alpine_ssl=openssl ;; \
         *) : ;; \
     esac ; \
     source /assets/functions/00-container && \
