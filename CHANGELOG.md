@@ -1,3 +1,9 @@
+## 6.5.15 2025-04-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update AUTHENTICATION_TYPE=LLNG parameters for better compatibility with recent versions
+
+
 ## 6.5.14 2025-04-25 <dave at tiredofit dot ca>
 
    ### Added

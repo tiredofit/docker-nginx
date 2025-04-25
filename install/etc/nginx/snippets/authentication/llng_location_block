@@ -8,6 +8,7 @@
             fastcgi_param CONTENT_LENGTH "";
             fastcgi_param HOST $http_host;
             fastcgi_param X_ORIGINAL_URI  $original_uri;
+            fastcgi_param UNIQUE_ID $request_id;
             proxy_http_version 1.1;
             proxy_set_header Connection "";
         }
