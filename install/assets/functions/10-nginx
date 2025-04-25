@@ -67,7 +67,11 @@ EOF
             echo "}" >> /etc/nginx/snippets/authentication/llng_upstream
             sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ include \/etc\/nginx\/snippets\/authentication\/llng_upstream;" /etc/nginx/nginx.conf
             sed -i -e "/# Do not delete - Upstream Configuration/a\ \ \ \ ### LLNG Authentication Multiple Handlers configuration" /etc/nginx/nginx.conf
-            update_template /etc/nginx/snippets/authentication/llng_location_block NGINX_AUTHENTICATION_LLNG_HANDLER_PORT
+            update_template \
+                            /etc/nginx/snippets/authentication/llng_location_block \
+                                NGINX_AUTHENTICATION_LLNG_HANDLER_PORT \
+                                NGINX_AUTHENTICATION_LLNG_FASTCGI_BUFFER_SIZE \
+                                NGINX_AUTHENTICATION_LLNG_FASTCGI_BUFFERS
 
             if [ ! -f "/etc/cont-init.d/20-php-fpm" ]; then
                 header_num=$(printenv | sort | grep -c '^NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')

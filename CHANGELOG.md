@@ -1,3 +1,9 @@
+## 6.5.16 2025-04-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add NGINX_AUTHENTICATION_LLNG_BUFFERS+BUFFER_SIZE environment variables for tuneable performance
+
+
 ## 6.5.15 2025-04-25 <dave at tiredofit dot ca>
 
    ### Added

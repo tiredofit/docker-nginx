@@ -188,6 +188,8 @@ You can choose to request visitors be authenticated before accessing your site. 
 | `NGINX_AUTHENTICATION_LLNG_HANDLER_HOST`    | If `LLNG` chosen use hostname and port of handler. Add multiple by seperating with comments | `llng-handler:2884` | x       |
 | `NGINX_AUTHENTICATION_LLNG_HANDLER_PORT`    | If `LLNG` chosen use this port for handler                                                  | `2884`              | x       |
 | `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE1`      | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below                           |                     |         |
+| `NGINX_AUTHENTICATION_LLNG_BUFFERS`    | FastCGI Buffers for performance                                                 | `32 32k`              |        |
+| `NGINX_AUTHENTICATION_LLNG_BUFFER_SIZE`    | FastCGI Buffer size for performance                                                  | `32k`              |        |
 | `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2`      | Syntax: HEADER_NAME, Variable, Upstream Variable - See note below                           |                     |         |
 
 When working with `NGINX_AUTHENTICATION_LLNG_ATTRIBUTE2` you will need to omit any `$` chracters from your string. It will be added in upon container startup. Example:
