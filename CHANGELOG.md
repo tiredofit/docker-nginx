@@ -1,3 +1,9 @@
+## 6.5.18 2025-04-26 <dave at tiredofit dot ca>
+
+   ### Added
+      - Pin to tiredofit/alpine and debian 7.10.30
+
+
 ## 6.5.17 2025-04-25 <dave at tiredofit dot ca>
 
 GHA Bump
